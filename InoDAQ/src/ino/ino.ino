@@ -1,17 +1,7 @@
+#include "payload_handler.h"
+
 #define BAUD_RATE 9600
 #define MAX_SIZE_PAYLOAD 12
-
-void read_payload(char *payload)
-{
-    if (strcmp(payload, "Hi InoDAQ") == 0)
-    {
-        Serial.println("Hello from InoDAQ");
-    }
-    else
-    {
-        Serial.println(payload);
-    }
-}
 
 void setup()
 {
@@ -35,7 +25,7 @@ void loop()
         else
         {
             payload[payload_idx] = '\0';
-            read_payload(payload);
+            payload_handler(payload);
             payload_idx = 0;
         }
     }
