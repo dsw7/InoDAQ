@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-bool lexer(char *payload);
+bool lexer(char *payload, int &pin);
 void payload_handler(char *payload);
 
 #endif

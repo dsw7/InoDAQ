@@ -1,7 +1,9 @@
 #include "payload_handler.h"
 
-bool lexer(char *payload)
+bool lexer(char *payload, int &pin)
 {
+    pin = -1;
+
     if (strncmp(payload, "D", 1) != 0)
     {
         return false;
@@ -12,19 +14,28 @@ bool lexer(char *payload)
 
     // Get the address of payload at the 2nd char, then
     // grab the 2rd and 3rd chars (the 2 arg)
-    strncpy(substr_pin, &payload[1], 2); 
+    strncpy(substr_pin, &payload[1], 2);
 
     // NULL terminate the C-string to ensure that we don't
     // get undefined behaviour from atoi
     substr_pin[2] = '\0';
 
-    int pin = atoi(substr_pin);
+    /*
+     * It's okay if we have:
+     * char s[3];
+     * s[0] = '1'
+     * s[2] = '\0'
+     *
+     * With s[1] unset. The atoi() function will handle this case.
+     */
+    pin = atoi(substr_pin);
 
     if ((pin < 2) or (pin > 13))
     {
         pin = -1;
+        return false;
     }
-    Serial.println(pin);
+
     return true;
 }
 
@@ -36,9 +47,10 @@ void payload_handler(char *payload)
     }
     else
     {
-        if (lexer(payload))
+        int pin;
+        if (lexer(payload, pin))
         {
-            Serial.println("Doing something with payload");
+            Serial.println(pin); // set pin on and off here
         }
         else
         {
