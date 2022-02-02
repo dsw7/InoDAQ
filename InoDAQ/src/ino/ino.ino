@@ -6,6 +6,11 @@
 void setup()
 {
     Serial.begin(BAUD_RATE);
+
+    for (unsigned int i = 2; i <= 13; i++)
+    {
+        pinMode(i, OUTPUT);
+    }
 }
 
 void loop()
