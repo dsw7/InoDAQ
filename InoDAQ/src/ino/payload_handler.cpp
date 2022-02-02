@@ -1,5 +1,22 @@
 #include "payload_handler.h"
 
+void set_pin_status(int *pin)
+{
+    static bool state = false;
+
+    // TODO: build a static map of some sort that toggles pins between true and false
+    if (state)
+    {
+        state = false;
+        Serial.println("State set to false");
+    }
+    else
+    {
+        state = true;
+        Serial.println("State set to true");
+    }
+}
+
 bool lexer(char *payload, int &pin)
 {
     pin = -1;
@@ -51,6 +68,7 @@ void payload_handler(char *payload)
         if (lexer(payload, pin))
         {
             Serial.println(pin); // set pin on and off here
+            set_pin_status(pin);
         }
         else
         {
