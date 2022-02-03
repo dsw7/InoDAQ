@@ -10,6 +10,7 @@ void setup()
     for (unsigned int i = 2; i <= 13; i++)
     {
         pinMode(i, OUTPUT);
+        digitalWrite(i, LOW);
     }
 }
 
@@ -22,7 +23,7 @@ void loop()
 
         char incoming_byte = Serial.read();
 
-        if ((incoming_byte != '\n') and (payload_idx < MAX_SIZE_PAYLOAD -1))
+        if ((incoming_byte != '\n') and (payload_idx < MAX_SIZE_PAYLOAD - 1))
         {
             payload[payload_idx] = incoming_byte;
             payload_idx++;
