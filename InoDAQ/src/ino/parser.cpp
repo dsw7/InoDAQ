@@ -39,11 +39,26 @@ bool digital_pin_lexer(char *payload, int &pin)
     return true;
 }
 
+void help_menu()
+{
+    Serial.println("> InoDAQ, 2022");
+    Serial.println("> System accepts the following messages:");
+    Serial.println("> 1. 'help'          <- Get this help message");
+    Serial.println("> 2. 'D[2-9]|1[1-3]' <- Toggle digital pins 2-13 on and off");
+    Serial.println("> 3. 'Hi InoDAQ'     <- Say hello (for handshaking purposes)");
+}
+
 void payload_parser(char *payload)
 {
     if (strcmp(payload, "Hi InoDAQ") == 0)
     {
         Serial.println("Hello from InoDAQ");
+        return;
+    }
+
+    if (strcmp(payload, "help") == 0)
+    {
+        help_menu();
         return;
     }
 
