@@ -1,4 +1,4 @@
-#include "payload_handler.h"
+#include "parser.h"
 
 #define BAUD_RATE 9600
 #define MAX_SIZE_PAYLOAD 12
@@ -31,7 +31,7 @@ void loop()
         else
         {
             payload[payload_idx] = '\0';
-            payload_handler(payload);
+            payload_parser(payload);
             payload_idx = 0;
         }
     }
