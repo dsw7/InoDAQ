@@ -22,4 +22,18 @@ void set_digital_pin_status(int &pin)
 
     pins[idx] = !pins[idx];
     digitalWrite(pin, pins[idx]);
+
+    // Cast pin (int) to char array
+    char pin_c[3];
+    snprintf(pin_c, 3, "%d", pin);
+
+    if (pins[idx])
+    {
+        strcat(pin_c, ": ON");
+        Serial.println(pin_c);
+        return;
+    }
+
+    strcat(pin_c, ": OFF");
+    Serial.println(pin_c);
 }

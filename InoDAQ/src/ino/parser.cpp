@@ -1,6 +1,6 @@
 #include "parser.h"
 
-bool lexer(char *payload, int &pin)
+bool digital_pin_lexer(char *payload, int &pin)
 {
     pin = -1;
 
@@ -44,17 +44,16 @@ void payload_parser(char *payload)
     if (strcmp(payload, "Hi InoDAQ") == 0)
     {
         Serial.println("Hello from InoDAQ");
+        return;
     }
-    else
+
+    int pin;
+
+    if (digital_pin_lexer(payload, pin))
     {
-        int pin;
-        if (lexer(payload, pin))
-        {
-            set_digital_pin_status(pin);
-        }
-        else
-        {
-            Serial.println(payload);
-        }
+        set_digital_pin_status(pin);
+        return;
     }
+
+    Serial.println(payload);
 }
