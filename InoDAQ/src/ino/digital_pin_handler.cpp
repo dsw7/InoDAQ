@@ -2,8 +2,7 @@
 
 void set_digital_pin_status(int &pin)
 {
-    static bool state = false;
-    static int idx = pin - 2;
+    int idx = pin - 2;
 
     static bool pins[12] = {
         false, // pin 2
@@ -24,8 +23,11 @@ void set_digital_pin_status(int &pin)
     digitalWrite(pin, pins[idx]);
 
     // Cast pin (int) to char array
-    char pin_c[3];
-    snprintf(pin_c, 3, "%d", pin);
+    // 9 bytes to handle strcat of "13" + ": OFF"
+    // 1 3 \0 : _ 0 F F \0
+    // 1 2 3  4 5 6 7 8 9
+    char pin_c[9];
+    snprintf(pin_c, 9, "%d", pin);
 
     if (pins[idx])
     {
