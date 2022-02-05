@@ -6,4 +6,12 @@ void toggle_builtin_led()
 
     status = !status;
     digitalWrite(LED_BUILTIN, status);
+
+    if (status)
+    {
+        Serial.println("Built in LED is ON");
+        return;
+    }
+
+    Serial.println("Built in LED is OFF");
 }
