@@ -12,6 +12,8 @@ void setup()
         pinMode(i, OUTPUT);
         digitalWrite(i, LOW);
     }
+
+    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop()
