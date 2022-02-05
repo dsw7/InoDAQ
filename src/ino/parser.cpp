@@ -41,12 +41,15 @@ bool digital_pin_lexer(char *payload, int &pin)
 
 void help_menu()
 {
-    Serial.println("> InoDAQ, 2022");
-    Serial.println("> System accepts the following messages:");
-    Serial.println("> 1. 'help'          <- Get this help message");
-    Serial.println("> 2. 'D[2-9]|1[1-3]' <- Toggle digital pins 2-13 on and off");
-    Serial.println("> 3. 'Hi InoDAQ'     <- Say hello (for handshaking purposes)");
-    Serial.println("> 4. 'test'          <- Toggle built in LED (for testing purposes)");
+    char menu[] =
+    "> InoDAQ, 2022\n"
+    "> System accepts the following messages:\n"
+    "> 1. 'help'          <- Get this help message\n"
+    "> 2. 'D[2-9]|1[1-3]' <- Toggle digital pins 2-13 on and off\n"
+    "> 3. 'Hi InoDAQ'     <- Say hello (for handshaking purposes)\n"
+    "> 4. 'test'          <- Toggle built in LED (for testing purposes)";
+
+    Serial.println(menu);
 }
 
 void payload_parser(char *payload)
