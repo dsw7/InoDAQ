@@ -12,6 +12,8 @@ void info(std::string message)
 
 bool Serial::open_connection(std::string serial_port)
 {
+    info("Attempting to open serial port: " + serial_port);
+
     this->serial_port_fd = open(serial_port.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 
     if (this->serial_port_fd == -1)
