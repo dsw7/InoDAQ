@@ -6,10 +6,8 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <termios.h>
-#include <iostream>
 
-void error(std::string message);
-void info(std::string message);
+#include "logging.h"
 
 class Serial
 {

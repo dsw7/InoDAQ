@@ -16,4 +16,5 @@ add_executable(${OUTPUT_NAME}
     "main.cpp"
     "serial.cpp"
     "commands.cpp"
+    "logging.cpp"
 )

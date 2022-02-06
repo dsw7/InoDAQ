@@ -1,15 +1,5 @@
 #include "serial.h"
 
-void error(std::string message)
-{
-    std::cerr << message << std::endl;
-}
-
-void info(std::string message)
-{
-    std::cout << message << std::endl;
-}
-
 bool Serial::open_connection(std::string serial_port)
 {
     info("Attempting to open serial port: " + serial_port);
