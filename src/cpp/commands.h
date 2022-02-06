@@ -3,6 +3,6 @@
 
 #include "serial.h"
 
-bool run_test_command(std::string &port);
+int run_test_command(std::string &port);
 
 #endif

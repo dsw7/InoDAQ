@@ -14,4 +14,6 @@ message(STATUS "Compiled binary will be ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${OUTP
 # Avoid using glob patterns
 add_executable(${OUTPUT_NAME}
     "main.cpp"
+    "serial.cpp"
+    "commands.cpp"
 )
