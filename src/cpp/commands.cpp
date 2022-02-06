@@ -23,6 +23,15 @@ int run_test_command(std::string &serial_port)
         connection.read_data(result_data);
     }
 
+    sleep(1);
+
+    if (connection.write_data("test\n"))
+    {
+        std::string result_data;
+        connection.read_data(result_data);
+    }
+
+    sleep(1);
     connection.close_connection();
 
     return EXIT_SUCCESS;
