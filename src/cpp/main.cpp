@@ -1,7 +1,9 @@
 #include <getopt.h>
 #include <iostream>
 #include <string>
+
 #include "commands.h"
+#include "logging.h"
 
 struct cli_options
 {
@@ -74,6 +76,6 @@ int main(int argc, char **argv)
         return run_test_command(options.serial_port);
     }
 
-    std::cout << "Ran no commands. Try " + std::string(argv[0]) + " --help for more information" << std::endl;
+    warning("Ran no commands. Try " + std::string(argv[0]) + " --help for more information", true);
     return 0;
 }
