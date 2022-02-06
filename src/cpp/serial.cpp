@@ -121,31 +121,3 @@ void Serial::close_connection()
         error(strerror(errno));
     }
 }
-
-/*
-int main(void)
-{
-    Serial s;
-    if (not s.open_connection("/dev/ttyS2"))
-    {
-        return EXIT_FAILURE;
-    }
-
-    if (not s.configure_connection())
-    {
-        s.close_connection();
-        return EXIT_FAILURE;
-    }
-
-    sleep(3);
-
-    if (s.write_data("test\n"))
-    {
-        std::string result_data;
-        s.read_data(result_data);
-    }
-
-    s.close_connection();
-    return 0;
-}
-*/

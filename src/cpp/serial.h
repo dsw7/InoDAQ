@@ -1,3 +1,6 @@
+#ifndef SERIAL_H
+#define SERIAL_H
+
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -20,3 +23,5 @@ class Serial
         bool read_data(std::string &message);
         void close_connection();
 };
+
+#endif
