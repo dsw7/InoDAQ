@@ -1,5 +1,10 @@
 #include "serial.h"
 
+Serial::Serial(const bool &is_verbose)
+{
+    this->is_verbose = is_verbose;
+}
+
 bool Serial::open_connection(std::string serial_port)
 {
     info("Attempting to open serial port: " + serial_port, this->is_verbose);

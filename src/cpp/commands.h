@@ -4,6 +4,6 @@
 #include "serial.h"
 #include "logging.h"
 
-int run_test_command(std::string &port);
+int run_test_command(std::string &port, const bool &is_verbose);
 
 #endif

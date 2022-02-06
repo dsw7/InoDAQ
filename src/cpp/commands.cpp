@@ -1,9 +1,10 @@
 #include "commands.h"
 
-int run_test_command(std::string &serial_port)
+int run_test_command(std::string &serial_port, const bool &is_verbose)
 {
     info("Running test command", true);
-    Serial connection;
+
+    Serial connection(is_verbose);
 
     if (not connection.open_connection(serial_port))
     {

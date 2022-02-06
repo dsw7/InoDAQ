@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 
     if (options.run_test_command)
     {
-        return run_test_command(options.serial_port);
+        return run_test_command(options.serial_port, true);
     }
 
     warning("Ran no commands. Try " + std::string(argv[0]) + " --help for more information", true);

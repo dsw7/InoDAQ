@@ -13,9 +13,11 @@ class Serial
 {
     private:
         int serial_port_fd = 0;
-        bool is_verbose = false;
+        bool is_verbose;
 
     public:
+        Serial(const bool &is_verbose);
+
         bool open_connection(std::string serial_port);
         bool configure_connection();
         bool write_data(const std::string &message);
