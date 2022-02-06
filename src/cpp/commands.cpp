@@ -2,6 +2,7 @@
 
 int run_test_command(std::string &serial_port)
 {
+    info("Running test command", true);
     Serial connection;
 
     if (not connection.open_connection(serial_port))
@@ -17,6 +18,7 @@ int run_test_command(std::string &serial_port)
 
     sleep(3);
 
+    info("Built in LED should now turn on", true);
     if (connection.write_data("test\n"))
     {
         std::string result_data;
@@ -25,6 +27,7 @@ int run_test_command(std::string &serial_port)
 
     sleep(1);
 
+    info("Built in LED should now turn off", true);
     if (connection.write_data("test\n"))
     {
         std::string result_data;
@@ -32,7 +35,7 @@ int run_test_command(std::string &serial_port)
     }
 
     sleep(1);
+
     connection.close_connection();
-
     return EXIT_SUCCESS;
 }
