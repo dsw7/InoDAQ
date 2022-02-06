@@ -17,7 +17,7 @@ bool Serial::open_connection(std::string serial_port)
         return false;
     }
 
-    if (fcntl(this->serial_port_fd, F_SETFL, 0) == -1)
+    if (fcntl(this->serial_port_fd, F_SETFL, O_NONBLOCK) == -1)
     {
         error(strerror(errno));
         return false;
@@ -68,7 +68,7 @@ bool Serial::write_data(const std::string &message)
     if (message.size() > 0)
     {
         std::string message_no_newline = message.substr(0, message.size() - 1);
-        info("Writing message '" + message_no_newline + "' to serial port", this->is_verbose);
+        info("Writing message '" + message_no_newline + "' to device", this->is_verbose);
     }
     else
     {
@@ -116,7 +116,26 @@ bool Serial::read_data(std::string &message)
         return false;
 	}
 
-	info("Bytes detected on the port!", this->is_verbose);
+	info("Bytes detected on the serial port!", this->is_verbose);
+
+    static const int max_bytes_to_read = 25;
+    char buf[max_bytes_to_read];
+
+    // Make sure to set O_NONBLOCK in fnctl call upstream otherwise read will hang
+    // if max_bytes_to_read > number of bytes sent by device
+    int num_bytes_read = read(this->serial_port_fd, &buf, max_bytes_to_read);
+
+    if (num_bytes_read == -1)
+    {
+        error(strerror(errno));
+        return false;
+    }
+
+	info("Number of bytes read from serial port: " + std::to_string(num_bytes_read), this->is_verbose);
+
+    // XXX continue here - something is wrong here. Data comes out mangled
+    info("Received message from device: '" + std::string(buf) + "'", this->is_verbose);
+
     return true;
 }
 
