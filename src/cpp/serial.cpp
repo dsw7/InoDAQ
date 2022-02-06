@@ -2,7 +2,7 @@
 
 bool Serial::open_connection(std::string serial_port)
 {
-    info("Attempting to open serial port: " + serial_port);
+    info("Attempting to open serial port: " + serial_port, this->is_verbose);
 
     this->serial_port_fd = open(serial_port.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 
@@ -18,13 +18,13 @@ bool Serial::open_connection(std::string serial_port)
         return false;
     }
 
-    info("Successfully opened serial port: " + serial_port);
+    info("Successfully opened serial port: " + serial_port, this->is_verbose);
     return true;
 }
 
 bool Serial::configure_connection()
 {
-    info("Configuring connection on serial port");
+    info("Configuring connection on serial port", this->is_verbose);
 
     struct termios serial_port_configs;
 
@@ -54,7 +54,7 @@ bool Serial::configure_connection()
         return false;
     }
 
-    info("Successfully set all configurations on serial port");
+    info("Successfully set all configurations on serial port", this->is_verbose);
 	return true;
 }
 
@@ -63,7 +63,7 @@ bool Serial::write_data(const std::string &message)
     if (message.size() > 0)
     {
         std::string message_no_newline = message.substr(0, message.size() - 1);
-        info("Writing message '" + message_no_newline + "' to serial port");
+        info("Writing message '" + message_no_newline + "' to serial port", this->is_verbose);
     }
     else
     {
@@ -78,13 +78,13 @@ bool Serial::write_data(const std::string &message)
         return false;
     }
 
-    info("Successfully wrote out message to serial port");
+    info("Successfully wrote out message to serial port", this->is_verbose);
     return true;
 }
 
 bool Serial::read_data(std::string &message)
 {
-    info("Reading data from serial port");
+    info("Reading data from serial port", this->is_verbose);
 
     char n;
     fd_set rdfs;
@@ -111,13 +111,13 @@ bool Serial::read_data(std::string &message)
         return false;
 	}
 
-	info("Bytes detected on the port!");
+	info("Bytes detected on the port!", this->is_verbose);
     return true;
 }
 
 void Serial::close_connection()
 {
-    info("Closing connection to serial port");
+    info("Closing connection to serial port", this->is_verbose);
 
     if (this->serial_port_fd == 0)
     {

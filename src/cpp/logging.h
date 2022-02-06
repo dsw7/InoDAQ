@@ -4,8 +4,8 @@
 #include <string.h>
 #include <iostream>
 
-void info(const std::string &message);
-void warning(const std::string &message);
+void info(const std::string &message, const bool &verbose);
+void warning(const std::string &message, const bool &verbose);
 void error(const std::string &message);
 
 #endif

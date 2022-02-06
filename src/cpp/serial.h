@@ -13,6 +13,7 @@ class Serial
 {
     private:
         int serial_port_fd = 0;
+        bool is_verbose = false;
 
     public:
         bool open_connection(std::string serial_port);

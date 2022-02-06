@@ -1,13 +1,19 @@
 #include "logging.h"
 
-void info(const std::string &message)
+void info(const std::string &message, const bool &verbose)
 {
-    std::cout << message << std::endl;
+    if (verbose)
+    {
+        std::cout << message << std::endl;
+    }
 }
 
-void warning(const std::string &message)
+void warning(const std::string &message, const bool &verbose)
 {
-    std::cout << message << std::endl;
+    if (verbose)
+    {
+        std::cout << message << std::endl;
+    }
 }
 
 void error(const std::string &message)
