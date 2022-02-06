@@ -1,9 +1,4 @@
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <termios.h>
-#include <iostream>
+#include "serial.h"
 
 void error(std::string message)
 {
@@ -14,19 +9,6 @@ void info(std::string message)
 {
     std::cout << message << std::endl;
 }
-
-class Serial
-{
-    private:
-        int serial_port_fd = 0;
-
-    public:
-        bool open_connection(std::string serial_port);
-        bool configure_connection();
-        bool write_data(std::string message);
-        bool read_data(std::string &message);
-        void close_connection();
-};
 
 bool Serial::open_connection(std::string serial_port)
 {
@@ -155,7 +137,9 @@ int main(void)
         return EXIT_FAILURE;
     }
 
-    if (s.write_data("D2\n"))
+    sleep(3);
+
+    if (s.write_data("test\n"))
     {
         std::string result_data;
         s.read_data(result_data);
