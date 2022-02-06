@@ -32,6 +32,8 @@ bool Serial::open_connection(std::string serial_port)
 
 bool Serial::configure_connection()
 {
+    info("Configuring connection on serial port");
+
     struct termios serial_port_configs;
 
     // https://linux.die.net/man/3/cfsetispeed
@@ -60,12 +62,22 @@ bool Serial::configure_connection()
         return false;
     }
 
+    info("Successfully set all configurations on serial port");
 	return true;
 }
 
-bool Serial::write_data(std::string message)
+bool Serial::write_data(const std::string &message)
 {
-    //unsigned char send_b[] = {0x44, 0x02, 0x0a};
+    if (message.size() > 0)
+    {
+        std::string message_no_newline = message.substr(0, message.size() - 1);
+        info("Writing message '" + message_no_newline + "' to serial port");
+    }
+    else
+    {
+        error("Message is empty. Doing nothing");
+        return false;
+    }
 
     // https://man7.org/linux/man-pages/man2/write.2.html
     if (write(this->serial_port_fd, message.c_str(), message.size()) == -1)
@@ -74,11 +86,14 @@ bool Serial::write_data(std::string message)
         return false;
     }
 
+    info("Successfully wrote out message to serial port");
     return true;
 }
 
 bool Serial::read_data(std::string &message)
 {
+    info("Reading data from serial port");
+
     char n;
     fd_set rdfs;
     struct timeval timeout;
@@ -110,6 +125,8 @@ bool Serial::read_data(std::string &message)
 
 void Serial::close_connection()
 {
+    info("Closing connection to serial port");
+
     if (this->serial_port_fd == 0)
     {
         return;
