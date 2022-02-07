@@ -45,21 +45,14 @@ void help_menu()
     "> InoDAQ, 2022\n"
     "> System accepts the following messages:\n"
     "> 1. 'help'          <- Get this help message\n"
-    "> 2. 'D[2-9]|1[1-3]' <- Toggle digital pins 2-13 on and off\n"
-    "> 3. 'Hi InoDAQ'     <- Say hello (for handshaking purposes)\n"
-    "> 4. 'test'          <- Toggle built in LED (for testing purposes)";
+    "> 2. 'test'          <- Toggle built in LED (for handshaking purposes)\n";
+    "> 3. 'D[2-9]|1[1-3]' <- Toggle digital pins 2-13 on and off\n"
 
     Serial.println(menu);
 }
 
 void payload_parser(char *payload)
 {
-    if (strcmp(payload, "Hi InoDAQ") == 0)
-    {
-        Serial.println("Hello from InoDAQ");
-        return;
-    }
-
     if (strcmp(payload, "help") == 0)
     {
         help_menu();
