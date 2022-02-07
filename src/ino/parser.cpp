@@ -45,8 +45,8 @@ void help_menu()
     "> InoDAQ, 2022\n"
     "> System accepts the following messages:\n"
     "> 1. 'help'          <- Get this help message\n"
-    "> 2. 'test'          <- Toggle built in LED (for handshaking purposes)\n";
-    "> 3. 'D[2-9]|1[1-3]' <- Toggle digital pins 2-13 on and off\n"
+    "> 2. 'test'          <- Toggle built in LED (for handshaking purposes)\n"
+    "> 3. 'D[2-9]|1[1-3]' <- Toggle digital pins 2-13 on and off";
 
     Serial.println(menu);
 }
