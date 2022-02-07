@@ -17,7 +17,7 @@ bool Serial::open_connection(std::string serial_port)
         return false;
     }
 
-    if (fcntl(this->serial_port_fd, F_SETFL, O_NONBLOCK) == -1)
+    if (fcntl(this->serial_port_fd, F_SETFL, 0) == -1)
     {
         error(strerror(errno));
         return false;
@@ -118,11 +118,13 @@ bool Serial::read_data(std::string &message)
 
 	info("Bytes detected on the serial port!", this->is_verbose);
 
-    static const int max_bytes_to_read = 25;
+    static const int max_bytes_to_read = 15;
     char buf[max_bytes_to_read];
 
-    // Make sure to set O_NONBLOCK in fnctl call upstream otherwise read will hang
-    // if max_bytes_to_read > number of bytes sent by device
+    // read function will wait until all 15 bytes arrive. If device only sends 10 bytes then
+    // read will hang until a timeout, unless fnctl sets a O_NONBLOCK on the file descriptor
+    // XXX the solution is simple -> we just need to pad the messages with zeros to a fixed length
+    // or read byte-by-byte until we receive some sort of terminator
     int num_bytes_read = read(this->serial_port_fd, &buf, max_bytes_to_read);
 
     if (num_bytes_read == -1)
@@ -133,7 +135,6 @@ bool Serial::read_data(std::string &message)
 
 	info("Number of bytes read from serial port: " + std::to_string(num_bytes_read), this->is_verbose);
 
-    // XXX continue here - something is wrong here. Data comes out mangled
     info("Received message from device: '" + std::string(buf) + "'", this->is_verbose);
 
     return true;
