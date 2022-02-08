@@ -40,4 +40,3 @@ void set_digital_pin_status(int &pin)
     send_message(pin_c);
 }
 
-
