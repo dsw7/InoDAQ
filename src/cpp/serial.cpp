@@ -87,7 +87,7 @@ bool Serial::write_data(const std::string &message)
     return true;
 }
 
-bool Serial::read_data(std::string &message)
+bool Serial::read_data()
 {
     info("Reading data from serial port", this->is_verbose);
 
@@ -118,14 +118,13 @@ bool Serial::read_data(std::string &message)
 
 	info("Bytes detected on the serial port!", this->is_verbose);
 
-    static const int max_bytes_to_read = 15;
-    char buf[max_bytes_to_read];
+    char message[MAX_SIZE_PAYLOAD];
 
-    // read function will wait until all 15 bytes arrive. If device only sends 10 bytes then
-    // read will hang until a timeout, unless fnctl sets a O_NONBLOCK on the file descriptor
-    // XXX the solution is simple -> we just need to pad the messages with zeros to a fixed length
+    // The read function will wait until all MAX_SIZE_PAYLOAD number of bytes arrive. If device only
+    // sends 10 bytes then read will hang until a timeout, unless fnctl sets a O_NONBLOCK on the file descriptor.
+    // The solution is simple -> we just need to pad the messages with zeros to a fixed length
     // or read byte-by-byte until we receive some sort of terminator
-    int num_bytes_read = read(this->serial_port_fd, &buf, max_bytes_to_read);
+    int num_bytes_read = read(this->serial_port_fd, &message, MAX_SIZE_PAYLOAD);
 
     if (num_bytes_read == -1)
     {
@@ -135,7 +134,8 @@ bool Serial::read_data(std::string &message)
 
 	info("Number of bytes read from serial port: " + std::to_string(num_bytes_read), this->is_verbose);
 
-    info("Received message from device: '" + std::string(buf) + "'", this->is_verbose);
+    message[24] = '\0'; // Final byte must be NULL terminated otherwise std::string doesn't know where to stop
+    info("Received message from device: '" + std::string(message) + "'", this->is_verbose);
 
     return true;
 }

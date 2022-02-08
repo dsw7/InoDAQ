@@ -22,8 +22,7 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
     info("Built in LED should now turn on", true);
     if (connection.write_data("test\n"))
     {
-        std::string result_data;
-        connection.read_data(result_data);
+        connection.read_data();
     }
 
     sleep(1);
@@ -31,8 +30,7 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
     info("Built in LED should now turn off", true);
     if (connection.write_data("test\n"))
     {
-        std::string result_data;
-        connection.read_data(result_data);
+        connection.read_data();
     }
 
     sleep(1);

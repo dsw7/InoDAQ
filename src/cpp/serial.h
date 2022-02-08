@@ -9,6 +9,8 @@
 
 #include "logging.h"
 
+#define MAX_SIZE_PAYLOAD 25
+
 class Serial
 {
     private:
@@ -21,7 +23,7 @@ class Serial
         bool open_connection(std::string serial_port);
         bool configure_connection();
         bool write_data(const std::string &message);
-        bool read_data(std::string &message);
+        bool read_data();
         void close_connection();
 };
 
