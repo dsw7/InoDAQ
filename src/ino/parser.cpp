@@ -73,5 +73,5 @@ void payload_parser(char *payload)
         return;
     }
 
-    Serial.println(payload);
+    send_message(payload);
 }

@@ -1,7 +1,7 @@
 #include "parser.h"
 
 #define BAUD_RATE 9600
-#define MAX_SIZE_PAYLOAD 12
+#define MAX_SIZE_PAYLOAD 25
 
 void setup()
 {
@@ -38,3 +38,4 @@ void loop()
         }
     }
 }
+

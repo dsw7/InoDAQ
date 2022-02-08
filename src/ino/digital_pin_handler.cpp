@@ -39,3 +39,4 @@ void set_digital_pin_status(int &pin)
     strcat(pin_c, ": OFF");
     Serial.println(pin_c);
 }
+
