@@ -18,7 +18,8 @@ void send_message(char *message)
     strcpy(payload, message);
     strcat(payload, padding);
 
-    // Use Serial.print() because Serial.println() adds two additional bytes. CRLF, to the outgoing
+    // Use Serial.print() because Serial.println() adds two additional bytes, CRLF, to the outgoing
     // payload which is a problem when reading the message on the receiver's end
     Serial.print(payload);
 }
+

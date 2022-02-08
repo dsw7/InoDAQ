@@ -9,10 +9,10 @@ void toggle_builtin_led()
 
     if (status)
     {
-        Serial.println("Built in LED is ON");
+        send_message("Built in LED is ON");
         return;
     }
 
-    Serial.println("Built in LED is OFF");
+    send_message("Built in LED is OFF");
 }
 

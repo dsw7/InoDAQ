@@ -32,11 +32,12 @@ void set_digital_pin_status(int &pin)
     if (pins[idx])
     {
         strcat(pin_c, ": ON");
-        Serial.println(pin_c);
+        send_message(pin_c);
         return;
     }
 
     strcat(pin_c, ": OFF");
-    Serial.println(pin_c);
+    send_message(pin_c);
 }
+
 
