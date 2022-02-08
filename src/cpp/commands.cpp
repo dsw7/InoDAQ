@@ -1,8 +1,8 @@
 #include "commands.h"
 
-int run_test_command(std::string &serial_port, const bool &is_verbose)
+int run_ping_command(std::string &serial_port, const bool &is_verbose)
 {
-    info("Running test command", true);
+    info("Running ping command", true);
 
     Serial connection(is_verbose);
 
@@ -32,8 +32,6 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
     {
         connection.read_data();
     }
-
-    sleep(1);
 
     connection.close_connection();
     return EXIT_SUCCESS;
