@@ -28,8 +28,8 @@ class TestInoDAQ:
         if not self.handle.is_open:
             pytest.exit(f'Could not connect to {self.handle.name}')
 
-        # A new connection will force Arduino to auto-reset (see Request To Send)
-        # Wait a couple of seconds for device to reset
+        # Opening a connection will send a DTR (Data Terminal Ready) signal to device, which will
+        # force the device to reset. Give device 2 seconds to reset
         sleep(2)
 
     def teardown_class(self) -> None:
