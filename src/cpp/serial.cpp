@@ -11,6 +11,8 @@ bool Serial::open_connection(std::string serial_port)
 
     this->serial_port_fd = open(serial_port.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 
+    sleep(MAX_SLEEP_WAIT_FOR_AUTO_RESET);
+
     if (this->serial_port_fd == -1)
     {
         error(strerror(errno));

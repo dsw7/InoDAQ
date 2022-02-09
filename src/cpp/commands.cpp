@@ -17,8 +17,6 @@ int run_ping_command(std::string &serial_port, const bool &is_verbose)
         return EXIT_FAILURE;
     }
 
-    sleep(3);
-
     info("Built in LED should now turn on", true);
     if (connection.write_data("test\n"))
     {
@@ -59,8 +57,6 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
         connection.close_connection();
         return EXIT_FAILURE;
     }
-
-    sleep(3);
 
     info("Turning digital pins on", true);
 

@@ -10,6 +10,7 @@
 #include "logging.h"
 
 #define MAX_SIZE_PAYLOAD 25
+#define MAX_SLEEP_WAIT_FOR_AUTO_RESET 2
 
 class Serial
 {
