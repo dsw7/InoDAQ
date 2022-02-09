@@ -62,11 +62,12 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
 
     for (std::vector<std::string>::iterator p = digital_pins.begin(); p != digital_pins.end(); ++p)
     {
-        usleep(100000);
+        usleep(50000);
 
         if (connection.write_data(*p))
         {
             connection.read_data();
+            info("", true);
         }
     }
 
@@ -75,13 +76,15 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
 
     for (std::vector<std::string>::iterator p = digital_pins.begin(); p != digital_pins.end(); ++p)
     {
-        usleep(100000);
+        usleep(50000);
 
         if (connection.write_data(*p))
         {
             connection.read_data();
+            info("", true);
         }
     }
 
+    connection.close_connection();
     return EXIT_SUCCESS;
 }
