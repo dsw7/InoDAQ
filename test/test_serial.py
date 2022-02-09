@@ -1,6 +1,8 @@
+from time import sleep
 import serial
 import pytest
 
+MAX_SIZE_PAYLOAD = 25
 
 CONNECTION_KWARGS = {
     'port': '/dev/ttyS2',
@@ -26,18 +28,9 @@ class TestInoDAQ:
         if not self.handle.is_open:
             pytest.exit(f'Could not connect to {self.handle.name}')
 
-        for _ in range(10):
-
-            self.handle.write(b'foobar\n')
-            retval = self.handle.readlines()
-
-            if not retval:
-                continue
-
-            if b'foobar' in retval[0]:
-                break
-        else:
-            pytest.exit(f'Could not connect to {self.handle.name} in time')
+        # A new connection will force Arduino to auto-reset (see Request To Send)
+        # Wait a couple of seconds for device to reset
+        sleep(2)
 
     def teardown_class(self) -> None:
 
@@ -64,7 +57,7 @@ class TestInoDAQ:
     def test_digital_pins(self, command: bytes, on_msg: bytes, off_msg: bytes) -> None:
 
         self.handle.write(command)
-        assert on_msg in self.handle.readlines()[0]
+        assert on_msg in self.handle.read(MAX_SIZE_PAYLOAD)
 
         self.handle.write(command)
-        assert off_msg in self.handle.readlines()[0]
+        assert off_msg in self.handle.read(MAX_SIZE_PAYLOAD)
