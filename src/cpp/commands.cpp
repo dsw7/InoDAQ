@@ -20,14 +20,16 @@ int run_ping_command(std::string &serial_port, const bool &is_verbose)
     info("Built in LED should now turn on", true);
     if (connection.write_data("test\n"))
     {
+        usleep(RW_DELAY_USEC);
         connection.read_data();
     }
 
-    usleep(250000);
+    usleep(RW_DELAY_USEC);
 
     info("Built in LED should now turn off", true);
     if (connection.write_data("test\n"))
     {
+        usleep(RW_DELAY_USEC);
         connection.read_data();
     }
 
@@ -64,10 +66,10 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
 
     for (std::vector<std::string>::iterator p = digital_pins.begin(); p != digital_pins.end(); ++p)
     {
-        usleep(50000);
 
         if (connection.write_data(*p))
         {
+            usleep(RW_DELAY_USEC);
             connection.read_data();
             info("", true);
         }
@@ -80,10 +82,10 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
 
     for (std::vector<std::string>::iterator p = digital_pins.begin(); p != digital_pins.end(); ++p)
     {
-        usleep(50000);
 
         if (connection.write_data(*p))
         {
+            usleep(RW_DELAY_USEC);
             connection.read_data();
             info("", true);
         }
