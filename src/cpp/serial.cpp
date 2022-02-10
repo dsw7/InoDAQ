@@ -80,13 +80,15 @@ bool Serial::write_data(const std::string &message)
     }
 
     // https://man7.org/linux/man-pages/man2/write.2.html
-    if (write(this->serial_port_fd, message.c_str(), message.size()) == -1)
+    int num_bytes_written = write(this->serial_port_fd, message.c_str(), message.size());
+
+    if (num_bytes_written == -1)
     {
         error(strerror(errno));
         return false;
     }
 
-    info("Successfully wrote out message to serial port", this->is_verbose);
+    info("Successfully wrote out " + std::to_string(num_bytes_written) + " bytes to serial port", this->is_verbose);
     return true;
 }
 
