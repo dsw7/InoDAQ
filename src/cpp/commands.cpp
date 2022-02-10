@@ -60,9 +60,9 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
         return EXIT_FAILURE;
     }
 
-    info("", true);
+    info("", is_verbose);
     info("Turning digital pins on", true);
-    info("------------------------", true);
+    info("------------------------", is_verbose);
 
     for (std::vector<std::string>::iterator p = digital_pins.begin(); p != digital_pins.end(); ++p)
     {
@@ -71,12 +71,12 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
         {
             usleep(RW_DELAY_USEC);
             connection.read_data();
-            info("", true);
+            info("", is_verbose);
         }
     }
 
     info("Turning digital pins off", true);
-    info("------------------------", true);
+    info("------------------------", is_verbose);
 
     sleep(1);
 
@@ -87,7 +87,7 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
         {
             usleep(RW_DELAY_USEC);
             connection.read_data();
-            info("", true);
+            info("", is_verbose);
         }
     }
 
