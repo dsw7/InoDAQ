@@ -62,6 +62,14 @@ class TestInoDAQ:
         self.handle.write(command)
         assert off_msg in self.handle.read(MAX_SIZE_PAYLOAD)
 
+    def test_handshake(self) -> None:
+
+        self.handle.write(b'test\n')
+        assert b'Built in LED is ON' in self.handle.read(MAX_SIZE_PAYLOAD)
+
+        self.handle.write(b'test\n')
+        assert b'Built in LED is OFF' in self.handle.read(MAX_SIZE_PAYLOAD)
+
     @pytest.mark.parametrize('message', [b'deadbeef\n', b'foo\n', b'bar\n', b'baz\n', b'spamham\n'])
     def test_unknown_message(self, message: bytes) -> None:
 
