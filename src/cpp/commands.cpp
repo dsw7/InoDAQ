@@ -58,7 +58,9 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
         return EXIT_FAILURE;
     }
 
+    info("", true);
     info("Turning digital pins on", true);
+    info("------------------------", true);
 
     for (std::vector<std::string>::iterator p = digital_pins.begin(); p != digital_pins.end(); ++p)
     {
@@ -72,6 +74,8 @@ int run_test_command(std::string &serial_port, const bool &is_verbose)
     }
 
     info("Turning digital pins off", true);
+    info("------------------------", true);
+
     sleep(1);
 
     for (std::vector<std::string>::iterator p = digital_pins.begin(); p != digital_pins.end(); ++p)

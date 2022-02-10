@@ -119,8 +119,6 @@ bool Serial::read_data()
         return false;
 	}
 
-	info("Bytes detected on the serial port!", this->is_verbose);
-
     char message[MAX_SIZE_PAYLOAD];
 
     // The read function will wait until all MAX_SIZE_PAYLOAD number of bytes arrive. If device only
