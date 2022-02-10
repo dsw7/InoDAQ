@@ -12,7 +12,7 @@ bool Serial::open_connection(std::string serial_port)
     this->serial_port_fd = open(serial_port.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 
     // Wait for device to reset after sending DTR (Data Terminal Ready) signal
-    sleep(MAX_SLEEP_WAIT_FOR_AUTO_RESET);
+    render_progress_bar(MAX_SLEEP_WAIT_FOR_AUTO_RESET);
 
     if (this->serial_port_fd == -1)
     {
