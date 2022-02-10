@@ -61,3 +61,9 @@ class TestInoDAQ:
 
         self.handle.write(command)
         assert off_msg in self.handle.read(MAX_SIZE_PAYLOAD)
+
+    @pytest.mark.parametrize('message', [b'deadbeef\n', b'foo\n', b'bar\n', b'baz\n', b'spamham\n'])
+    def test_unknown_message(self, message: bytes) -> None:
+
+        self.handle.write(message)
+        assert message.strip() in self.handle.read(MAX_SIZE_PAYLOAD)
