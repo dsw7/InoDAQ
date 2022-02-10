@@ -95,18 +95,19 @@ bool Serial::read_data()
     info("Reading data from serial port", this->is_verbose);
 
     char n;
-    fd_set rdfs;
+    fd_set fildes_ready_for_reading;
     struct timeval timeout;
 
-    timeout.tv_sec = 10; // ten second timeout
+    timeout.tv_sec = TIMEOUT_SELECT_SECS;
     timeout.tv_usec = 0;
 
 	// https://man7.org/linux/man-pages/man2/select.2.html
-    FD_ZERO(&rdfs);
-    FD_SET(this->serial_port_fd, &rdfs);
+    FD_ZERO(&fildes_ready_for_reading);
+    FD_SET(this->serial_port_fd, &fildes_ready_for_reading);
 
 	// https://man7.org/linux/man-pages/man2/select.2.html
-	n = select(this->serial_port_fd + 1, &rdfs, NULL, NULL, &timeout);
+    // specifically see the part about how we must have the largest file descriptor + 1
+	n = select(this->serial_port_fd + 1, &fildes_ready_for_reading, NULL, NULL, &timeout);
 
 	if (n < 0)
 	{
