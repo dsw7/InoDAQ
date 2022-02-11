@@ -1,19 +1,4 @@
-#include "interface.h"
-
-class ControlPanel
-{
-    private:
-        unsigned int cursor;
-
-    public:
-        ControlPanel();
-        ~ControlPanel();
-
-        void move_cursor_up();
-        void move_cursor_down();
-        void input_handler(int &key);
-        void loop();
-};
+#include "control_panel.h"
 
 ControlPanel::ControlPanel()
 {

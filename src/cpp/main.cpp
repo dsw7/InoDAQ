@@ -11,7 +11,7 @@ struct cli_options
     bool enable_logging = false;
     bool run_ping_command = false;
     bool run_test_command = false;
-    bool run_interface = false;
+    bool run_control_panel = false;
 };
 
 void help_message(char *file)
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
                 options.run_test_command = true;
                 break;
             case 'i':
-                options.run_interface = true;
+                options.run_control_panel = true;
                 break;
             case 'p':
                 options.serial_port = optarg;
@@ -100,6 +100,12 @@ int main(int argc, char **argv)
     if (options.run_test_command)
     {
         return run_test_command(options.serial_port, options.enable_logging);
+    }
+
+    if (options.run_control_panel)
+    {
+        run_control_panel();
+        return 0;
     }
 
     warning("Ran no commands. Try " + std::string(argv[0]) + " --help for more information", true);

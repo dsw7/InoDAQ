@@ -1,3 +1,6 @@
+#ifndef CONTROL_PANEL_H
+#define CONTROL_PANEL_H
+
 #include <curses.h>
 #include <string>
 
@@ -18,3 +21,5 @@ class ControlPanel
         void input_handler(int &key);
         void loop();
 };
+
+#endif

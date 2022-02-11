@@ -1,5 +1,11 @@
 #include "commands.h"
 
+void run_control_panel()
+{
+    ControlPanel panel;
+    panel.loop();
+}
+
 int run_ping_command(std::string &serial_port, const bool &is_verbose)
 {
     info("Running ping command", true);

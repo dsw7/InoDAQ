@@ -17,10 +17,18 @@ add_compile_definitions(MAX_SLEEP_WAIT_FOR_AUTO_RESET=2)  # Number of seconds to
 add_compile_definitions(RW_DELAY_USEC=50000)              # Delay between writing to and reading from device
 add_compile_definitions(TIMEOUT_SELECT_SECS=2)            # select(2) timeout in seconds
 
+# Link curses
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
+
 # Avoid using glob patterns
 add_executable(${OUTPUT_NAME}
     "main.cpp"
     "serial.cpp"
     "commands.cpp"
     "logging.cpp"
+    "control_panel.cpp"
 )
+
+# Libs need to be linked after adding executable (i.e. ~ $ g++ <main.cpp> -lncurses)
+target_link_libraries(${OUTPUT_NAME} ${CURSES_LIBRARIES})
