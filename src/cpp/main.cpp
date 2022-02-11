@@ -11,6 +11,7 @@ struct cli_options
     bool enable_logging = false;
     bool run_ping_command = false;
     bool run_test_command = false;
+    bool run_interface = false;
 };
 
 void help_message(char *file)
@@ -21,12 +22,14 @@ void help_message(char *file)
     std::cerr << " [-v]";
     std::cerr << " [-c]";
     std::cerr << " [-t]";
+    std::cerr << " [-i]";
     std::cerr << " [-p <serial-port>]\n\n";
     std::cerr << "Options:\n\n";
     std::cerr << "  -h, --help                      Print help information and exit\n";
     std::cerr << "  -v, --verbose                   Enable logging when running commands\n";
     std::cerr << "  -c, --ping                      Ping device. Will blink built in LED\n";
     std::cerr << "  -t, --test                      Test communication with device by toggling digital pins\n";
+    std::cerr << "  -i, --interface                 Open up curses interface for toggling digital pins\n";
     std::cerr << "  -p, --serial-port=<tcp-port>    Specify which serial port to send data to\n";
     std::cout << std::endl;
 }
@@ -45,6 +48,7 @@ int main(int argc, char **argv)
             {"verbose",     no_argument,       0, 'v'},
             {"ping",        no_argument,       0, 'c'},
             {"test",        no_argument,       0, 't'},
+            {"interface",   no_argument,       0, 'i'},
             {"serial-port", required_argument, 0, 'p'}
         };
 
@@ -52,7 +56,7 @@ int main(int argc, char **argv)
         int option_index = 0;
 
         c = getopt_long(
-            argc, argv, "hvctp:", long_options, &option_index
+            argc, argv, "hvctip:", long_options, &option_index
         );
 
         // End of options
@@ -75,6 +79,9 @@ int main(int argc, char **argv)
                 break;
             case 't':
                 options.run_test_command = true;
+                break;
+            case 'i':
+                options.run_interface = true;
                 break;
             case 'p':
                 options.serial_port = optarg;
