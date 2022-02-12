@@ -2,6 +2,9 @@
 
 ControlPanel::ControlPanel()
 {
+
+    // I follow RAII (resource acquisition is initialization) and do all setup in the constructor
+
     initscr();
     cbreak();
     noecho();
