@@ -21,7 +21,7 @@ ControlPanel::ControlPanel()
     }
 
     attron(A_REVERSE);
-    mvwprintw(stdscr, LINES - 1, 0, " Press 'j' key to scroll down and 'k' key to scroll up ");
+    mvwprintw(stdscr, LINES - 1, 0, " Press 'j' key to scroll down | Press 'k' key to scroll up ");
     attroff(A_REVERSE);
 }
 
