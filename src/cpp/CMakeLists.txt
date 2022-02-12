@@ -4,6 +4,9 @@ project(InoDAQ)
 # Use C++ 17 or later
 set(CMAKE_CXX_STANDARD 17)
 
+# Lots of warnings + all warnings as errors
+add_compile_options(-Wall -Wextra -pedantic -Werror)
+
 # Set binary name
 set(OUTPUT_NAME inodaq)
 
