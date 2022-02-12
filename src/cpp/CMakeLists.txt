@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(OUTPUT_NAME inodaq)
 
 # Set where to dump binary
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/tmp/")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/tmp")
 message(STATUS "Compiled binary will be ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${OUTPUT_NAME}")
 
 # Macro definitions
