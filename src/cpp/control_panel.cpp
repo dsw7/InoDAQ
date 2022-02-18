@@ -9,6 +9,8 @@ ControlPanel::ControlPanel()
     cbreak();
     noecho();
 
+    curs_set(0); // disable blinking cursor
+
     keypad(stdscr, true);
 
     this->cursor = MIN_BOUND;
