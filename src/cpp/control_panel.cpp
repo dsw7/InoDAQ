@@ -19,7 +19,7 @@ ControlPanel::ControlPanel()
 
     for (unsigned int i = MIN_BOUND; i < MAX_BOUND + 1; i++)
     {
-        mvwprintw(stdscr, i, 4, "[x]");
+        mvwprintw(stdscr, i, 4, "[ ]");
 
         std::string pin = "D" + std::to_string(i);
         mvwprintw(stdscr, i, 9, pin.c_str());
@@ -59,6 +59,38 @@ void ControlPanel::move_cursor_down()
     mvwprintw(stdscr, this->cursor, 2, ">");
 }
 
+void ControlPanel::toggle_pin()
+{
+    static std::map<int, bool> state_matrix {
+        {2,  false},
+        {3,  false},
+        {4,  false},
+        {5,  false},
+        {6,  false},
+        {7,  false},
+        {8,  false},
+        {9,  false},
+        {10, false},
+        {11, false},
+        {12, false},
+        {13, false}
+    };
+
+    state_matrix[this->cursor] = !state_matrix[this->cursor];
+
+    for (unsigned int i = MIN_BOUND; i < MAX_BOUND + 1; i++)
+    {
+        if (state_matrix[i])
+        {
+            mvwprintw(stdscr, i, 4, "[x]");
+        }
+        else
+        {
+            mvwprintw(stdscr, i, 4, "[ ]");
+        }
+    }
+}
+
 void ControlPanel::input_handler(int &key)
 {
     switch(key)
@@ -68,6 +100,9 @@ void ControlPanel::input_handler(int &key)
             break;
         case 'k':
             this->move_cursor_up();
+            break;
+        case 10:
+            this->toggle_pin();
             break;
     }
 }
