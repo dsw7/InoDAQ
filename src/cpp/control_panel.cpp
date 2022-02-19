@@ -25,8 +25,11 @@ ControlPanel::ControlPanel()
         mvwprintw(stdscr, i, 9, pin.c_str());
     }
 
+    mvwprintw(stdscr, 15, 4, "Status: ");
+    mvwprintw(stdscr, 15, 12, "All digital pins are low");
+
     attron(A_REVERSE);
-    mvwprintw(stdscr, LINES - 1, 0, " Press 'j' key to scroll down | Press 'k' key to scroll up ");
+    mvwprintw(stdscr, LINES - 1, 0, " Press 'j' to scroll down and 'k' to scroll up | Press 'q' to quit ");
     attroff(A_REVERSE);
 }
 
@@ -77,6 +80,21 @@ void ControlPanel::toggle_pin()
     };
 
     state_matrix[this->cursor] = !state_matrix[this->cursor];
+
+    std::string status;
+
+    if (state_matrix[this->cursor])
+    {
+        status = "Pin " + std::to_string(this->cursor) + " was set to high";
+    }
+    else
+    {
+        status = "Pin " + std::to_string(this->cursor) + " was set to low";
+    }
+
+    move(15, 12);
+    clrtoeol();
+    mvwprintw(stdscr, 15, 12, status.c_str());
 
     for (unsigned int i = MIN_BOUND; i < MAX_BOUND + 1; i++)
     {
