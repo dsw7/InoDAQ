@@ -21,6 +21,7 @@ class ControlPanel
         void print_status(const std::string &status);
         void list_instructions();
         void connect();
+        void disconnect();
         void move_cursor_up();
         void move_cursor_down();
         void toggle_pin();

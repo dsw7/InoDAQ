@@ -62,9 +62,10 @@ void ControlPanel::list_instructions()
     mvwprintw(stdscr, 18, 2, "1. Press 'j' key to scroll down and 'k' key to scroll up");
     mvwprintw(stdscr, 19, 2, "2. Scroll to desired pin and press ENTER to toggle pin");
     mvwprintw(stdscr, 20, 2, "3. Press 'c' to connect on serial port specified via command line");
-    mvwprintw(stdscr, 21, 2, "4. Press 'q' key to quit");
+    mvwprintw(stdscr, 21, 2, "3. Press 'd' to disconnect from serial port specified via command line");
+    mvwprintw(stdscr, 22, 2, "4. Press 'q' key to quit");
 
-    move(22, 0);
+    move(23, 0);
     hline('=', terminal_width);
 }
 
@@ -73,6 +74,11 @@ void ControlPanel::connect()
     this->print_status("Connecting on port " + this->serial_port);
 
     // Put code here for instantiating the actual serial class
+}
+
+void ControlPanel::disconnect()
+{
+    this->print_status("Disconnecting from port " + this->serial_port);
 }
 
 void ControlPanel::move_cursor_up()
@@ -156,6 +162,9 @@ void ControlPanel::input_handler(int &key)
             break;
         case 'c':
             this->connect();
+            break;
+        case 'd':
+            this->disconnect();
             break;
         case 10:
             this->toggle_pin();
