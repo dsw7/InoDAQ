@@ -25,15 +25,28 @@ ControlPanel::ControlPanel()
         mvwprintw(stdscr, i, 9, pin.c_str());
     }
 
-    mvwprintw(stdscr, 15, 4, "Status: ");
-    mvwprintw(stdscr, 15, 12, "All digital pins are low");
-
+    this->print_status("All digital pins are low");
     this->list_instructions();
 }
 
 ControlPanel::~ControlPanel()
 {
     endwin();
+}
+
+void ControlPanel::print_status(const std::string &status)
+{
+    static bool prefix_enabled = false;
+
+    if (!prefix_enabled)
+    {
+        mvwprintw(stdscr, 15, 4, "Status:");
+        prefix_enabled = true;
+    }
+
+    move(15, 12);
+    clrtoeol();
+    mvwprintw(stdscr, 15, 12, status.c_str());
 }
 
 void ControlPanel::list_instructions()
@@ -105,9 +118,7 @@ void ControlPanel::toggle_pin()
         status = "Pin " + std::to_string(this->cursor) + " was set to low";
     }
 
-    move(15, 12);
-    clrtoeol();
-    mvwprintw(stdscr, 15, 12, status.c_str());
+    this->print_status(status);
 
     for (unsigned int i = MIN_BOUND; i < MAX_BOUND + 1; i++)
     {
