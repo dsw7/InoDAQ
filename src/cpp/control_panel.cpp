@@ -1,6 +1,6 @@
 #include "control_panel.h"
 
-ControlPanel::ControlPanel()
+ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
 {
 
     // I follow RAII (resource acquisition is initialization) and do all setup in the constructor

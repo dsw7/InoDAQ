@@ -12,9 +12,10 @@ class ControlPanel
 {
     private:
         unsigned int cursor;
+        std::string serial_port;
 
     public:
-        ControlPanel();
+        ControlPanel(std::string &serial_port);
         ~ControlPanel();
 
         void print_status(const std::string &status);

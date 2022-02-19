@@ -1,8 +1,8 @@
 #include "commands.h"
 
-void run_control_panel()
+void run_control_panel(std::string &serial_port)
 {
-    ControlPanel panel;
+    ControlPanel panel(serial_port);
     panel.loop();
 }
 
