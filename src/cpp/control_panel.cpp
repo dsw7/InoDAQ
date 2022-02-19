@@ -28,14 +28,27 @@ ControlPanel::ControlPanel()
     mvwprintw(stdscr, 15, 4, "Status: ");
     mvwprintw(stdscr, 15, 12, "All digital pins are low");
 
-    attron(A_REVERSE);
-    mvwprintw(stdscr, LINES - 1, 0, " Press 'j' to scroll down and 'k' to scroll up | Press 'q' to quit ");
-    attroff(A_REVERSE);
+    this->list_instructions();
 }
 
 ControlPanel::~ControlPanel()
 {
     endwin();
+}
+
+void ControlPanel::list_instructions()
+{
+    static unsigned int terminal_width = getmaxx(stdscr);
+
+    move(17, 0);
+    hline('=', terminal_width);
+
+    mvwprintw(stdscr, 18, 2, "1. Press 'j' key to scroll down and 'k' key to scroll up");
+    mvwprintw(stdscr, 19, 2, "2. Scroll to desired pin and press ENTER to toggle pin");
+    mvwprintw(stdscr, 20, 2, "3. Press 'q' key to quit");
+
+    move(21, 0);
+    hline('=', terminal_width);
 }
 
 void ControlPanel::move_cursor_up()

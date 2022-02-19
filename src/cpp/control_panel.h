@@ -17,6 +17,7 @@ class ControlPanel
         ControlPanel();
         ~ControlPanel();
 
+        void list_instructions();
         void move_cursor_up();
         void move_cursor_down();
         void toggle_pin();
