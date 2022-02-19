@@ -9,11 +9,14 @@ ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
     cbreak();
     noecho();
 
-    curs_set(0); // disable blinking cursor
+    curs_set(0);
 
     keypad(stdscr, true);
 
     this->cursor = MIN_BOUND;
+
+    // Cursor should start at 0, 0 by default
+    hline('=', getmaxx(stdscr));
 
     mvwprintw(stdscr, this->cursor, 2, ">");
 
