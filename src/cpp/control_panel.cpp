@@ -71,14 +71,28 @@ void ControlPanel::list_instructions()
 
 void ControlPanel::connect()
 {
-    this->print_status("Connecting on port " + this->serial_port);
-
-    // Put code here for instantiating the actual serial class
+    if (this->is_connected)
+    {
+        this->print_status("Already connected on port " + this->serial_port);
+    }
+    else
+    {
+        this->print_status("Connecting on port " + this->serial_port);
+        this->is_connected = true;
+    }
 }
 
 void ControlPanel::disconnect()
 {
-    this->print_status("Disconnecting from port " + this->serial_port);
+    if (this->is_connected)
+    {
+        this->print_status("Disconnecting from port " + this->serial_port);
+        this->is_connected = false;
+    }
+    else
+    {
+        this->print_status("Not disconnecting. Was not connected to port " + this->serial_port);
+    }
 }
 
 void ControlPanel::move_cursor_up()

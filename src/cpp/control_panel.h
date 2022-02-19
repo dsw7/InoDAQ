@@ -13,6 +13,7 @@ class ControlPanel
     private:
         unsigned int cursor;
         std::string serial_port;
+        bool is_connected = false;
 
     public:
         ControlPanel(std::string &serial_port);
