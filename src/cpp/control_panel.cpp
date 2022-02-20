@@ -60,13 +60,26 @@ void ControlPanel::list_instructions()
     move(17, 0);
     hline('=', terminal_width);
 
-    mvwprintw(stdscr, 18, 2, "1. Press 'j' key to scroll down and 'k' key to scroll up");
-    mvwprintw(stdscr, 19, 2, "2. Scroll to desired pin and press ENTER to toggle pin");
-    mvwprintw(stdscr, 20, 2, "3. Press 'c' to connect on serial port specified via command line");
-    mvwprintw(stdscr, 21, 2, "4. Press 'd' to disconnect from serial port specified via command line");
-    mvwprintw(stdscr, 22, 2, "5. Press 'q' key to quit");
+    wattron(stdscr, A_BOLD | A_UNDERLINE);
+    mvwprintw(stdscr, 19, 2, "Key");
+    mvwprintw(stdscr, 19, 18, "Description");
+    wattroff(stdscr, A_BOLD | A_UNDERLINE);
 
-    move(23, 0);
+    mvwprintw(stdscr, 21, 2, "j, KEY_UP");
+    mvwprintw(stdscr, 22, 2, "k, KEY_DOWN");
+    mvwprintw(stdscr, 23, 2, "c");
+    mvwprintw(stdscr, 24, 2, "d");
+    mvwprintw(stdscr, 25, 2, "ENTER");
+    mvwprintw(stdscr, 26, 2, "q");
+
+    mvwprintw(stdscr, 21, 18, "Scroll cursor down");
+    mvwprintw(stdscr, 22, 18, "Scroll cursor up");
+    mvwprintw(stdscr, 23, 18, "Connect to serial port specified via command line");
+    mvwprintw(stdscr, 24, 18, "Disconnect from serial port specified via command line");
+    mvwprintw(stdscr, 25, 18, "Toggle pin at current cursor position");
+    mvwprintw(stdscr, 26, 18, "Quit the program");
+
+    move(28, 0);
     hline('=', terminal_width);
 }
 
