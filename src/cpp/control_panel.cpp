@@ -63,8 +63,8 @@ void ControlPanel::list_instructions()
     mvwprintw(stdscr, 18, 2, "1. Press 'j' key to scroll down and 'k' key to scroll up");
     mvwprintw(stdscr, 19, 2, "2. Scroll to desired pin and press ENTER to toggle pin");
     mvwprintw(stdscr, 20, 2, "3. Press 'c' to connect on serial port specified via command line");
-    mvwprintw(stdscr, 21, 2, "3. Press 'd' to disconnect from serial port specified via command line");
-    mvwprintw(stdscr, 22, 2, "4. Press 'q' key to quit");
+    mvwprintw(stdscr, 21, 2, "4. Press 'd' to disconnect from serial port specified via command line");
+    mvwprintw(stdscr, 22, 2, "5. Press 'q' key to quit");
 
     move(23, 0);
     hline('=', terminal_width);
@@ -193,6 +193,12 @@ void ControlPanel::input_handler(int &key)
             this->move_cursor_down();
             break;
         case 'k':
+            this->move_cursor_up();
+            break;
+        case KEY_DOWN:
+            this->move_cursor_down();
+            break;
+        case KEY_UP:
             this->move_cursor_up();
             break;
         case 'c':
