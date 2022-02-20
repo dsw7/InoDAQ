@@ -116,7 +116,7 @@ void ControlPanel::move_cursor_up()
 
     if (this->cursor < MIN_BOUND)
     {
-        this->cursor = MIN_BOUND;
+        this->cursor = MAX_BOUND;
     }
     mvwprintw(stdscr, this->cursor, 2, ">");
 }
@@ -128,7 +128,7 @@ void ControlPanel::move_cursor_down()
 
     if (this->cursor > MAX_BOUND)
     {
-        this->cursor = MAX_BOUND;
+        this->cursor = MIN_BOUND;
     }
     mvwprintw(stdscr, this->cursor, 2, ">");
 }
