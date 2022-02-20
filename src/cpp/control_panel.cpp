@@ -5,8 +5,6 @@ ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
 
     // I follow RAII (resource acquisition is initialization) and do all setup in the constructor
 
-    Serial connection(false);
-
     initscr();
     cbreak();
     noecho();
@@ -36,6 +34,7 @@ ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
 
 ControlPanel::~ControlPanel()
 {
+    this->connection.close_connection();
     endwin();
 }
 
@@ -43,7 +42,7 @@ void ControlPanel::print_status(const std::string &status)
 {
     static bool prefix_enabled = false;
 
-    if (!prefix_enabled)
+    if (not prefix_enabled)
     {
         mvwprintw(stdscr, 15, 4, "Status:");
         prefix_enabled = true;
@@ -79,19 +78,34 @@ void ControlPanel::connect()
         return;
     }
 
-    this->print_status("Connecting on port " + this->serial_port);
+    if (not this->connection.open_connection(serial_port))
+    {
+        this->print_status("Could not connect on port " + this->serial_port);
+        return;
+    }
+
+    if (not this->connection.configure_connection())
+    {
+        this->print_status("Could not configure port " + this->serial_port);
+        this->connection.close_connection();
+        return;
+    }
+
+    this->print_status("Connected on port " + this->serial_port);
     this->is_connected = true;
 }
 
 void ControlPanel::disconnect()
 {
-    if (!this->is_connected)
+    if (not this->is_connected)
     {
         this->print_status("Not disconnecting. Was not connected to port " + this->serial_port);
         return;
     }
 
     this->print_status("Disconnecting from port " + this->serial_port);
+    this->connection.close_connection();
+
     this->is_connected = false;
 }
 

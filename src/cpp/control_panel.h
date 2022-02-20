@@ -17,6 +17,8 @@ class ControlPanel
         std::string serial_port;
         bool is_connected = false;
 
+        Serial connection{false};
+
     public:
         ControlPanel(std::string &serial_port);
         ~ControlPanel();
