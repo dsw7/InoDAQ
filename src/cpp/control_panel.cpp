@@ -135,6 +135,12 @@ void ControlPanel::move_cursor_down()
 
 void ControlPanel::toggle_pin()
 {
+    if (not this->is_connected)
+    {
+        this->print_status("Not toggling pin. A connection to port " + this->serial_port + " does not exist!");
+        return;
+    }
+
     static std::map<int, bool> state_matrix {
         {2,  false},
         {3,  false},
@@ -150,9 +156,10 @@ void ControlPanel::toggle_pin()
         {13, false}
     };
 
+    this->connection.write_data("D" + std::to_string(this->cursor) + "\n");
     state_matrix[this->cursor] = !state_matrix[this->cursor];
 
-    std::string status;
+    static std::string status;
 
     if (state_matrix[this->cursor])
     {
