@@ -5,6 +5,8 @@
 #include <string>
 #include <map>
 
+#include "serial.h"
+
 #define MIN_BOUND 2
 #define MAX_BOUND 13
 

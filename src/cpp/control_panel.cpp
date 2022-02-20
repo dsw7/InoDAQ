@@ -5,6 +5,8 @@ ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
 
     // I follow RAII (resource acquisition is initialization) and do all setup in the constructor
 
+    Serial connection(false);
+
     initscr();
     cbreak();
     noecho();
@@ -74,25 +76,23 @@ void ControlPanel::connect()
     if (this->is_connected)
     {
         this->print_status("Already connected on port " + this->serial_port);
+        return;
     }
-    else
-    {
-        this->print_status("Connecting on port " + this->serial_port);
-        this->is_connected = true;
-    }
+
+    this->print_status("Connecting on port " + this->serial_port);
+    this->is_connected = true;
 }
 
 void ControlPanel::disconnect()
 {
-    if (this->is_connected)
-    {
-        this->print_status("Disconnecting from port " + this->serial_port);
-        this->is_connected = false;
-    }
-    else
+    if (!this->is_connected)
     {
         this->print_status("Not disconnecting. Was not connected to port " + this->serial_port);
+        return;
     }
+
+    this->print_status("Disconnecting from port " + this->serial_port);
+    this->is_connected = false;
 }
 
 void ControlPanel::move_cursor_up()
