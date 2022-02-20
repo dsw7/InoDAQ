@@ -16,13 +16,13 @@ bool Serial::open_connection(std::string serial_port)
 
     if (this->serial_port_fd == -1)
     {
-        error(strerror(errno));
+        error(strerror(errno), this->is_verbose);
         return false;
     }
 
     if (fcntl(this->serial_port_fd, F_SETFL, 0) == -1)
     {
-        error(strerror(errno));
+        error(strerror(errno), this->is_verbose);
         return false;
     }
 
@@ -39,14 +39,14 @@ bool Serial::configure_connection()
     // https://linux.die.net/man/3/cfsetispeed
 	if (cfsetispeed(&serial_port_configs, B9600) == -1)
     {
-        error(strerror(errno));
+        error(strerror(errno), this->is_verbose);
         return false;
     }
 
     // https://linux.die.net/man/3/cfsetospeed
 	if (cfsetospeed(&serial_port_configs, B9600) == -1)
     {
-        error(strerror(errno));
+        error(strerror(errno), this->is_verbose);
         return false;
     }
 
@@ -58,7 +58,7 @@ bool Serial::configure_connection()
     // https://linux.die.net/man/3/tcsetattr
 	if (tcsetattr(this->serial_port_fd, TCSANOW, &serial_port_configs) == -1)
     {
-        error(strerror(errno));
+        error(strerror(errno), this->is_verbose);
         return false;
     }
 
@@ -75,7 +75,7 @@ bool Serial::write_data(const std::string &message)
     }
     else
     {
-        error("Message is empty. Doing nothing");
+        error("Message is empty. Doing nothing", this->is_verbose);
         return false;
     }
 
@@ -84,7 +84,7 @@ bool Serial::write_data(const std::string &message)
 
     if (num_bytes_written == -1)
     {
-        error(strerror(errno));
+        error(strerror(errno), this->is_verbose);
         return false;
     }
 
@@ -113,12 +113,12 @@ bool Serial::read_data()
 
 	if (n < 0)
 	{
-        error(strerror(errno));
+        error(strerror(errno), this->is_verbose);
         return false;
 	}
 	else if (n == 0)
 	{
-        error("Timeout!");
+        error("Timeout!", this->is_verbose);
         return false;
 	}
 
@@ -132,7 +132,7 @@ bool Serial::read_data()
 
     if (num_bytes_read == -1)
     {
-        error(strerror(errno));
+        error(strerror(errno), this->is_verbose);
         return false;
     }
 
@@ -156,6 +156,6 @@ void Serial::close_connection()
     // https://man7.org/linux/man-pages/man2/close.2.html
     if (close(this->serial_port_fd) == -1)
     {
-        error(strerror(errno));
+        error(strerror(errno), this->is_verbose);
     }
 }

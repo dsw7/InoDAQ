@@ -8,7 +8,7 @@
 
 void info(const std::string &message, const bool &verbose);
 void warning(const std::string &message, const bool &verbose);
-void error(const std::string &message);
+void error(const std::string &message, const bool &verbose);
 void render_progress_bar(int delay_secs);
 
 #endif

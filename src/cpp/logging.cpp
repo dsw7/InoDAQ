@@ -16,9 +16,12 @@ void warning(const std::string &message, const bool &verbose)
     }
 }
 
-void error(const std::string &message)
+void error(const std::string &message, const bool &verbose)
 {
-    std::cerr << "\033[31m[ E ]\033[0m " << message << std::endl;
+    if (verbose)
+    {
+        std::cerr << "\033[31m[ E ]\033[0m " << message << std::endl;
+    }
 }
 
 void render_progress_bar(int delay_secs)
