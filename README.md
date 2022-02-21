@@ -13,7 +13,7 @@ and receiving messages via UART.
     - [Step 3](#step-3)
     - [Step 4](#step-4)
     - [Step 5](#step-5)
-  - [Example](#example)
+  - [Example - testing a NAND gate](#example-testing-a-nand-gate)
     - [A = 0 & B = 0](#a--0--b--0)
     - [A = 1 & B = 0](#a--1--b--0)
     - [A = 0 & B = 1](#a--0--b--1)
@@ -126,7 +126,7 @@ To disconnect, simply press `d`.
 ### Step 5
 The pins on the device can now be toggled. For example, to set pin `D3` to high, press the `j` or down arrow
 key to position the cursor over the `D3` switch, then press enter. To set `D3` to low, press enter again.
-## Example
+## Example - testing a NAND gate
 In this basic example, I test a DM74LS00N NAND gate. See [this
 datasheet](./docs/74LS00_datasheet_fairchild.pdf). From this datasheet, I derive the following truth table:
 | Row | D2 | D3 | Y |
