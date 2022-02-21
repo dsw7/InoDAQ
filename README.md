@@ -31,7 +31,35 @@ This chain of commands will compile a binary named `inodaq` and place the binary
 directory. The binary can and should be moved to a convenient location such as under `$PATH`.
 ### Setting up the hardware control layer
 To set up the hardware control layer, change directories from the project root to `src/ino` and upload the
-`ino.ino` sketch via the Arduino CLI or the Arduino GUI.
+`ino.ino` sketch via the Arduino CLI or the Arduino GUI. I strongly recommend using the CLI and am including
+instructions here.
+### Step 1
+Install the `arduino-cli` suite if it is not installed:
+```bash
+curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+```
+This command will yield the `arduino-cli` binary. I had to move this binary under `/usr/bin`. Next update
+the index:
+```bash
+arduino-cli core update-index
+```
+Search for cores after updating the index. Since I am using an Arduino Uno, I ran the following command:
+```bash
+arduino-cli core search uno
+ID              Version Name
+arduino:avr     1.8.5   Arduino AVR Boards
+arduino:megaavr 1.8.7   Arduino megaAVR Boards
+```
+The core ID is `arduino:avr`. This is the core that I needed to install. To install the core, I ran:
+```bash
+arduino-cli core install arduino:avr
+```
+Last, confirm that the correct core was installed. In my case:
+```bash
+arduino-cli core list
+ID          Installed Latest Name
+arduino:avr 1.8.5     1.8.5  Arduino AVR Boards
+```
 ## Usage
 ### Step 1
 Start off by plugging in the device into a free USB port. At this stage, it is assumed that the code has been
