@@ -168,9 +168,9 @@ In this case, the program input follows:
 
 ==============================================================================
 ```
-Note that both `D2` and `D3` are low.
+Note that both `D2` and `D3` are low. Unsurprisingly, in this case the LED (Y) is logical true because both of the inputs are logical false:
 <p align="center">
-  <img width="300" src=./docs/row1.jpg>
+  <img width="500" src=./docs/row1.jpg>
 </p>
 
 ### Row B
@@ -206,6 +206,11 @@ In this case, only `D2` was set to high:
 
 ==============================================================================
 ```
+In this case, the LED is logical true because at least one of the inputs is logical false:
+<p align="center">
+  <img width="500" src=./docs/row2.jpg>
+</p>
+
 ### Row C
 In this case, only `D3` was set to high:
 ```
@@ -239,6 +244,11 @@ In this case, only `D3` was set to high:
 
 ==============================================================================
 ```
+In this case, the LED is logical true because at least one of the inputs is logical false:
+<p align="center">
+  <img width="500" src=./docs/row3.jpg>
+</p>
+
 ### Row D
 In this case, both `D2` and `D3` were set to high:
 ```
@@ -272,3 +282,7 @@ In this case, both `D2` and `D3` were set to high:
 
 ==============================================================================
 ```
+In this case, the LED (Y) is logical false because both of the inputs are logical true:
+<p align="center">
+  <img width="500" src=./docs/row4.jpg>
+</p>
