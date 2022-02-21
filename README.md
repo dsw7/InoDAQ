@@ -170,7 +170,7 @@ In this case, the program input follows:
 ```
 Note that both `D2` and `D3` are low.
 <p align="center">
-  <img src=./docs/row_1.png>
+  <img src=./docs/row1.png>
 </p>
 
 ### Row B
