@@ -14,7 +14,7 @@ and receiving messages via UART.
     - [Step 4](#step-4)
     - [Step 5](#step-5)
   - [Example](#example)
-    - [A = 0 & B = 0](#a-=-0-&-b-=-0)
+    - [A = 0 & B = 0](#a--0--b--0)
     - [One input logical false](#row-b)
     - [Row C](#row-c)
     - [Row D](#row-d)
