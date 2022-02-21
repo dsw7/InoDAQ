@@ -14,8 +14,8 @@ and receiving messages via UART.
     - [Step 4](#step-4)
     - [Step 5](#step-5)
   - [Example](#example)
-    - [Row A](#row-a)
-    - [Row B](#row-b)
+    - [A = 0 & B = 0](#a-=-0-&-b-=-0)
+    - [One input logical false](#row-b)
     - [Row C](#row-c)
     - [Row D](#row-d)
 ## Setup
@@ -135,7 +135,7 @@ datasheet](./docs/74LS00_datasheet_fairchild.pdf). From this datasheet, I derive
 | B   | 1  | 0  | 1 |
 | C   | 0  | 1  | 1 |
 | D   | 1  | 1  | 0 |
-### Row A
+### A = 0 & B = 0
 In this case, the program input follows:
 ```
 ==============================================================================
@@ -282,7 +282,7 @@ In this case, both `D2` and `D3` were set to high:
 
 ==============================================================================
 ```
-In this case, the LED (Y) is logical false because both of the inputs are logical true:
+In this case, the LED is logical false because both of the inputs are logical true:
 <p align="center">
   <img width="500" src=./docs/row4.jpg>
 </p>
