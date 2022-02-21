@@ -12,6 +12,8 @@ and receiving messages via UART.
     - [Step 2](#step-2)
     - [Step 3](#step-3)
     - [Step 4](#step-4)
+    - [Step 5](#step-5)
+  - [Example]
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses`
 interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino
@@ -120,3 +122,5 @@ To disconnect, simply press `d`.
 ### Step 5
 The pins on the device can now be toggled. For example, to set pin `D3` to high, press the `j` or down arrow
 key to position the cursor over the `D3` switch, then press enter. To set `D3` to low, press enter again.
+## Example
+In this basic example, I troubleshoot a DM74LS00N NAND gate. See [this datasheet](./docs/74LS00_datasheet_fairchild.pdf).
