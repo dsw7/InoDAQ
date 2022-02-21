@@ -65,8 +65,8 @@ void ControlPanel::list_instructions()
     mvwprintw(stdscr, 19, 18, "Description");
     wattroff(stdscr, A_BOLD | A_UNDERLINE);
 
-    mvwprintw(stdscr, 21, 2, "j, KEY_UP");
-    mvwprintw(stdscr, 22, 2, "k, KEY_DOWN");
+    mvwprintw(stdscr, 21, 2, "j, KEY_DOWN");
+    mvwprintw(stdscr, 22, 2, "k, KEY_UP");
     mvwprintw(stdscr, 23, 2, "c");
     mvwprintw(stdscr, 24, 2, "d");
     mvwprintw(stdscr, 25, 2, "ENTER");
