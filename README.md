@@ -5,8 +5,8 @@ A low cost, primitive alternative to some commercially available digital I/O too
     - [Setting up the presentation layer](#setting-up-the-presentation-layer)
     - [Setting up the hardware control layer](#setting-up-the-hardware-control-layer)
   - [Usage](#usage)
-    - [Step 1](#step 1)
-    - [Step 2](#step 2)
+    - [Step 1](#step-1)
+    - [Step 2](#step-2)
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses` interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino device.
 ### Setting up the presentation layer
