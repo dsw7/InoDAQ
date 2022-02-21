@@ -123,4 +123,4 @@ To disconnect, simply press `d`.
 The pins on the device can now be toggled. For example, to set pin `D3` to high, press the `j` or down arrow
 key to position the cursor over the `D3` switch, then press enter. To set `D3` to low, press enter again.
 ## Example
-In this basic example, I troubleshoot a DM74LS00N NAND gate. See [this datasheet](./docs/74Ls00_datasheet_fairchild.pdf).
+In this basic example, I troubleshoot a DM74LS00N NAND gate. See [this datasheet](./docs/74LS00_datasheet_fairchild.pdf).
