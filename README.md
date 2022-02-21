@@ -16,7 +16,7 @@ and receiving messages via UART.
   - [Example](#example)
     - [A = 0 & B = 0](#a--0--b--0)
     - [A = 1 & B = 0](#a--1--b--0)
-    - [A = 0 & B = 1](#a--0--1--0)
+    - [A = 0 & B = 1](#a--0--b--1)
     - [A = 1 & B = 1](#a--1--b--1)
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses`
