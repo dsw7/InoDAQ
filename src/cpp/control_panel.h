@@ -27,6 +27,7 @@ class ControlPanel
         void print_status(const std::string &status);
         void list_instructions();
         void reset_state_matrix();
+        void reset_state_panel();
         void connect();
         void disconnect();
         void move_cursor_up();

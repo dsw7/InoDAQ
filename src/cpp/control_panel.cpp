@@ -22,15 +22,15 @@ ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
 
     for (unsigned int i = MIN_BOUND; i < MAX_BOUND + 1; i++)
     {
-        mvwprintw(stdscr, i, 4, "[ ]");
-
         std::string pin = "D" + std::to_string(i);
         mvwprintw(stdscr, i, 9, pin.c_str());
     }
 
-    this->print_status("All digital pins are low");
     this->list_instructions();
+
+    this->print_status("All digital pins are low");
     this->reset_state_matrix();
+    this->reset_state_panel();
 }
 
 ControlPanel::~ControlPanel()
@@ -102,6 +102,21 @@ void ControlPanel::reset_state_matrix()
     };
 }
 
+void ControlPanel::reset_state_panel()
+{
+    for (unsigned int i = MIN_BOUND; i < MAX_BOUND + 1; i++)
+    {
+        if (this->state_matrix[i])
+        {
+            mvwprintw(stdscr, i, 4, "[x]");
+        }
+        else
+        {
+            mvwprintw(stdscr, i, 4, "[ ]");
+        }
+    }
+}
+
 void ControlPanel::connect()
 {
     if (this->is_connected)
@@ -136,7 +151,10 @@ void ControlPanel::disconnect()
     }
 
     this->print_status("Disconnecting from port " + this->serial_port);
+
     this->connection.close_connection();
+    this->reset_state_matrix();
+    this->reset_state_panel();
 
     this->is_connected = false;
 }
@@ -174,11 +192,9 @@ void ControlPanel::toggle_pin()
     }
 
     this->connection.write_data("D" + std::to_string(this->cursor) + "\n");
-
     this->state_matrix[this->cursor] = !this->state_matrix[this->cursor];
 
     static std::string status;
-
     if (this->state_matrix[this->cursor])
     {
         status = "Pin " + std::to_string(this->cursor) + " was set to high";
@@ -189,18 +205,7 @@ void ControlPanel::toggle_pin()
     }
 
     this->print_status(status);
-
-    for (unsigned int i = MIN_BOUND; i < MAX_BOUND + 1; i++)
-    {
-        if (this->state_matrix[i])
-        {
-            mvwprintw(stdscr, i, 4, "[x]");
-        }
-        else
-        {
-            mvwprintw(stdscr, i, 4, "[ ]");
-        }
-    }
+    this->reset_state_panel();
 }
 
 void ControlPanel::input_handler(int &key)
