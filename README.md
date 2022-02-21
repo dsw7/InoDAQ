@@ -135,6 +135,135 @@ In this basic example, I test a DM74LS00N NAND gate. See [this datasheet](./docs
 | C   | 0  | 1  | 1 |
 | D   | 1  | 1  | 0 |
 ### Row A
+In this case, the program input follows:
+```
+==============================================================================
+
+  > [ ]  D2
+    [ ]  D3
+    [ ]  D4
+    [ ]  D5
+    [ ]  D6
+    [ ]  D7
+    [ ]  D8
+    [ ]  D9
+    [ ]  D10
+    [ ]  D11
+    [ ]  D12
+    [ ]  D13
+
+    Status: All digital pins are low
+
+==============================================================================
+
+  Key             Description
+
+  j, KEY_DOWN     Scroll cursor down
+  k, KEY_UP       Scroll cursor up
+  c               Connect to serial port specified via command line
+  d               Disconnect from serial port specified via command line
+  ENTER           Toggle pin at current cursor position
+  q               Quit the program
+
+==============================================================================
+```
+Note that both `D2` and `D3` are low.
 ### Row B
+In this case, only `D2` was set to high:
+```
+==============================================================================
+
+  > [x]  D2
+    [ ]  D3
+    [ ]  D4
+    [ ]  D5
+    [ ]  D6
+    [ ]  D7
+    [ ]  D8
+    [ ]  D9
+    [ ]  D10
+    [ ]  D11
+    [ ]  D12
+    [ ]  D13
+
+    Status: Pin 2 was set to high
+
+==============================================================================
+
+  Key             Description
+
+  j, KEY_DOWN     Scroll cursor down
+  k, KEY_UP       Scroll cursor up
+  c               Connect to serial port specified via command line
+  d               Disconnect from serial port specified via command line
+  ENTER           Toggle pin at current cursor position
+  q               Quit the program
+
+==============================================================================
+```
 ### Row C
+In this case, only `D3` was set to high:
+```
+==============================================================================
+
+    [ ]  D2
+  > [x]  D3
+    [ ]  D4
+    [ ]  D5
+    [ ]  D6
+    [ ]  D7
+    [ ]  D8
+    [ ]  D9
+    [ ]  D10
+    [ ]  D11
+    [ ]  D12
+    [ ]  D13
+
+    Status: Pin 3 was set to high
+
+==============================================================================
+
+  Key             Description
+
+  j, KEY_DOWN     Scroll cursor down
+  k, KEY_UP       Scroll cursor up
+  c               Connect to serial port specified via command line
+  d               Disconnect from serial port specified via command line
+  ENTER           Toggle pin at current cursor position
+  q               Quit the program
+
+==============================================================================
+```
 ### Row D
+In this case, both `D2` and `D3` were set to high:
+```
+==============================================================================
+
+  > [x]  D2
+    [x]  D3
+    [ ]  D4
+    [ ]  D5
+    [ ]  D6
+    [ ]  D7
+    [ ]  D8
+    [ ]  D9
+    [ ]  D10
+    [ ]  D11
+    [ ]  D12
+    [ ]  D13
+
+    Status: Pin 2 was set to high
+
+==============================================================================
+
+  Key             Description
+
+  j, KEY_DOWN     Scroll cursor down
+  k, KEY_UP       Scroll cursor up
+  c               Connect to serial port specified via command line
+  d               Disconnect from serial port specified via command line
+  ENTER           Toggle pin at current cursor position
+  q               Quit the program
+
+==============================================================================
+```
