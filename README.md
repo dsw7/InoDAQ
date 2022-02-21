@@ -10,6 +10,7 @@ and receiving messages via UART.
       - [Install `arduino-cli`](#install-arduino-cli)
       - [Compile the Arduino code](#compile-the-arduino-code)
       - [Upload the Arduino code](#upload-the-arduino-code)
+    - [Example: build product from end-to-end](#example-build-product-from-end-to-end)
   - [Usage](#usage)
     - [Step 1](#step-1)
     - [Step 2](#step-2)
@@ -101,6 +102,7 @@ For example, one would pass:
 arduino-cli upload --port COM3 --fqbn <fqbn> src/ino/
 ```
 If plugging in the device allocates the `/dev/ttyS2` device file.
+### Example: build product from end-to-end
 ## Usage
 ### Step 1
 Start off by plugging in the device into a free USB port. At this stage, it is assumed that the code has been
