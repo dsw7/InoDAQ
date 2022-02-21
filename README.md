@@ -8,6 +8,7 @@ A low cost, primitive alternative to some commercially available digital I/O too
     - [Step 1](#step-1)
     - [Step 2](#step-2)
     - [Step 3](#step-3)
+    - [Step 4](#step-4)
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses` interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino device.
 ### Setting up the presentation layer
@@ -39,7 +40,7 @@ The device file corresponding to the serial port is `/dev/ttyS2`. Therefore, the
 /path/to/inodaq --serial-port /dev/ttyS2 --interface
 ```
 Which will open a new interface:
-```bash
+```
 ==============================================================================================
 
   > [ ]  D2
@@ -70,3 +71,37 @@ Which will open a new interface:
 
 ==============================================================================================
 ```
+### Step 4
+Connect to the device. To connect to the device, press the `c` key. This step will take 2 seconds as the device resets. The interface follows if a connection is successfully opened:
+```
+==============================================================================================
+
+  > [ ]  D2
+    [ ]  D3
+    [ ]  D4
+    [ ]  D5
+    [ ]  D6
+    [ ]  D7
+    [ ]  D8
+    [ ]  D9
+    [ ]  D10
+    [ ]  D11
+    [ ]  D12
+    [ ]  D13
+
+    Status: Connected on port /dev/ttyS2
+
+==============================================================================================
+
+  Key             Description
+
+  j, KEY_DOWN     Scroll cursor down
+  k, KEY_UP       Scroll cursor up
+  c               Connect to serial port specified via command line
+  d               Disconnect from serial port specified via command line
+  ENTER           Toggle pin at current cursor position
+  q               Quit the program
+
+==============================================================================================
+```
+To disconnect, simply press `d`.
