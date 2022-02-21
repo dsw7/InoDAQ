@@ -7,6 +7,7 @@ A low cost, primitive alternative to some commercially available digital I/O too
   - [Usage](#usage)
     - [Step 1](#step-1)
     - [Step 2](#step-2)
+    - [Step 3](#step-3)
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses` interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino device.
 ### Setting up the presentation layer
@@ -31,4 +32,41 @@ In this case, the device file `ttyS0` corresponds to my modem. Next, after plugg
 $ ls -l /dev | grep ttyS
 crw-rw-rw-  1 David None 117,   0 Feb 21 00:38 ttyS0
 crw-rw-rw-  1 David None 117,   2 Feb 21 00:38 ttyS2
+```
+### Step 3
+The device file corresponding to the serial port is `/dev/ttyS2`. Therefore, the presentation layer can be used to connect to the device by attaching to this device file. Run:
+```bash
+/path/to/inodaq --serial-port /dev/ttyS2 --interface
+```
+Which will open a new interface:
+```bash
+==============================================================================================
+
+  > [ ]  D2
+    [ ]  D3
+    [ ]  D4
+    [ ]  D5
+    [ ]  D6
+    [ ]  D7
+    [ ]  D8
+    [ ]  D9
+    [ ]  D10
+    [ ]  D11
+    [ ]  D12
+    [ ]  D13
+
+    Status: All digital pins are low
+
+==============================================================================================
+
+  Key             Description
+
+  j, KEY_DOWN     Scroll cursor down
+  k, KEY_UP       Scroll cursor up
+  c               Connect to serial port specified via command line
+  d               Disconnect from serial port specified via command line
+  ENTER           Toggle pin at current cursor position
+  q               Quit the program
+
+==============================================================================================
 ```
