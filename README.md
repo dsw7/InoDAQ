@@ -168,7 +168,8 @@ In this case, the program input follows:
 
 ==============================================================================
 ```
-Note that both `D2` and `D3` are low. Unsurprisingly, in this case the LED (Y) is logical true because both of the inputs are logical false:
+Note that both `D2` and `D3` are low. Unsurprisingly, in this case the LED (Y) is logical true because both of
+the inputs are logical false:
 <p align="center">
   <img width="500" src=./docs/row1.jpg>
 </p>
