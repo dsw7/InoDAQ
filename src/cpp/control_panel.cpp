@@ -30,6 +30,7 @@ ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
 
     this->print_status("All digital pins are low");
     this->list_instructions();
+    this->reset_state_matrix();
 }
 
 ControlPanel::~ControlPanel()
@@ -81,6 +82,24 @@ void ControlPanel::list_instructions()
 
     move(28, 0);
     hline('=', terminal_width);
+}
+
+void ControlPanel::reset_state_matrix()
+{
+    this->state_matrix = {
+        {2,  false},
+        {3,  false},
+        {4,  false},
+        {5,  false},
+        {6,  false},
+        {7,  false},
+        {8,  false},
+        {9,  false},
+        {10, false},
+        {11, false},
+        {12, false},
+        {13, false}
+    };
 }
 
 void ControlPanel::connect()
@@ -154,27 +173,13 @@ void ControlPanel::toggle_pin()
         return;
     }
 
-    static std::map<int, bool> state_matrix {
-        {2,  false},
-        {3,  false},
-        {4,  false},
-        {5,  false},
-        {6,  false},
-        {7,  false},
-        {8,  false},
-        {9,  false},
-        {10, false},
-        {11, false},
-        {12, false},
-        {13, false}
-    };
-
     this->connection.write_data("D" + std::to_string(this->cursor) + "\n");
-    state_matrix[this->cursor] = !state_matrix[this->cursor];
+
+    this->state_matrix[this->cursor] = !this->state_matrix[this->cursor];
 
     static std::string status;
 
-    if (state_matrix[this->cursor])
+    if (this->state_matrix[this->cursor])
     {
         status = "Pin " + std::to_string(this->cursor) + " was set to high";
     }
@@ -187,7 +192,7 @@ void ControlPanel::toggle_pin()
 
     for (unsigned int i = MIN_BOUND; i < MAX_BOUND + 1; i++)
     {
-        if (state_matrix[i])
+        if (this->state_matrix[i])
         {
             mvwprintw(stdscr, i, 4, "[x]");
         }

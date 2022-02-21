@@ -16,6 +16,7 @@ class ControlPanel
         unsigned int cursor;
         std::string serial_port;
         bool is_connected = false;
+        std::map<int, bool> state_matrix;
 
         Serial connection{false};
 
@@ -25,6 +26,7 @@ class ControlPanel
 
         void print_status(const std::string &status);
         void list_instructions();
+        void reset_state_matrix();
         void connect();
         void disconnect();
         void move_cursor_up();
