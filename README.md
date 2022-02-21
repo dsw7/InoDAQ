@@ -47,6 +47,9 @@ arduino-cli core update-index
 Search for cores after updating the index. Since I am using an Arduino Uno, I ran the following command:
 ```bash
 arduino-cli core search uno
+```
+The command returned:
+```
 ID              Version Name
 arduino:avr     1.8.5   Arduino AVR Boards
 arduino:megaavr 1.8.7   Arduino megaAVR Boards
