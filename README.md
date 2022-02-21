@@ -13,7 +13,7 @@ and receiving messages via UART.
     - [Step 3](#step-3)
     - [Step 4](#step-4)
     - [Step 5](#step-5)
-  - [Example - testing a NAND gate](#example-testing-a-nand-gate)
+  - [Example - testing a NAND gate](#example---testing-a-nand-gate)
     - [A = 0 & B = 0](#a--0--b--0)
     - [A = 1 & B = 0](#a--1--b--0)
     - [A = 0 & B = 1](#a--0--b--1)
