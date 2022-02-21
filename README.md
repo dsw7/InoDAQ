@@ -15,9 +15,9 @@ and receiving messages via UART.
     - [Step 5](#step-5)
   - [Example](#example)
     - [A = 0 & B = 0](#a--0--b--0)
-    - [One input logical false](#row-b)
-    - [Row C](#row-c)
-    - [Row D](#row-d)
+    - [A = 1 & B = 0](#a--1--b--0)
+    - [A = 0 & B = 1](#a--0--1--0)
+    - [A = 1 & B = 1](#a--1--b--1)
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses`
 interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino
@@ -173,7 +173,7 @@ Note that both `D2` and `D3` are low. Unsurprisingly, in this case the LED (Y) i
   <img width="500" src=./docs/row1.jpg>
 </p>
 
-### Row B
+### A = 1 & B = 0
 In this case, only `D2` was set to high:
 ```
 ==============================================================================
@@ -211,7 +211,7 @@ In this case, the LED is logical true because at least one of the inputs is logi
   <img width="500" src=./docs/row2.jpg>
 </p>
 
-### Row C
+### A = 0 & B = 1
 In this case, only `D3` was set to high:
 ```
 ==============================================================================
@@ -249,7 +249,7 @@ In this case, the LED is logical true because at least one of the inputs is logi
   <img width="500" src=./docs/row3.jpg>
 </p>
 
-### Row D
+### A = 1 & B = 1
 In this case, both `D2` and `D3` were set to high:
 ```
 ==============================================================================
