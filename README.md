@@ -38,7 +38,7 @@ To set up the hardware control layer, change directories from the project root t
 instructions here.
 #### Install `arduino-cli`
 **NOTE:** These instructions vary strongly between boards. In this case I will only describe the installation
-of the Arduino Uno board.
+of `arduino-cli` for the Arduino Uno board.
 
 Start by installing the `arduino-cli` suite if it is not installed:
 ```bash
