@@ -8,6 +8,8 @@ and receiving messages via UART.
     - [Setting up the presentation layer](#setting-up-the-presentation-layer)
     - [Setting up the hardware control layer](#setting-up-the-hardware-control-layer)
       - [Install `arduino-cli`](#install-arduino-cli)
+      - [Compile the Arduino code](#compile-the-arduino-code)
+      - [Upload the Arduino code](#upload-the-arduino-code)
   - [Usage](#usage)
     - [Step 1](#step-1)
     - [Step 2](#step-2)
