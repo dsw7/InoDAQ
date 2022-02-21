@@ -67,7 +67,12 @@ ID          Installed Latest Name
 arduino:avr 1.8.5     1.8.5  Arduino AVR Boards
 ```
 #### Compile the Arduino code
-The device's FQBN (Fully Qualified Board Name) is required to compile the Arduino code. To get the FQBN, I ran:
+To compile the code, change directories to the project root and run:
+```bash
+arduino-cli compile --fqbn <fqbn> src/ino/
+```
+The `<fqbn>` argument refers to the particular board's FQBN (Fully Qualified Board Name). For example, to get
+the FQBN corresponding to my board, I ran:
 ```bash
 arduino-cli board listall | grep -i uno
 ```
@@ -77,13 +82,9 @@ Arduino Uno                      arduino:avr:uno
 Arduino Uno Mini                 arduino:avr:unomini
 Arduino Uno WiFi                 arduino:avr:unowifi
 ```
-In my case, the FQBN is `arduino:avr:uno`. To compile the code, I changed directories to the project root and
-ran:
-```bash
-arduino-cli compile --fqbn arduino:avr:uno src/ino/
-```
+In my case, the FQBN is `arduino:avr:uno`.
 #### Upload the Arduino code
-To upload the code, run:
+To upload the code, change directories to the project root and run:
 ```bash
 arduino-cli upload --port <serial-port> --fqbn <fqbn> src/ino/
 ```
