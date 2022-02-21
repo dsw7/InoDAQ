@@ -103,6 +103,17 @@ arduino-cli upload --port COM3 --fqbn <fqbn> src/ino/
 ```
 If plugging in the device allocates the `/dev/ttyS2` device file.
 ### Example: build product from end-to-end
+Here is a short example for building this entire product from end to end. The example assumes the following:
+- The host's kernel is `SMP Debian 4.9.210-1`
+- The FQBN is `arduino:avr:uno`
+- The serial port is `/dev/ttyUSB0`
+The command follows:
+```bash
+cmake -S src/cpp/ -B build/ \
+&& make -j12 -C build/ \
+&& arduino-cli compile --fqbn arduino:avr:uno src/ino/ \
+&& arduino-cli upload --port /dev/ttyUSB0 --fqbn arduino:avr:uno src/ino/
+```
 ## Usage
 ### Step 1
 Start off by plugging in the device into a free USB port. At this stage, it is assumed that the code has been
