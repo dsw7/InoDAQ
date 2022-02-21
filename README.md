@@ -105,3 +105,5 @@ Connect to the device. To connect to the device, press the `c` key. This step wi
 ==============================================================================================
 ```
 To disconnect, simply press `d`.
+### Step 5
+The pins on the device can now be toggled. For example, to set pin `D3` to high, press the `j` or down arrow key to position the cursor over the `D3` switch, then press enter. To set `D3` to low, press enter again.
