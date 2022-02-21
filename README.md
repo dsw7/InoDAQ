@@ -7,6 +7,7 @@ and receiving messages via UART.
   - [Setup](#installation)
     - [Setting up the presentation layer](#setting-up-the-presentation-layer)
     - [Setting up the hardware control layer](#setting-up-the-hardware-control-layer)
+      - [Install `arduino-cli`](#install-arduino-cli)
   - [Usage](#usage)
     - [Step 1](#step-1)
     - [Step 2](#step-2)
@@ -33,7 +34,7 @@ directory. The binary can and should be moved to a convenient location such as u
 To set up the hardware control layer, change directories from the project root to `src/ino` and upload the
 `ino.ino` sketch via the Arduino CLI or the Arduino GUI. I strongly recommend using the CLI and am including
 instructions here.
-### Step 1
+### Install `arduino-cli`
 Install the `arduino-cli` suite if it is not installed:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
