@@ -34,7 +34,7 @@ directory. The binary can and should be moved to a convenient location such as u
 To set up the hardware control layer, change directories from the project root to `src/ino` and upload the
 `ino.ino` sketch via the Arduino CLI or the Arduino GUI. I strongly recommend using the CLI and am including
 instructions here.
-### Install `arduino-cli`
+#### Install `arduino-cli`
 Install the `arduino-cli` suite if it is not installed:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
@@ -64,6 +64,37 @@ arduino-cli core list
 ID          Installed Latest Name
 arduino:avr 1.8.5     1.8.5  Arduino AVR Boards
 ```
+#### Compile the Arduino code
+The device's FQBN (Fully Qualified Board Name) is required to compile the Arduino code. To get the FQBN, I ran:
+```bash
+arduino-cli board listall | grep -i uno
+```
+Which returned:
+```
+Arduino Uno                      arduino:avr:uno
+Arduino Uno Mini                 arduino:avr:unomini
+Arduino Uno WiFi                 arduino:avr:unowifi
+```
+In my case, the FQBN is `arduino:avr:uno`. To compile the code, I changed directories to the project root and
+ran:
+```bash
+arduino-cli compile --fqbn arduino:avr:uno src/ino/
+```
+#### Upload the Arduino code
+To upload the code, run:
+```bash
+arduino-cli upload --port <serial-port> --fqbn <fqbn> src/ino/
+```
+**NOTE:** Cygwin users may encounter an issue with `COM` ports and `dev` device file naming. The general mapping
+follows:
+```
+ttySn => COM(n + 1)
+```
+For example, one would pass:
+```bash
+arduino-cli upload --port COM3 --fqbn <fqbn> src/ino/
+```
+If plugging in the device allocates the `/dev/ttyS2` device file.
 ## Usage
 ### Step 1
 Start off by plugging in the device into a free USB port. At this stage, it is assumed that the code has been
