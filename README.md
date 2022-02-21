@@ -169,6 +169,10 @@ In this case, the program input follows:
 ==============================================================================
 ```
 Note that both `D2` and `D3` are low.
+<p align="center">
+  <src=./docs/row_1.png>
+</p>
+
 ### Row B
 In this case, only `D2` was set to high:
 ```
