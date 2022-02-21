@@ -37,7 +37,10 @@ To set up the hardware control layer, change directories from the project root t
 `ino.ino` sketch via the Arduino CLI or the Arduino GUI. I strongly recommend using the CLI and am including
 instructions here.
 #### Install `arduino-cli`
-Install the `arduino-cli` suite if it is not installed:
+**NOTE:** These instructions vary strongly between boards. In this case I will only describe the installation
+of the Arduino Uno board.
+
+Start by installing the `arduino-cli` suite if it is not installed:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 ```
