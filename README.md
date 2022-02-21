@@ -7,6 +7,10 @@ and receiving messages via UART.
   - [Setup](#installation)
     - [Setting up the presentation layer](#setting-up-the-presentation-layer)
     - [Setting up the hardware control layer](#setting-up-the-hardware-control-layer)
+      - [Install `arduino-cli`](#install-arduino-cli)
+      - [Compile the Arduino code](#compile-the-arduino-code)
+      - [Upload the Arduino code](#upload-the-arduino-code)
+    - [Example: build product from end-to-end](#example-build-product-from-end-to-end)
   - [Usage](#usage)
     - [Step 1](#step-1)
     - [Step 2](#step-2)
@@ -31,7 +35,85 @@ This chain of commands will compile a binary named `inodaq` and place the binary
 directory. The binary can and should be moved to a convenient location such as under `$PATH`.
 ### Setting up the hardware control layer
 To set up the hardware control layer, change directories from the project root to `src/ino` and upload the
-`ino.ino` sketch via the Arduino CLI or the Arduino GUI.
+`ino.ino` sketch via the Arduino CLI or the Arduino GUI. I strongly recommend using the CLI and am including
+instructions here.
+#### Install `arduino-cli`
+**NOTE:** These instructions vary strongly between boards. In this case I will only describe the installation
+of `arduino-cli` for the Arduino Uno board.
+
+Start by installing the `arduino-cli` suite if it is not installed:
+```bash
+curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+```
+This command will yield the `arduino-cli` binary. I had to move this binary under `/usr/bin`. Next update
+the index:
+```bash
+arduino-cli core update-index
+```
+Search for cores after updating the index. Since I am using an Arduino Uno, I ran the following command:
+```bash
+arduino-cli core search uno
+```
+The command returned:
+```
+ID              Version Name
+arduino:avr     1.8.5   Arduino AVR Boards
+arduino:megaavr 1.8.7   Arduino megaAVR Boards
+```
+The core ID is `arduino:avr`. This is the core that I needed to install. To install the core, I ran:
+```bash
+arduino-cli core install arduino:avr
+```
+Last, confirm that the correct core was installed. In my case:
+```bash
+arduino-cli core list
+ID          Installed Latest Name
+arduino:avr 1.8.5     1.8.5  Arduino AVR Boards
+```
+#### Compile the Arduino code
+To compile the code, change directories to the project root and run:
+```bash
+arduino-cli compile --fqbn <fqbn> src/ino/
+```
+The `<fqbn>` argument refers to the particular board's FQBN (Fully Qualified Board Name). For example, to get
+the FQBN corresponding to my board, I ran:
+```bash
+arduino-cli board listall | grep -i uno
+```
+Which returned:
+```
+Arduino Uno                      arduino:avr:uno
+Arduino Uno Mini                 arduino:avr:unomini
+Arduino Uno WiFi                 arduino:avr:unowifi
+```
+In my case, the FQBN is `arduino:avr:uno`.
+#### Upload the Arduino code
+To upload the code, change directories to the project root and run:
+```bash
+arduino-cli upload --port <serial-port> --fqbn <fqbn> src/ino/
+```
+**NOTE:** Cygwin users may encounter an issue with `COM` ports and `dev` device file naming. The general mapping
+follows:
+```
+ttySn => COM(n + 1)
+```
+For example, one would pass:
+```bash
+arduino-cli upload --port COM3 --fqbn <fqbn> src/ino/
+```
+If plugging in the device allocates the `/dev/ttyS2` device file.
+### Example: build product from end-to-end
+Here is a short example for building this entire product from end to end. The example assumes the following:
+- The host's kernel is `SMP Debian 4.9.210-1`
+- The FQBN is `arduino:avr:uno`
+- The serial port is `/dev/ttyUSB0`
+The command follows:
+```bash
+cmake -S src/cpp/ -B build/ \
+&& make -j12 -C build/ \
+&& arduino-cli compile --fqbn arduino:avr:uno src/ino/ \
+&& arduino-cli upload --port /dev/ttyUSB0 --fqbn arduino:avr:uno src/ino/
+```
 ## Usage
 ### Step 1
 Start off by plugging in the device into a free USB port. At this stage, it is assumed that the code has been
