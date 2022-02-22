@@ -18,7 +18,7 @@ class ControlPanel
         bool is_connected = false;
         std::map<int, bool> state_matrix;
 
-        Serial connection{false};
+        Serial connection{true};
 
     public:
         ControlPanel(std::string &serial_port);
