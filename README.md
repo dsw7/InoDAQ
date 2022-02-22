@@ -339,8 +339,8 @@ python3 -m pytest -vs .
 After compiling and uploading the Arduino code to the device.
 ### Troubleshooting with `strace`
 The `strace` utility can be used to troubleshoot communication issues between the host and the device given
-that the host writes to and reads from a device file (i.e. makes `read` and `write` system calls). To troubleshoot
-writes, run
+that the host writes to and reads from a device file (i.e. makes `read` and `write` system calls). To
+troubleshoot writes, run
 ```bash
 strace -s1000 -e write /tmp/inodaq <arguments>
 ```
@@ -348,15 +348,15 @@ For example:
 ```bash
 strace -s1000 -e write /tmp/inodaq --ping --quiet --serial-port /dev/ttyUSB0
 ```
-Notice in the above command that the `--quiet` flag was passed. This will suppress writing to `stdout` and `stderr`,
-or file descriptors 1 and 2, respectively. Therefore the output follows:
+Notice in the above command that the `--quiet` flag was passed. This will suppress writing to `stdout` and
+`stderr`, or file descriptors 1 and 2, respectively. Therefore the output follows:
 ```
 write(3, "test\n", 5)                   = 5
 write(3, "test\n", 5)                   = 5
 +++ exited with 0 +++
 ```
-The `--ping` command writes the string `test\n` to the `ttyUSB0` device file (whom was allocated file descriptor 3).
-Writes to `stdout` can, of course, be enabled by omitting the `--quiet` flag:
+The `--ping` command writes the string `test\n` to the `ttyUSB0` device file (whom was allocated file
+descriptor 3).  Writes to `stdout` can, of course, be enabled by omitting the `--quiet` flag:
 ```bash
 strace -s1000 -e write /tmp/inodaq --ping --serial-port /dev/ttyUSB0 >/dev/null
 ```
