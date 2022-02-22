@@ -1,6 +1,16 @@
 cmake_minimum_required(VERSION 3.8.1)
 project(InoDAQ)
 
+# Do not support Windows or Mac OS X at the moment
+if(UNIX)
+    message(STATUS "Detected *nix platform. Proceeding.")
+    if (APPLE)
+        message(FATAL_ERROR "Detected Mac OS X *nix platform. Cannot proceed!")
+    endif(APPLE)
+else()
+    message(FATAL_ERROR "Cannot compile on non-*nix platform!")
+endif(UNIX)
+
 # Use C++ 17 or later
 set(CMAKE_CXX_STANDARD 17)
 
