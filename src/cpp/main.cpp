@@ -3,7 +3,6 @@
 #include <string>
 
 #include "commands.h"
-#include "logging.h"
 
 struct cli_options
 {
@@ -108,6 +107,6 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    warning("Ran no commands. Try " + std::string(argv[0]) + " --help for more information", true);
+    std::cerr << "Ran no commands. Try " + std::string(argv[0]) + " --help for more information" << std::endl;
     return 0;
 }
