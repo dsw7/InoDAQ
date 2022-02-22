@@ -24,6 +24,7 @@ and receiving messages via UART.
     - [A = 1 & B = 1](#a--1--b--1)
   - [Testing and troubleshooting](#testing-and-troubleshooting)
     - [Automated testing](#automated-testing)
+    - [Troubleshooting with `strace`](#troubleshooting-with-strace)
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses`
 interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino
@@ -336,3 +337,42 @@ tests, change directories to the project root and run:
 python3 -m pytest -vs .
 ```
 After compiling and uploading the Arduino code to the device.
+### Troubleshooting with `strace`
+The `strace` utility can be used to troubleshoot communication issues between the host and the device given
+that the host writes to and reads from a device file (i.e. makes `read` and `write` system calls). To troubleshoot
+writes, run
+```bash
+strace -s1000 -e write /tmp/inodaq <arguments>
+```
+For example:
+```bash
+strace -s1000 -e write /tmp/inodaq --ping --quiet --serial-port /dev/ttyUSB0
+```
+Notice in the above command that the `--quiet` flag was passed. This will suppress writing to `stdout` and `stderr`,
+or file descriptors 1 and 2, respectively. Therefore the output follows:
+```
+write(3, "test\n", 5)                   = 5
+write(3, "test\n", 5)                   = 5
++++ exited with 0 +++
+```
+The `--ping` command writes the string `test\n` to the `ttyUSB0` device file (whom was allocated file descriptor 3).
+Writes to `stdout` can, of course, be enabled by omitting the `--quiet` flag:
+```bash
+strace -s1000 -e write /tmp/inodaq --ping --serial-port /dev/ttyUSB0 >/dev/null
+```
+The output follows:
+```
+write(1, "\33[32m[ I ]\33[0m Running ping command\n", 36) = 36
+...
+write(1, "\33[32m[ I ]\33[0m Writing message 'test' to device\n", 48) = 48
+write(3, "test\n", 5)                   = 5
+write(1, "\33[32m[ I ]\33[0m Successfully wrote out 5 bytes to serial port\n", 61) = 61
+write(1, "\33[32m[ I ]\33[0m Reading data from serial port\n", 45) = 45
+write(1, "\33[32m[ I ]\33[0m Number of bytes read from serial port: 25\n", 57) = 57
+write(1, "\33[32m[ I ]\33[0m Received message from device: 'Built in LED is ONxxxxxx'\n", 72) = 72
+write(1, "\33[32m[ I ]\33[0m Built in LED should now turn off\n", 48) = 48
+write(1, "\33[32m[ I ]\33[0m Writing message 'test' to device\n", 48) = 48
+write(3, "test\n", 5)                   = 5
+...
++++ exited with 0 +++
+```
