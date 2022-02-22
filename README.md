@@ -330,3 +330,9 @@ In this case, the LED is logical false because both of the inputs are logical tr
 
 ## Testing and troubleshooting
 ### Automated testing
+This package includes some primitive automated tests for testing the hardware control layer. To run the
+tests, change directories to the project root and run:
+```shell
+python3 -m pytest -vs .
+```
+After compiling and uploading the Arduino code to the device.
