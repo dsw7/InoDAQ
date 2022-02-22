@@ -12,10 +12,10 @@ class Serial
 {
     private:
         int serial_port_fd = 0;
-        bool is_verbose;
+        bool is_quiet;
 
     public:
-        Serial(const bool &is_verbose);
+        Serial(const bool &is_quiet);
 
         bool open_connection(std::string serial_port);
         bool configure_connection();

@@ -10,7 +10,7 @@
 #include "control_panel.h"
 
 void run_control_panel(std::string &serial_port);
-int run_ping_command(std::string &port, const bool &is_verbose);
-int run_test_command(std::string &port, const bool &is_verbose);
+int run_ping_command(std::string &port, const bool &is_quiet);
+int run_test_command(std::string &port, const bool &is_quiet);
 
 #endif

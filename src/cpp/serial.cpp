@@ -1,13 +1,13 @@
 #include "serial.h"
 
-Serial::Serial(const bool &is_verbose)
+Serial::Serial(const bool &is_quiet)
 {
-    this->is_verbose = is_verbose;
+    this->is_quiet = is_quiet;
 }
 
 bool Serial::open_connection(std::string serial_port)
 {
-    info("Attempting to open serial port: " + serial_port, this->is_verbose);
+    info("Attempting to open serial port: " + serial_port, this->is_quiet);
 
     this->serial_port_fd = open(serial_port.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 
@@ -16,37 +16,37 @@ bool Serial::open_connection(std::string serial_port)
 
     if (this->serial_port_fd == -1)
     {
-        error(strerror(errno), this->is_verbose);
+        error(strerror(errno), this->is_quiet);
         return false;
     }
 
     if (fcntl(this->serial_port_fd, F_SETFL, 0) == -1)
     {
-        error(strerror(errno), this->is_verbose);
+        error(strerror(errno), this->is_quiet);
         return false;
     }
 
-    info("Successfully opened serial port: " + serial_port, this->is_verbose);
+    info("Successfully opened serial port: " + serial_port, this->is_quiet);
     return true;
 }
 
 bool Serial::configure_connection()
 {
-    info("Configuring connection on serial port", this->is_verbose);
+    info("Configuring connection on serial port", this->is_quiet);
 
     struct termios serial_port_configs;
 
     // https://linux.die.net/man/3/cfsetispeed
 	if (cfsetispeed(&serial_port_configs, B9600) == -1)
     {
-        error(strerror(errno), this->is_verbose);
+        error(strerror(errno), this->is_quiet);
         return false;
     }
 
     // https://linux.die.net/man/3/cfsetospeed
 	if (cfsetospeed(&serial_port_configs, B9600) == -1)
     {
-        error(strerror(errno), this->is_verbose);
+        error(strerror(errno), this->is_quiet);
         return false;
     }
 
@@ -58,11 +58,11 @@ bool Serial::configure_connection()
     // https://linux.die.net/man/3/tcsetattr
 	if (tcsetattr(this->serial_port_fd, TCSANOW, &serial_port_configs) == -1)
     {
-        error(strerror(errno), this->is_verbose);
+        error(strerror(errno), this->is_quiet);
         return false;
     }
 
-    info("Successfully set all configurations on serial port", this->is_verbose);
+    info("Successfully set all configurations on serial port", this->is_quiet);
 	return true;
 }
 
@@ -71,11 +71,11 @@ bool Serial::write_data(const std::string &message)
     if (message.size() > 0)
     {
         std::string message_no_newline = message.substr(0, message.size() - 1);
-        info("Writing message '" + message_no_newline + "' to device", this->is_verbose);
+        info("Writing message '" + message_no_newline + "' to device", this->is_quiet);
     }
     else
     {
-        error("Message is empty. Doing nothing", this->is_verbose);
+        error("Message is empty. Doing nothing", this->is_quiet);
         return false;
     }
 
@@ -84,17 +84,17 @@ bool Serial::write_data(const std::string &message)
 
     if (num_bytes_written == -1)
     {
-        error(strerror(errno), this->is_verbose);
+        error(strerror(errno), this->is_quiet);
         return false;
     }
 
-    info("Successfully wrote out " + std::to_string(num_bytes_written) + " bytes to serial port", this->is_verbose);
+    info("Successfully wrote out " + std::to_string(num_bytes_written) + " bytes to serial port", this->is_quiet);
     return true;
 }
 
 bool Serial::read_data()
 {
-    info("Reading data from serial port", this->is_verbose);
+    info("Reading data from serial port", this->is_quiet);
 
     char n;
     fd_set fildes_ready_for_reading;
@@ -113,12 +113,12 @@ bool Serial::read_data()
 
 	if (n < 0)
 	{
-        error(strerror(errno), this->is_verbose);
+        error(strerror(errno), this->is_quiet);
         return false;
 	}
 	else if (n == 0)
 	{
-        error("Timeout!", this->is_verbose);
+        error("Timeout!", this->is_quiet);
         return false;
 	}
 
@@ -132,21 +132,21 @@ bool Serial::read_data()
 
     if (num_bytes_read == -1)
     {
-        error(strerror(errno), this->is_verbose);
+        error(strerror(errno), this->is_quiet);
         return false;
     }
 
-	info("Number of bytes read from serial port: " + std::to_string(num_bytes_read), this->is_verbose);
+	info("Number of bytes read from serial port: " + std::to_string(num_bytes_read), this->is_quiet);
 
     message[24] = '\0'; // Final byte must be NULL terminated otherwise std::string doesn't know where to stop
-    info("Received message from device: '" + std::string(message) + "'", this->is_verbose);
+    info("Received message from device: '" + std::string(message) + "'", this->is_quiet);
 
     return true;
 }
 
 void Serial::close_connection()
 {
-    info("Closing connection to serial port", this->is_verbose);
+    info("Closing connection to serial port", this->is_quiet);
 
     if (this->serial_port_fd == 0)
     {
@@ -156,6 +156,6 @@ void Serial::close_connection()
     // https://man7.org/linux/man-pages/man2/close.2.html
     if (close(this->serial_port_fd) == -1)
     {
-        error(strerror(errno), this->is_verbose);
+        error(strerror(errno), this->is_quiet);
     }
 }
