@@ -7,7 +7,7 @@
 
 struct cli_options
 {
-    std::string serial_port = "/dev/ttyS2";
+    std::string serial_port = DEFAULT_SERIAL_PORT_DEVICE;
     bool enable_logging = false;
     bool run_ping_command = false;
     bool run_test_command = false;

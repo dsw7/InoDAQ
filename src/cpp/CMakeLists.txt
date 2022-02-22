@@ -24,11 +24,22 @@ set(OUTPUT_NAME inodaq)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/tmp")
 message(STATUS "Compiled binary will be ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${OUTPUT_NAME}")
 
+set(DEFAULT_SERIAL_PORT_DEV_X86_X86_64 "/dev/ttyS2")
+set(DEFAULT_SERIAL_PORT_DEV_NIX "/dev/ttyUSB0")
+
 # Macro definitions
 add_compile_definitions(MAX_SIZE_PAYLOAD=25)              # Maximum payload size in bytes (must match device)
 add_compile_definitions(MAX_SLEEP_WAIT_FOR_AUTO_RESET=2)  # Number of seconds to wait for device to auto-reset
 add_compile_definitions(RW_DELAY_USEC=50000)              # Delay between writing to and reading from device
 add_compile_definitions(TIMEOUT_SELECT_SECS=2)            # select(2) timeout in seconds
+
+if (CYGWIN)                                               # ttyS0 is the device for the serial console on x86 and x86_64 arch
+    add_compile_definitions(DEFAULT_SERIAL_PORT_DEVICE="${DEFAULT_SERIAL_PORT_DEV_X86_X86_64}")
+    message(STATUS "The default serial port device will be ${DEFAULT_SERIAL_PORT_DEV_X86_X86_64}")
+else()                                                    # All other *nix systems default to ttyUSB0 it seems
+    add_compile_definitions(DEFAULT_SERIAL_PORT_DEVICE="${DEFAULT_SERIAL_PORT_DEV_NIX}")
+    message(STATUS "The default serial port device will be ${DEFAULT_SERIAL_PORT_DEV_NIX}")
+endif(CYGWIN)
 
 # Link curses
 find_package(Curses REQUIRED)
