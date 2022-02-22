@@ -238,17 +238,6 @@ In this case, the program input follows:
     Status: All digital pins are low
 
 ==============================================================================
-
-  Key             Description
-
-  j, KEY_DOWN     Scroll cursor down
-  k, KEY_UP       Scroll cursor up
-  c               Connect to serial port specified via command line
-  d               Disconnect from serial port specified via command line
-  ENTER           Toggle pin at current cursor position
-  q               Quit the program
-
-==============================================================================
 ```
 Note that both `D2` and `D3` are low. Unsurprisingly, in this case the LED (Y) is logical true because both of
 the inputs are logical false:
@@ -275,17 +264,6 @@ In this case, only `D2` was set to high:
     [ ]  D13
 
     Status: Pin 2 was set to high
-
-==============================================================================
-
-  Key             Description
-
-  j, KEY_DOWN     Scroll cursor down
-  k, KEY_UP       Scroll cursor up
-  c               Connect to serial port specified via command line
-  d               Disconnect from serial port specified via command line
-  ENTER           Toggle pin at current cursor position
-  q               Quit the program
 
 ==============================================================================
 ```
@@ -315,17 +293,6 @@ In this case, only `D3` was set to high:
     Status: Pin 3 was set to high
 
 ==============================================================================
-
-  Key             Description
-
-  j, KEY_DOWN     Scroll cursor down
-  k, KEY_UP       Scroll cursor up
-  c               Connect to serial port specified via command line
-  d               Disconnect from serial port specified via command line
-  ENTER           Toggle pin at current cursor position
-  q               Quit the program
-
-==============================================================================
 ```
 In this case, the LED is logical true because at least one of the inputs is logical false:
 <p align="center">
@@ -351,17 +318,6 @@ In this case, both `D2` and `D3` were set to high:
     [ ]  D13
 
     Status: Pin 2 was set to high
-
-==============================================================================
-
-  Key             Description
-
-  j, KEY_DOWN     Scroll cursor down
-  k, KEY_UP       Scroll cursor up
-  c               Connect to serial port specified via command line
-  d               Disconnect from serial port specified via command line
-  ENTER           Toggle pin at current cursor position
-  q               Quit the program
 
 ==============================================================================
 ```
