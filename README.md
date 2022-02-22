@@ -22,6 +22,8 @@ and receiving messages via UART.
     - [A = 1 & B = 0](#a--1--b--0)
     - [A = 0 & B = 1](#a--0--b--1)
     - [A = 1 & B = 1](#a--1--b--1)
+  - [Testing and troubleshooting](#testing-and-troubleshooting)
+    - [Automated testing](#automated-testing)
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses`
 interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino
@@ -325,3 +327,6 @@ In this case, the LED is logical false because both of the inputs are logical tr
 <p align="center">
   <img width="500" src=./docs/row4.jpg>
 </p>
+
+## Testing and troubleshooting
+### Automated testing
