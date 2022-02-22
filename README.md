@@ -376,3 +376,17 @@ write(3, "test\n", 5)                   = 5
 ...
 +++ exited with 0 +++
 ```
+The `strace` utility can also be used to troubleshoot bidirectional I/O. For example:
+```bash
+strace -s1000 -e read,write /tmp/inodaq --ping --quiet --serial-port /dev/ttyUSB0 >/dev/null
+```
+The output follows:
+```
+...
+write(3, "test\n", 5)                   = 5
+read(3, "Built in LED is ONxxxxxxx", 25) = 25
+write(3, "test\n", 5)                   = 5
+read(3, "Built in LED is OFFxxxxxx", 25) = 25
++++ exited with 0 +++
+```
+The above example demonstrates proper read/write sequence.
