@@ -22,5 +22,5 @@ void send_message(char *message)
     // Use Serial.print() because Serial.println() adds two additional bytes, CRLF, to the outgoing
     // payload which is a problem when reading the message on the receiver's end
     Serial.print(payload);
-    //Serial.flush();
+    Serial.flush();
 }
