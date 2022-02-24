@@ -4,14 +4,14 @@ void send_message(char *message)
 {
     unsigned int size_padding = MAX_SIZE_PAYLOAD - strlen(message);
 
-    char padding[size_padding + 1];
+    char padding[size_padding + 5];
 
-    for (unsigned int i = 0; i < size_padding; i++)
+    for (unsigned int i = 0; i <= size_padding; i++)
     {
         padding[i] = 'x';
     }
 
-    padding[size_padding] = '\0';
+    padding[size_padding + 1] = '\0';
 
     char payload[MAX_SIZE_PAYLOAD];
 
