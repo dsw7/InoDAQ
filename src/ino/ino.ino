@@ -4,7 +4,7 @@
 
 namespace Protocol
 {
-    const char* MESSAGE_READY = "READY\n";
+    const char* MESSAGE_SYN = "SYN\n";
     const char* MESSAGE_ACK = "ACK";
 
     const unsigned int SIZE_MESSAGE_ACK = strlen(MESSAGE_ACK);
@@ -23,7 +23,7 @@ void establish_connection()
     {
         if ((micros() - start_time) >= Protocol::PERIOD_TRANSMISSION)
         {
-            Serial.print(Protocol::MESSAGE_READY);
+            Serial.print(Protocol::MESSAGE_SYN);
             start_time = micros();
         }
 
