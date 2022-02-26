@@ -21,7 +21,7 @@ CONNECTION_KWARGS = {
 }
 
 MESSAGE_SYN = b'SYN\n'
-MESSAGE_ACK = 'ACK'
+MESSAGE_ACK = b'ACK\n'
 
 
 class Serial:
@@ -52,7 +52,7 @@ class Serial:
         sleep(2)
 
         logging.debug('Resetting input buffer')
-        #self.serial_port_obj.reset_input_buffer()
+        self.serial_port_obj.reset_input_buffer()
 
         return True, None
 
@@ -67,7 +67,7 @@ class Serial:
         if self.serial_port_obj.is_open:
             self.serial_port_obj.close()
 
-    def wait_for_syn(self):
+    def wait_for_syn(self) -> None:
 
         logging.debug('Waiting to receive SYN message')
         syn_received = False
@@ -88,10 +88,18 @@ class Serial:
             else:
                 logging.debug('Received unknown bytes %s', bytes_from_dev)
 
+    def send_ack(self) -> None:
+
+        logging.debug('Sending ACK message')
+        self.serial_port_obj.write(MESSAGE_ACK)
 
 
+def main() -> None:
+    serial_obj = Serial()
+    serial_obj.open_connection()
+    serial_obj.wait_for_syn()
+    serial_obj.send_ack()
+    serial_obj.close_connection()
 
-s = Serial()
-s.open_connection()
-s.wait_for_syn()
-s.close_connection()
+if __name__ == '__main__':
+    main()

@@ -4,6 +4,7 @@ LIGHT_PURPLE = "\033[1;1;35m"
 NO_COLOR = "\033[0m"
 FULLY_QUALIFIED_BOARD_NAME = arduino:avr:uno
 KERNEL := $(shell uname --kernel-name)
+PYTHON_INTERP = /usr/bin/python3.9
 
 ifneq (,$(findstring CYGWIN,$(KERNEL)))
 	SERIAL_PORT = COM3
@@ -38,3 +39,7 @@ compile:
 upload: compile
 	$(call MESSAGE,Uploading Arduino code)
 	@arduino-cli upload --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose
+
+test: upload
+	$(call MESSAGE,Running basic test)
+	@$(PYTHON_INTERP) test_serial.py
