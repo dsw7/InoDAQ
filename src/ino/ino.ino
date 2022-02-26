@@ -1,41 +1,58 @@
-#include "parser.h"
+#include <Arduino.h>
 
 #define BAUD_RATE 9600
-#define MAX_SIZE_PAYLOAD 25
 
-void setup()
+namespace Protocol
 {
+    const char* MESSAGE_READY = "READY\n";
+    const char* MESSAGE_ACK = "ACK";
+
+    const unsigned int SIZE_MESSAGE_ACK = strlen(MESSAGE_ACK);
+    const unsigned long PERIOD_TRANSMISSION = 1e6;
+}
+
+void establish_connection()
+{
+    size_t bytes_recv;
+    bool ack_received = false;
+
+    unsigned long start_time = micros();
+    char buffer[sizeof(Protocol::MESSAGE_ACK) + 1]; // make extra room for null terminator
+
+    while (ack_received == false)
+    {
+        if ((micros() - start_time) >= Protocol::PERIOD_TRANSMISSION)
+        {
+            Serial.print(Protocol::MESSAGE_READY);
+            start_time = micros();
+        }
+
+        if (Serial.available() > 2)
+        {
+            bytes_recv = Serial.readBytesUntil('\n', buffer, Protocol::SIZE_MESSAGE_ACK);
+
+            if (bytes_recv == Protocol::SIZE_MESSAGE_ACK)
+            {
+                if (strcmp(buffer, Protocol::MESSAGE_ACK) == 0)
+                {
+                    ack_received = true;
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    init();
+
     Serial.begin(BAUD_RATE);
+    establish_connection();
 
-    for (unsigned int i = 2; i <= 13; i++)
+    while(1)
     {
-        pinMode(i, OUTPUT);
-        digitalWrite(i, LOW);
+
     }
 
-    pinMode(LED_BUILTIN, OUTPUT);
+    return 0;
 }
-
-void loop()
-{
-    if (Serial.available() > 0)
-    {
-        static char payload[MAX_SIZE_PAYLOAD];
-        static unsigned int payload_idx = 0;
-
-        char incoming_byte = Serial.read();
-
-        if ((incoming_byte != '\n') and (payload_idx < MAX_SIZE_PAYLOAD - 1))
-        {
-            payload[payload_idx] = incoming_byte;
-            payload_idx++;
-        }
-        else
-        {
-            payload[payload_idx] = '\0';
-            payload_parser(payload);
-            payload_idx = 0;
-        }
-    }
-}
-
