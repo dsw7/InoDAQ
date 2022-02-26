@@ -11,7 +11,7 @@ namespace Protocol
     const unsigned long PERIOD_TRANSMISSION = 1e6;
 }
 
-void establish_connection()
+void wait_for_ack()
 {
     size_t bytes_recv;
     bool ack_received = false;
@@ -47,7 +47,7 @@ int main()
     init();
 
     Serial.begin(BAUD_RATE);
-    establish_connection();
+    wait_for_ack();
 
     while(1)
     {
