@@ -25,7 +25,7 @@ void run_handshake()
     bool ack_received = false;
 
     unsigned long start_time = micros();
-    char buffer[sizeof(Protocol::MESSAGE_ACK) + 1]; // make extra room for null terminator
+    char buffer[Protocol::SIZE_MESSAGE_ACK + 1] = {'\0'}; // make extra room for null terminator
 
     while (ack_received == false)
     {

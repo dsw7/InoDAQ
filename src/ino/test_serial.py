@@ -49,10 +49,19 @@ class Serial:
         logging.debug('DTR (Data Terminal Ready) was sent. Waiting for device to reset')
         sleep(2)
 
-        logging.debug('Resetting input buffer')
-        self.serial_port_obj.reset_input_buffer()
+        self.flush_input_buffer()
 
         return True, None
+
+    def flush_input_buffer(self) -> None:
+
+        logging.debug('Flushing input buffer')
+        self.serial_port_obj.reset_input_buffer()
+
+    def flush_output_buffer(self) -> None:
+
+        logging.debug('Flushing output buffer')
+        self.serial_port_obj.reset_output_buffer()
 
     def close_connection(self) -> None:
 
@@ -75,7 +84,7 @@ class Serial:
             while self.serial_port_obj.in_waiting < len(MESSAGE_ACK):
                 pass
 
-            logging.debug('Read to read data')
+            logging.debug('Ready to read data')
             bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
 
             logging.debug('Received message: %s', bytes_from_dev)
@@ -91,13 +100,34 @@ class Serial:
         logging.debug('Sending ACK message')
         self.serial_port_obj.write(MESSAGE_ACK)
 
+    def send_message(self, message: bytes) -> None:
 
-def test_main() -> None:
-    serial_obj = Serial()
-    serial_obj.open_connection()
-    serial_obj.wait_for_syn()
-    serial_obj.send_ack()
-    serial_obj.close_connection()
+        logging.debug('Sending message: "%s"', message)
+        self.serial_port_obj.write(message)
 
-if __name__ == '__main__':
-    test_main()
+    def receive_message(self) -> bytes:
+        message = self.serial_port_obj.read_until()
+        logging.debug('Received message: "%s"', message)
+
+        return message
+
+
+class TestSerial:
+
+    def setup_method(self) -> None:
+
+        self.serial_obj = Serial()
+        self.serial_obj.open_connection()
+        self.serial_obj.wait_for_syn()
+        self.serial_obj.send_ack()
+
+        # Note that SYN will still exist in input buffer after sending ACK
+        self.serial_obj.flush_input_buffer()
+        self.serial_obj.flush_output_buffer()
+
+    def teardown_method(self) -> None:
+        self.serial_obj.close_connection()
+
+    def test_unknown_message(self) -> None:
+        self.serial_obj.send_message(b'foobar')
+        assert self.serial_obj.receive_message() == b'foobar'
