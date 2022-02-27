@@ -33,6 +33,7 @@ void run_handshake()
         if ((micros() - start_time) >= Protocol::PERIOD_TRANSMISSION)
         {
             Serial.print(Protocol::MESSAGE_SYN);
+            Serial.flush();
             start_time = micros();
         }
 
@@ -51,6 +52,7 @@ void run_handshake()
     }
 
     Serial.print(Protocol::MESSAGE_SYN_ACK);
+    Serial.flush();
 }
 
 void run_loop()
@@ -60,10 +62,11 @@ void run_loop()
 
     while (true)
     {
-        if (Serial.available() > 2)
+        if (Serial.available() > 0)
         {
             bytes_recv = Serial.readBytesUntil(Protocol::MESSAGE_TERMINATOR, buffer, Protocol::SIZE_MESSAGE_BUF);
             Serial.print(buffer);
+            Serial.flush();
         }
     }
 }

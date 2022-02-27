@@ -124,7 +124,7 @@ class Serial:
     def send_message(self, message: bytes) -> None:
 
         logging.debug('Sending message: "%s"', message)
-        self.serial_port_obj.write(message)
+        logging.debug('Sent %i bytes', self.serial_port_obj.write(message))
 
     def receive_message(self) -> bytes:
         message = self.serial_port_obj.read_until()
@@ -148,5 +148,6 @@ class TestSerial:
 
     def test_unknown_message(self) -> None:
         message = b'foobar\n'
+
         self.serial_obj.send_message(message)
         assert self.serial_obj.receive_message() == message
