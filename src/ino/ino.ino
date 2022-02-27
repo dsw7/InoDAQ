@@ -6,6 +6,7 @@ namespace Protocol
 {
     const char* MESSAGE_SYN = "SYN\n";
     const char* MESSAGE_ACK = "ACK";
+    const char* MESSAGE_SYN_ACK = "SYN-ACK\n";
     const char* MESSAGE_TERMINATOR = "\n";
 
     const unsigned int SIZE_MESSAGE_ACK = strlen(MESSAGE_ACK);
@@ -48,12 +49,14 @@ void run_handshake()
             }
         }
     }
+
+    Serial.print(Protocol::MESSAGE_SYN_ACK);
 }
 
 void run_loop()
 {
     size_t bytes_recv;
-    char buffer[Protocol::SIZE_MESSAGE_BUF];
+    char buffer[Protocol::SIZE_MESSAGE_BUF] = {'\0'};
 
     while (true)
     {

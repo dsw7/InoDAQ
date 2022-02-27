@@ -20,6 +20,7 @@ CONNECTION_KWARGS = {
 
 MESSAGE_SYN = b'SYN\n'
 MESSAGE_ACK = b'ACK\n'
+MESSAGE_SYN_ACK = b'SYN-ACK\n'
 
 
 class Serial:
@@ -27,7 +28,6 @@ class Serial:
     def __init__(self) -> None:
 
         self.serial_port_obj = None
-        self.run = True
 
     def open_connection(self) -> bool:
 
@@ -77,9 +77,9 @@ class Serial:
     def wait_for_syn(self) -> None:
 
         logging.debug('Waiting to receive SYN message')
-        syn_received = False
+        message_received = False
 
-        while (not syn_received) and (self.run):
+        while not message_received:
 
             while self.serial_port_obj.in_waiting < len(MESSAGE_ACK):
                 pass
@@ -91,7 +91,7 @@ class Serial:
 
             if bytes_from_dev == MESSAGE_SYN:
                 logging.debug('Accepted SYN message')
-                syn_received = True
+                message_received = True
             else:
                 logging.debug('Received unknown bytes %s', bytes_from_dev)
 
@@ -99,6 +99,27 @@ class Serial:
 
         logging.debug('Sending ACK message')
         self.serial_port_obj.write(MESSAGE_ACK)
+
+    def wait_for_syn_ack(self) -> None:
+
+        logging.debug('Waiting to receive SYN-ACK message')
+        message_received = False
+
+        while not message_received:
+
+            while self.serial_port_obj.in_waiting < len(MESSAGE_SYN_ACK):
+                pass
+
+            logging.debug('Ready to read data')
+            bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
+
+            logging.debug('Received message: %s', bytes_from_dev)
+
+            if bytes_from_dev == MESSAGE_SYN_ACK:
+                logging.debug('Accepted SYN-ACK message')
+                message_received = True
+            else:
+                logging.debug('Received unknown bytes %s', bytes_from_dev)
 
     def send_message(self, message: bytes) -> None:
 
@@ -120,14 +141,11 @@ class TestSerial:
         self.serial_obj.open_connection()
         self.serial_obj.wait_for_syn()
         self.serial_obj.send_ack()
-
-        # Note that SYN will still exist in input buffer after sending ACK
-        self.serial_obj.flush_input_buffer()
-        self.serial_obj.flush_output_buffer()
+        self.serial_obj.wait_for_syn_ack()
 
     def teardown_method(self) -> None:
         self.serial_obj.close_connection()
 
     def test_unknown_message(self) -> None:
-        self.serial_obj.send_message(b'foobar')
-        assert self.serial_obj.receive_message() == b'foobar'
+        self.serial_obj.send_message(b'foobar\n')
+        print(self.serial_obj.receive_message())
