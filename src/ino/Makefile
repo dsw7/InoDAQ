@@ -42,6 +42,8 @@ upload: compile
 
 test:
 	$(call MESSAGE,Running basic test)
-	@$(PYTHON_INTERP) -m pytest --verbose -o log_cli=true -o log_cli_level=DEBUG .
+	@$(PYTHON_INTERP) -m pytest --verbose -o log_cli=true -o log_cli_level=DEBUG \
+	-o log_format="%(asctime)s.%(msecs)03d %(levelname)s %(message)s" . \
+	-o log_date_format="%H:%M:%S" .
 
 full: upload test
