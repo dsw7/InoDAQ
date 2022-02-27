@@ -4,8 +4,6 @@ from json import dumps
 import logging
 import serial
 
-logging.basicConfig(level=logging.DEBUG)
-
 if 'CYGWIN' in uname().system:
     SERIAL_PORT = '/dev/ttyS2'
 else:
@@ -94,7 +92,7 @@ class Serial:
         self.serial_port_obj.write(MESSAGE_ACK)
 
 
-def main() -> None:
+def test_main() -> None:
     serial_obj = Serial()
     serial_obj.open_connection()
     serial_obj.wait_for_syn()
@@ -102,4 +100,4 @@ def main() -> None:
     serial_obj.close_connection()
 
 if __name__ == '__main__':
-    main()
+    test_main()

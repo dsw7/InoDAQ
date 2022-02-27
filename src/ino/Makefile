@@ -24,7 +24,7 @@ Compile Arduino code:
 Upload compiled Arduino code to board:
     $$ make upload
 Make all targets:
-    $$ make all
+    $$ make full
 endef
 
 export HELP_LIST_TARGETS
@@ -40,6 +40,8 @@ upload: compile
 	$(call MESSAGE,Uploading Arduino code)
 	@arduino-cli upload --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose
 
-test: upload
+test:
 	$(call MESSAGE,Running basic test)
-	@$(PYTHON_INTERP) test_serial.py
+	@$(PYTHON_INTERP) -m pytest --verbose -o log_cli=true -o log_cli_level=DEBUG .
+
+full: upload test
