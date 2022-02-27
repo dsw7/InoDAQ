@@ -6,12 +6,20 @@ namespace Protocol
 {
     const char* MESSAGE_SYN = "SYN\n";
     const char* MESSAGE_ACK = "ACK";
+    const char* MESSAGE_TERMINATOR = "\n";
 
     const unsigned int SIZE_MESSAGE_ACK = strlen(MESSAGE_ACK);
+    const unsigned int SIZE_MESSAGE_BUF = 100;
     const unsigned long PERIOD_TRANSMISSION = 1e6;
 }
 
-void wait_for_ack()
+void run_setup()
+{
+    init();
+    Serial.begin(BAUD_RATE);
+}
+
+void run_handshake()
 {
     size_t bytes_recv;
     bool ack_received = false;
@@ -29,7 +37,7 @@ void wait_for_ack()
 
         if (Serial.available() > 2)
         {
-            bytes_recv = Serial.readBytesUntil('\n', buffer, Protocol::SIZE_MESSAGE_ACK);
+            bytes_recv = Serial.readBytesUntil(Protocol::MESSAGE_TERMINATOR, buffer, Protocol::SIZE_MESSAGE_ACK);
 
             if (bytes_recv == Protocol::SIZE_MESSAGE_ACK)
             {
@@ -42,17 +50,26 @@ void wait_for_ack()
     }
 }
 
+void run_loop()
+{
+    size_t bytes_recv;
+    char buffer[Protocol::SIZE_MESSAGE_BUF];
+
+    while (true)
+    {
+        if (Serial.available() > 2)
+        {
+            bytes_recv = Serial.readBytesUntil(Protocol::MESSAGE_TERMINATOR, buffer, Protocol::SIZE_MESSAGE_BUF);
+            Serial.print(buffer);
+        }
+    }
+}
+
 int main()
 {
-    init();
-
-    Serial.begin(BAUD_RATE);
-    wait_for_ack();
-
-    while (1)
-    {
-
-    }
+    run_setup();
+    run_handshake();
+    run_loop();
 
     return 0;
 }
