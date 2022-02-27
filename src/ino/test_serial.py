@@ -1,8 +1,12 @@
-from time import sleep
-from platform import uname
-from json import dumps
 import logging
+from time import sleep
+from json import dumps
+from uuid import uuid4
+from random import randint
+from typing import List
+from platform import uname
 import serial
+from pytest import mark
 
 if 'CYGWIN' in uname().system:
     SERIAL_PORT = '/dev/ttyS2'
@@ -121,6 +125,9 @@ class Serial:
             else:
                 logging.debug('Received unknown bytes %s', bytes_from_dev)
 
+        # Extra newline seems to come from somewhere
+        self.flush_input_buffer()
+
     def send_message(self, message: bytes) -> None:
 
         logging.debug('Sending message: "%s"', message)
@@ -133,9 +140,20 @@ class Serial:
         return message
 
 
+def generate_random_bytes(size: int) -> List[bytes]:
+
+    random_bytes = []
+    for _ in range(size):
+
+        byte_array = str(uuid4()).encode()
+        random_bytes.append(byte_array[:randint(1, 36)] + b'\n')
+
+    return random_bytes
+
+
 class TestSerial:
 
-    def setup_method(self) -> None:
+    def setup_class(self) -> None:
 
         self.serial_obj = Serial()
         self.serial_obj.open_connection()
@@ -143,11 +161,11 @@ class TestSerial:
         self.serial_obj.send_ack()
         self.serial_obj.wait_for_syn_ack()
 
-    def teardown_method(self) -> None:
+    def teardown_class(self) -> None:
         self.serial_obj.close_connection()
 
-    def test_unknown_message(self) -> None:
-        message = b'foobar\n'
+    @mark.parametrize('message', generate_random_bytes(10))
+    def test_unknown_message(self, message: str) -> None:
 
         self.serial_obj.send_message(message)
         assert self.serial_obj.receive_message() == message
