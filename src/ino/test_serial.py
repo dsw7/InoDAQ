@@ -147,5 +147,6 @@ class TestSerial:
         self.serial_obj.close_connection()
 
     def test_unknown_message(self) -> None:
-        self.serial_obj.send_message(b'foobar\n')
-        print(self.serial_obj.receive_message())
+        message = b'foobar\n'
+        self.serial_obj.send_message(message)
+        assert self.serial_obj.receive_message() == message
