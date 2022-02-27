@@ -49,7 +49,7 @@ int main()
     Serial.begin(BAUD_RATE);
     wait_for_ack();
 
-    while(1)
+    while (1)
     {
 
     }
