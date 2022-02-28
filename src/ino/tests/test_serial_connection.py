@@ -1,4 +1,5 @@
 from uuid import uuid4
+from time import sleep
 from random import randint
 from typing import List
 from pytest import mark
@@ -63,7 +64,23 @@ class TestSerial:
         assert self.serial_obj.receive_message() == b'abcdefghijabcdefghijabcdefghijabcdefghij\n'
         assert self.serial_obj.receive_message() == b'abcdefghij\n'
 
-    def test_toggle_builtin_led(self) -> None:
+    @mark.parametrize(
+        'message',
+        [
+            b'Built in LED is ON\n',
+            b'Built in LED is OFF\n',
+            b'Built in LED is ON\n',
+            b'Built in LED is OFF\n'
+        ],
+        ids=[
+            '(1) Test built in LED is turned ON',
+            '(2) Test built in LED is turned OFF',
+            '(3) Test built in LED is turned ON',
+            '(4) Test built in LED is turned OFF'
+        ]
+    )
+    def test_toggle_builtin_led(self, message: bytes) -> None:
 
         self.serial_obj.send_message(b'TEST\n')
-        assert self.serial_obj.receive_message() == b'Toggling built in LED\n'
+        sleep(0.5)
+        assert self.serial_obj.receive_message() == message
