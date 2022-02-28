@@ -3,6 +3,6 @@
 
 #include <string.h>
 
-void parser(char* buffer_input, char* buffer_output);
+bool parser(char* buffer_input, char* buffer_output);
 
 #endif

@@ -67,6 +67,7 @@ void handshake()
 void loop()
 {
     size_t bytes_recv;
+    bool abort_loop = false;
 
     while (true)
     {
@@ -76,12 +77,17 @@ void loop()
             char buffer_output[Protocol::SIZE_MESSAGE_BUF] = {'\0'};
 
             bytes_recv = Serial.readBytesUntil(Protocol::MESSAGE_TERMINATOR, buffer_input, Protocol::SIZE_MESSAGE_BUF);
-            parser(buffer_input, buffer_output);
+            abort_loop = parser(buffer_input, buffer_output);
 
             // readBytesUntil strips out MESSAGE_TERMINATOR - need to add it back
             buffer_output[bytes_recv] = '\n';
             Serial.print(buffer_output);
             Serial.flush();
+
+            if (abort_loop)
+            {
+                break;
+            }
         }
     }
 }
