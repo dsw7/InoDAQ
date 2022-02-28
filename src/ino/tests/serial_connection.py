@@ -19,8 +19,8 @@ CONNECTION_KWARGS = {
 }
 
 MESSAGE_SYN = b'SYN\n'
-MESSAGE_ACK = b'ACK\n'
 MESSAGE_SYN_ACK = b'SYN-ACK\n'
+MESSAGE_ACK = b'ACK\n'
 
 
 class SerialConnection:
@@ -81,7 +81,7 @@ class SerialConnection:
 
         while not message_received:
 
-            while self.serial_port_obj.in_waiting < len(MESSAGE_ACK):
+            while self.serial_port_obj.in_waiting < len(MESSAGE_SYN):
                 pass
 
             logging.debug('Ready to read data')
@@ -95,19 +95,19 @@ class SerialConnection:
             else:
                 logging.debug('Received unknown bytes %s', bytes_from_dev)
 
-    def send_ack(self) -> None:
+    def send_syn_ack(self) -> None:
 
-        logging.debug('Sending ACK message')
-        self.serial_port_obj.write(MESSAGE_ACK)
+        logging.debug('Sending SYN-ACK message')
+        self.serial_port_obj.write(MESSAGE_SYN_ACK)
 
-    def wait_for_syn_ack(self) -> None:
+    def wait_for_ack(self) -> None:
 
-        logging.debug('Waiting to receive SYN-ACK message')
+        logging.debug('Waiting to receive ACK message')
         message_received = False
 
         while not message_received:
 
-            while self.serial_port_obj.in_waiting < len(MESSAGE_SYN_ACK):
+            while self.serial_port_obj.in_waiting < len(MESSAGE_ACK):
                 pass
 
             logging.debug('Ready to read data')
@@ -115,8 +115,8 @@ class SerialConnection:
 
             logging.debug('Received message: %s', bytes_from_dev)
 
-            if bytes_from_dev == MESSAGE_SYN_ACK:
-                logging.debug('Accepted SYN-ACK message')
+            if bytes_from_dev == MESSAGE_ACK:
+                logging.debug('Accepted ACK message')
                 message_received = True
             else:
                 logging.debug('Received unknown bytes %s', bytes_from_dev)

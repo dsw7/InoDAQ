@@ -22,9 +22,10 @@ class TestSerial:
 
         self.serial_obj = SerialConnection()
         self.serial_obj.open_connection()
+
         self.serial_obj.wait_for_syn()
-        self.serial_obj.send_ack()
-        self.serial_obj.wait_for_syn_ack()
+        self.serial_obj.send_syn_ack()
+        self.serial_obj.wait_for_ack()
 
     def teardown_class(self) -> None:
         self.serial_obj.close_connection()
