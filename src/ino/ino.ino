@@ -1,5 +1,4 @@
-#include <Arduino.h>
-#include "core.h"
+#include "src/core.h"
 
 int main()
 {
