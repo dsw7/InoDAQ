@@ -65,5 +65,5 @@ class TestSerial:
 
     def test_toggle_builtin_led(self) -> None:
 
-        self.serial_obj.send_message(b'test\n')
+        self.serial_obj.send_message(b'TEST\n')
         assert self.serial_obj.receive_message() == b'Toggling built in LED\n'
