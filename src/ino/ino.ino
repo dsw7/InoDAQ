@@ -10,7 +10,7 @@ namespace Protocol
     const char* MESSAGE_TERMINATOR = '\n';
 
     const unsigned int SIZE_MESSAGE_ACK = strlen(MESSAGE_ACK);
-    const unsigned int SIZE_MESSAGE_BUF = 100;
+    const unsigned int SIZE_MESSAGE_BUF = 40;
     const unsigned long PERIOD_TRANSMISSION = 1e6;
 }
 

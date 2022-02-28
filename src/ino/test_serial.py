@@ -186,3 +186,15 @@ class TestSerial:
         self.serial_obj.send_message(b'\n')
 
         assert self.serial_obj.receive_message() == b'\n'
+
+    def test_overflow_message(self) -> None:
+
+        self.serial_obj.send_message(b'abcdefghijabcdefghij')
+        self.serial_obj.send_message(b'abcdefghijabcdefghij')
+
+        # readBytesUntil reads until either MESSAGE_TERMINATOR is received
+        # or the number of bytes in buffer exceeds SIZE_MESSAGE_BUF
+        self.serial_obj.send_message(b'abcdefghij\n')
+
+        assert self.serial_obj.receive_message() == b'abcdefghijabcdefghijabcdefghijabcdefghij\n'
+        assert self.serial_obj.receive_message() == b'abcdefghij\n'
