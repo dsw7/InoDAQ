@@ -18,6 +18,14 @@ void run_setup()
 {
     init();
     Serial.begin(BAUD_RATE);
+
+    for (unsigned int pin = 2; pin <= 13; pin++)
+    {
+        pinMode(pin, OUTPUT);
+        digitalWrite(pin, LOW);
+    }
+
+    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void run_handshake()
