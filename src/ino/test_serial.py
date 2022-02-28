@@ -169,3 +169,20 @@ class TestSerial:
 
         self.serial_obj.send_message(message)
         assert self.serial_obj.receive_message() == message
+
+    def test_message_buffering(self) -> None:
+
+        self.serial_obj.send_message(b'ab')
+        self.serial_obj.send_message(b'cd')
+        self.serial_obj.send_message(b'ef')
+        self.serial_obj.send_message(b'\n')
+
+        assert self.serial_obj.receive_message() == b'abcdef\n'
+
+    def test_empty_message(self) -> None:
+
+        self.serial_obj.send_message(b'')
+        self.serial_obj.send_message(b'')
+        self.serial_obj.send_message(b'\n')
+
+        assert self.serial_obj.receive_message() == b'\n'
