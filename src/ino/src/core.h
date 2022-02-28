@@ -2,6 +2,7 @@
 #define CORE_H
 
 #include <Arduino.h>
+#include "commands.h"
 
 #define BAUD_RATE 9600
 

@@ -72,12 +72,15 @@ void loop()
     {
         if (Serial.available() > 0)
         {
-            char buffer[Protocol::SIZE_MESSAGE_BUF] = {'\0'};
-            bytes_recv = Serial.readBytesUntil(Protocol::MESSAGE_TERMINATOR, buffer, Protocol::SIZE_MESSAGE_BUF);
+            char buffer_input[Protocol::SIZE_MESSAGE_BUF] = {'\0'};
+            char buffer_output[Protocol::SIZE_MESSAGE_BUF] = {'\0'};
+
+            bytes_recv = Serial.readBytesUntil(Protocol::MESSAGE_TERMINATOR, buffer_input, Protocol::SIZE_MESSAGE_BUF);
+            parser(buffer_input, buffer_output);
 
             // readBytesUntil strips out MESSAGE_TERMINATOR - need to add it back
-            buffer[bytes_recv] = '\n';
-            Serial.print(buffer);
+            buffer_output[bytes_recv] = '\n';
+            Serial.print(buffer_output);
             Serial.flush();
         }
     }
