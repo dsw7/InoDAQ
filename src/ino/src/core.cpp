@@ -12,10 +12,10 @@ namespace Protocol
     const unsigned long PERIOD_TRANSMISSION = 1e6;
 }
 
-namespace Core
+namespace InoDAQ
 {
 
-void run_setup()
+void setup()
 {
     init();
     Serial.begin(BAUD_RATE);
@@ -29,7 +29,7 @@ void run_setup()
     pinMode(LED_BUILTIN, OUTPUT);
 }
 
-void run_handshake()
+void handshake()
 {
     size_t bytes_recv;
     bool ack_received = false;
@@ -64,7 +64,7 @@ void run_handshake()
     Serial.flush();
 }
 
-void run_loop()
+void loop()
 {
     size_t bytes_recv;
 
@@ -83,4 +83,4 @@ void run_loop()
     }
 }
 
-} // namespace Core
+} // namespace InoDAQ

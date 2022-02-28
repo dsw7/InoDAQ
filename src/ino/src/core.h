@@ -5,11 +5,11 @@
 
 #define BAUD_RATE 9600
 
-namespace Core
+namespace InoDAQ
 {
-    void run_setup();
-    void run_handshake();
-    void run_loop();
+    void setup();
+    void handshake();
+    void loop();
 }
 
 #endif

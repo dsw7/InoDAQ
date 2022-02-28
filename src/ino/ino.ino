@@ -2,9 +2,9 @@
 
 int main()
 {
-    Core::run_setup();
-    Core::run_handshake();
-    Core::run_loop();
+    InoDAQ::setup();
+    InoDAQ::handshake();
+    InoDAQ::loop();
 
     return 0;
 }
