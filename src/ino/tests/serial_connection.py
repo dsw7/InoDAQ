@@ -21,6 +21,8 @@ CONNECTION_KWARGS = {
 MESSAGE_SYN = b'SYN\n'
 MESSAGE_SYN_ACK = b'SYN-ACK\n'
 MESSAGE_ACK = b'ACK\n'
+MESSAGE_FIN = b'FIN\n'
+MESSAGE_FIN_ACK = b'FIN-ACK\n'
 
 
 class SerialConnection:
@@ -63,6 +65,30 @@ class SerialConnection:
         logging.debug('Flushing output buffer')
         self.serial_port_obj.reset_output_buffer()
 
+    def send_fin(self) -> None:
+
+        logging.debug('Sending FIN message')
+        self.serial_port_obj.write(MESSAGE_FIN)
+
+    def wait_for_fin_ack(self) -> None:
+
+        logging.debug('Waiting to receive FIN-ACK message')
+        message_received = False
+
+        while not message_received:
+
+            while self.serial_port_obj.in_waiting < len(MESSAGE_FIN_ACK):
+                pass
+
+            bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
+            logging.debug('Received message: %s', bytes_from_dev)
+
+            if bytes_from_dev == MESSAGE_FIN_ACK:
+                logging.debug('Accepted FIN-ACK message')
+                message_received = True
+            else:
+                logging.debug('Received unknown bytes %s', bytes_from_dev)
+
     def close_connection(self) -> None:
 
         if self.serial_port_obj is None:
@@ -84,9 +110,7 @@ class SerialConnection:
             while self.serial_port_obj.in_waiting < len(MESSAGE_SYN):
                 pass
 
-            logging.debug('Ready to read data')
             bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
-
             logging.debug('Received message: %s', bytes_from_dev)
 
             if bytes_from_dev == MESSAGE_SYN:
@@ -110,9 +134,7 @@ class SerialConnection:
             while self.serial_port_obj.in_waiting < len(MESSAGE_ACK):
                 pass
 
-            logging.debug('Ready to read data')
             bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
-
             logging.debug('Received message: %s', bytes_from_dev)
 
             if bytes_from_dev == MESSAGE_ACK:

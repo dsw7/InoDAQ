@@ -28,6 +28,9 @@ class TestSerial:
         self.serial_obj.wait_for_ack()
 
     def teardown_class(self) -> None:
+
+        self.serial_obj.send_fin()
+        self.serial_obj.wait_for_fin_ack()
         self.serial_obj.close_connection()
 
     @mark.parametrize('message', generate_random_bytes(10))
