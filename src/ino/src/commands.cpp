@@ -2,7 +2,8 @@
 
 namespace Protocol
 {
-    const char* MESSAGE_EXIT = "EXIT";
+    const char* MESSAGE_FIN = "FIN";
+    const char* MESSAGE_FIN_ACK = "FIN-ACK";
     const char* MESSAGE_TOGGLE_BUILTIN_LED = "TEST";
 }
 
@@ -25,9 +26,9 @@ void toggle_builtin_led(char *buffer)
 bool parser(char* buffer_input, char* buffer_output)
 {
 
-    if (strcmp(buffer_input, Protocol::MESSAGE_EXIT) == 0)
+    if (strcmp(buffer_input, Protocol::MESSAGE_FIN) == 0)
     {
-        strcpy(buffer_output, "Disconnecting from device");
+        strcpy(buffer_output, Protocol::MESSAGE_FIN_ACK);
         return false;
     }
 
