@@ -20,7 +20,6 @@ def generate_random_bytes(size: int) -> List[bytes]:
 class TestSerial:
 
     def setup_class(self) -> None:
-
         self.serial_obj = SerialConnection()
 
         if not self.serial_obj.three_way_handshake():
