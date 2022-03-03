@@ -1,8 +1,9 @@
+from os import EX_PROTOCOL
 from uuid import uuid4
 from time import sleep
 from random import randint
 from typing import List
-from pytest import mark
+import pytest
 from serial_connection import SerialConnection
 
 def generate_random_bytes(size: int) -> List[bytes]:
@@ -21,16 +22,14 @@ class TestSerial:
     def setup_class(self) -> None:
 
         self.serial_obj = SerialConnection()
-        self.serial_obj.open_connection()
 
-        self.serial_obj.wait_for_syn()
-        self.serial_obj.send_syn_ack()
-        self.serial_obj.wait_for_ack()
+        if not self.serial_obj.three_way_handshake():
+            pytest.exit('Failed to connect to device!', EX_PROTOCOL)
 
     def teardown_class(self) -> None:
         self.serial_obj.two_way_termination()
 
-    @mark.parametrize('message', generate_random_bytes(10))
+    @pytest.mark.parametrize('message', generate_random_bytes(10))
     def test_unknown_message(self, message: str) -> None:
 
         self.serial_obj.send_message(message)
@@ -65,7 +64,7 @@ class TestSerial:
         assert self.serial_obj.receive_message() == b'abcdefghijabcdefghijabcdefghijabcdefghij\n'
         assert self.serial_obj.receive_message() == b'abcdefghij\n'
 
-    @mark.parametrize(
+    @pytest.mark.parametrize(
         'message',
         [
             b'Built in LED is ON\n',

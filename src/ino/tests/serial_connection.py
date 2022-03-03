@@ -113,48 +113,29 @@ class SerialConnection:
         logging.debug('Accepted FIN-ACK message')
         self.close_connection()
 
-    def wait_for_syn(self) -> None:
+    def three_way_handshake(self) -> bool:
 
-        logging.debug('Waiting to receive SYN message')
-        message_received = False
+        if not self.open_connection():
+            return False
 
-        while not message_received:
+        logging.debug('Waiting to receive %s message', MESSAGE_SYN)
+        message = self.wait_for_message()
 
-            while self.serial_port_obj.in_waiting < len(MESSAGE_SYN):
-                pass
+        if message != MESSAGE_SYN:
+            logging.debug('Received unknown bytes %s', message)
+            return False
 
-            bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
-            logging.debug('Received message: %s', bytes_from_dev)
-
-            if bytes_from_dev == MESSAGE_SYN:
-                logging.debug('Accepted SYN message')
-                message_received = True
-            else:
-                logging.debug('Received unknown bytes %s', bytes_from_dev)
-
-    def send_syn_ack(self) -> None:
-
-        logging.debug('Sending SYN-ACK message')
+        logging.debug('Sending %s message', MESSAGE_SYN_ACK)
         self.serial_port_obj.write(MESSAGE_SYN_ACK)
 
-    def wait_for_ack(self) -> None:
+        logging.debug('Waiting to receive %s message', MESSAGE_ACK)
+        message = self.wait_for_message()
 
-        logging.debug('Waiting to receive ACK message')
-        message_received = False
-
-        while not message_received:
-
-            while self.serial_port_obj.in_waiting < len(MESSAGE_ACK):
-                pass
-
-            bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
-            logging.debug('Received message: %s', bytes_from_dev)
-
-            if bytes_from_dev == MESSAGE_ACK:
-                logging.debug('Accepted ACK message')
-                message_received = True
-            else:
-                logging.debug('Received unknown bytes %s', bytes_from_dev)
+        if message != MESSAGE_ACK:
+            logging.debug('Received unknown bytes %s', message)
+            return False
 
         # Extra newline seems to come from somewhere
         self.flush_input_buffer()
+
+        return True
