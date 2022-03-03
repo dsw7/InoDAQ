@@ -32,7 +32,10 @@ class TestSerial:
     def test_unknown_message(self, message: str) -> None:
 
         self.serial_obj.send_message(message)
-        assert self.serial_obj.receive_message() == message
+
+        #TODO remove this
+        #assert self.serial_obj.receive_message() == message
+        assert self.serial_obj.wait_for_message() == message
 
     def test_message_buffering(self) -> None:
 
@@ -41,7 +44,9 @@ class TestSerial:
         self.serial_obj.send_message(b'ef')
         self.serial_obj.send_message(b'\n')
 
-        assert self.serial_obj.receive_message() == b'abcdef\n'
+        #TODO remove this
+        #assert self.serial_obj.receive_message() == b'abcdef\n'
+        assert self.serial_obj.wait_for_message() == b'abcdef\n'
 
     def test_empty_message(self) -> None:
 
@@ -49,7 +54,9 @@ class TestSerial:
         self.serial_obj.send_message(b'')
         self.serial_obj.send_message(b'\n')
 
-        assert self.serial_obj.receive_message() == b'\n'
+        #TODO remove this
+        #assert self.serial_obj.receive_message() == b'\n'
+        assert self.serial_obj.wait_for_message() == b'\n'
 
     def test_overflow_message(self) -> None:
 
@@ -60,8 +67,11 @@ class TestSerial:
         # or the number of bytes in buffer exceeds SIZE_MESSAGE_BUF
         self.serial_obj.send_message(b'abcdefghij\n')
 
-        assert self.serial_obj.receive_message() == b'abcdefghijabcdefghijabcdefghijabcdefghij\n'
-        assert self.serial_obj.receive_message() == b'abcdefghij\n'
+        #TODO remove this
+        #assert self.serial_obj.receive_message() == b'abcdefghijabcdefghijabcdefghijabcdefghij\n'
+        #assert self.serial_obj.receive_message() == b'abcdefghij\n'
+        assert self.serial_obj.wait_for_message() == b'abcdefghijabcdefghijabcdefghijabcdefghij\n'
+        assert self.serial_obj.wait_for_message() == b'abcdefghij\n'
 
     @pytest.mark.parametrize(
         'message',
@@ -82,4 +92,7 @@ class TestSerial:
 
         self.serial_obj.send_message(b'TEST\n')
         sleep(0.5)
-        assert self.serial_obj.receive_message() == message
+
+        #TODO remove this
+        #assert self.serial_obj.receive_message() == message
+        assert self.serial_obj.wait_for_message() == message

@@ -89,7 +89,7 @@ class SerialConnection:
 
         while not message_received:
 
-            while self.serial_port_obj.in_waiting < 3:
+            while self.serial_port_obj.in_waiting < 1:
                 pass
 
             bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
