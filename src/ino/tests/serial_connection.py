@@ -55,35 +55,6 @@ class SerialConnection:
 
         return True, None
 
-    def flush_input_buffer(self) -> None:
-
-        logging.debug('Flushing input buffer')
-        self.serial_port_obj.reset_input_buffer()
-
-    def send_fin(self) -> None:
-
-        logging.debug('Sending FIN message')
-        self.serial_port_obj.write(MESSAGE_FIN)
-
-    def wait_for_fin_ack(self) -> None:
-
-        logging.debug('Waiting to receive FIN-ACK message')
-        message_received = False
-
-        while not message_received:
-
-            while self.serial_port_obj.in_waiting < len(MESSAGE_FIN_ACK):
-                pass
-
-            bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
-            logging.debug('Received message: %s', bytes_from_dev)
-
-            if bytes_from_dev == MESSAGE_FIN_ACK:
-                logging.debug('Accepted FIN-ACK message')
-                message_received = True
-            else:
-                logging.debug('Received unknown bytes %s', bytes_from_dev)
-
     def close_connection(self) -> None:
 
         if self.serial_port_obj is None:
@@ -94,6 +65,53 @@ class SerialConnection:
 
         if self.serial_port_obj.is_open:
             self.serial_port_obj.close()
+
+    def flush_input_buffer(self) -> None:
+
+        logging.debug('Flushing input buffer')
+        self.serial_port_obj.reset_input_buffer()
+
+    def send_message(self, message: bytes) -> None:
+
+        logging.debug('Sending message: "%s"', message)
+        logging.debug('Sent %i bytes', self.serial_port_obj.write(message))
+
+    def receive_message(self) -> bytes:
+        message = self.serial_port_obj.read_until()
+        logging.debug('Received message: "%s"', message)
+
+        return message
+
+    def wait_for_message(self) -> bytes:
+
+        logging.debug('Waiting to receive message...')
+        message_received = False
+
+        while not message_received:
+
+            while self.serial_port_obj.in_waiting < 3:
+                pass
+
+            bytes_from_dev = self.serial_port_obj.read_until()  # Reads until \n by default
+            message_received = True
+
+        logging.debug('Received message: %s', bytes_from_dev)
+        return bytes_from_dev
+
+    def two_way_termination(self) -> None:
+
+        logging.debug('Sending %s message', MESSAGE_FIN)
+        self.serial_port_obj.write(MESSAGE_FIN)
+
+        logging.debug('Waiting to receive %s message', MESSAGE_FIN_ACK)
+        message = self.wait_for_message()
+
+        if message != MESSAGE_FIN_ACK:
+            logging.debug('Received unknown bytes %s', message)
+            return
+
+        logging.debug('Accepted FIN-ACK message')
+        self.close_connection()
 
     def wait_for_syn(self) -> None:
 
@@ -140,14 +158,3 @@ class SerialConnection:
 
         # Extra newline seems to come from somewhere
         self.flush_input_buffer()
-
-    def send_message(self, message: bytes) -> None:
-
-        logging.debug('Sending message: "%s"', message)
-        logging.debug('Sent %i bytes', self.serial_port_obj.write(message))
-
-    def receive_message(self) -> bytes:
-        message = self.serial_port_obj.read_until()
-        logging.debug('Received message: "%s"', message)
-
-        return message
