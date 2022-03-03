@@ -60,11 +60,6 @@ class SerialConnection:
         logging.debug('Flushing input buffer')
         self.serial_port_obj.reset_input_buffer()
 
-    def flush_output_buffer(self) -> None:
-
-        logging.debug('Flushing output buffer')
-        self.serial_port_obj.reset_output_buffer()
-
     def send_fin(self) -> None:
 
         logging.debug('Sending FIN message')
