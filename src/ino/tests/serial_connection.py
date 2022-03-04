@@ -76,12 +76,6 @@ class SerialConnection:
         logging.debug('Sending message: "%s"', message)
         logging.debug('Sent %i bytes', self.serial_port_obj.write(message))
 
-    def receive_message(self) -> bytes:
-        message = self.serial_port_obj.read_until()
-        logging.debug('Received message: "%s"', message)
-
-        return message
-
     def wait_for_message(self) -> bytes:
 
         logging.debug('Waiting to receive message...')
