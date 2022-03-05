@@ -87,7 +87,7 @@ class TestSerial:
         assert self.serial_obj.wait_for_message() == message
 
     @pytest.mark.parametrize(
-        'message',
+        'command',
         [
             b'D\n',
             b'DI\n',
@@ -97,7 +97,16 @@ class TestSerial:
             b'DIGABC\n',
         ]
     )
-    def test_invalid_digital_pin_message(self, message: bytes) -> None:
+    def test_invalid_digital_pin_message(self, command: bytes) -> None:
 
-        self.serial_obj.send_message(message)
-        assert self.serial_obj.wait_for_message() == message
+        self.serial_obj.send_message(command)
+        assert self.serial_obj.wait_for_message() == command
+
+    @pytest.mark.parametrize('pin', range(2, 14), ids=[f'Test digital pin {n}' for n in range(2, 14)])
+    def test_valid_digital_pin_message(self, pin: int) -> None:
+
+        self.serial_obj.send_message(f'DIG{pin}\n'.encode())
+        assert self.serial_obj.wait_for_message() == f'DIG{pin}: ON\n'.encode()
+
+        self.serial_obj.send_message(f'DIG{pin}\n'.encode())
+        assert self.serial_obj.wait_for_message() == f'DIG{pin}: OFF\n'.encode()
