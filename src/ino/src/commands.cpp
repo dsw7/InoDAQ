@@ -45,8 +45,36 @@ void toggle_digital_pin(char* buffer_input, char* buffer_output)
         return;
     }
 
-    // TODO continue here
-    strcpy(buffer_output, "ABC");
+    unsigned int idx = pin - 2;
+
+    static bool pins[12] = {
+        false, // pin 2
+        false, // pin 3
+        false, // ...
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false, // ...
+        false, // pin 12
+        false  // pin 13
+    };
+
+    pins[idx] = !pins[idx];
+    digitalWrite(pin, pins[idx]);
+
+    strcat(buffer_output, Protocol::MESSAGE_PREFIX_TOGGLE_DIG_PIN);
+    strcat(buffer_output, substr_pin);
+
+    if (pins[idx])
+    {
+        strcat(buffer_output, ": ON");
+        return;
+    }
+
+    strcat(buffer_output, ": OFF");
 }
 
 bool parser(char* buffer_input, char* buffer_output)
