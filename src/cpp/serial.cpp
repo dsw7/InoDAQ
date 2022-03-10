@@ -3,7 +3,7 @@
 namespace Protocol
 {
     std::string MESSAGE_SYN = "SYN";
-    std::string MESSAGE_SYN_ACK = "SYN-ACK";
+    std::string MESSAGE_SYN_ACK = "SYN-ACK\n";
     std::string MESSAGE_ACK = "ACK";
 
     std::string MESSAGE_FIN = "FIN";
@@ -150,8 +150,7 @@ bool Serial::read_data(std::string &payload)
         if (read(this->serial_port_fd, &buffer[index], 1) == -1)
         {
             error(strerror(errno), this->is_quiet);
-            //break;
-            goto abort;
+            break;
         }
 
         if (buffer[index] == '\n')
@@ -161,8 +160,6 @@ bool Serial::read_data(std::string &payload)
 
         index++;
     }
-
-    goto: return false
 
     buffer[index] = '\0';
     payload = std::string(buffer);
@@ -208,8 +205,19 @@ bool Serial::connect()
         return false;
     }
 
+    info("Starting 3-way handshake...", this->is_quiet);
     std::string syn;
-    this->read_data(syn);
+
+    if (this->read_data(syn))
+    {
+        if (syn.compare(Protocol::MESSAGE_SYN) != 0)
+        {
+            error("Received unknown bytes: '" + syn + "'. Was expecting: " + Protocol::MESSAGE_SYN, this->is_quiet);
+            return false;
+        }
+    }
+
+    info("Accepted " + Protocol::MESSAGE_SYN + ". Sending " + Protocol::MESSAGE_SYN_ACK, this->is_quiet);
 
     return true;
 }
