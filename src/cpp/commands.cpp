@@ -1,48 +1,29 @@
 #include "commands.h"
 
+/*
 void run_control_panel(std::string &serial_port)
 {
     ControlPanel panel(serial_port);
     panel.loop();
 }
+*/
 
 int run_ping_command(std::string &serial_port, const bool &is_quiet)
 {
     info("Running ping command", is_quiet);
 
-    Serial connection(is_quiet);
+    Serial connection{is_quiet, serial_port};
 
-    if (not connection.open_connection(serial_port))
+    if (not connection.connect())
     {
         return EXIT_FAILURE;
     }
 
-    if (not connection.configure_connection())
-    {
-        connection.close_connection();
-        return EXIT_FAILURE;
-    }
-
-    info("Built in LED should now turn on", is_quiet);
-    if (connection.write_data("test\n"))
-    {
-        usleep(RW_DELAY_USEC);
-        connection.read_data();
-    }
-
-    usleep(RW_DELAY_USEC);
-
-    info("Built in LED should now turn off", is_quiet);
-    if (connection.write_data("test\n"))
-    {
-        usleep(RW_DELAY_USEC);
-        connection.read_data();
-    }
-
-    connection.close_connection();
+    connection.disconnect();
     return EXIT_SUCCESS;
 }
 
+/*
 int run_test_command(std::string &serial_port, const bool &is_quiet)
 {
     info("Running test command", is_quiet);
@@ -100,3 +81,4 @@ int run_test_command(std::string &serial_port, const bool &is_quiet)
     connection.close_connection();
     return EXIT_SUCCESS;
 }
+*/

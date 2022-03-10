@@ -10,16 +10,17 @@ namespace Protocol
     const char* MESSAGE_FIN_ACK = "FIN-ACK";
 }
 
-Serial::Serial(const bool &is_quiet)
+Serial::Serial(const bool &is_quiet, std::string &serial_port)
 {
     this->is_quiet = is_quiet;
+    this->serial_port = serial_port;
 }
 
-bool Serial::setup_fd(std::string serial_port)
+bool Serial::setup_fd()
 {
-    info("Attempting to open serial port: " + serial_port, this->is_quiet);
+    info("Attempting to open serial port: " + this->serial_port, this->is_quiet);
 
-    this->serial_port_fd = open(serial_port.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+    this->serial_port_fd = open(this->serial_port.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 
     // Wait for device to reset after sending DTR (Data Terminal Ready) signal
     sleep(MAX_SLEEP_WAIT_FOR_AUTO_RESET);
@@ -30,7 +31,7 @@ bool Serial::setup_fd(std::string serial_port)
         return false;
     }
 
-    info("Successfully opened serial port: " + serial_port, this->is_quiet);
+    info("Successfully opened serial port: " + this->serial_port, this->is_quiet);
     info("File descriptor: " + std::to_string(this->serial_port_fd), this->is_quiet);
 
     return true;
@@ -179,9 +180,9 @@ void Serial::teardown_fd()
     }
 }
 
-bool Serial::connect(std::string &serial_port)
+bool Serial::connect()
 {
-    if (not this->setup_fd(serial_port))
+    if (not this->setup_fd())
     {
         return false;
     }

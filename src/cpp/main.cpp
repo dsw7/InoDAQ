@@ -98,12 +98,15 @@ int main(int argc, char **argv)
 
     if (options.run_test_command)
     {
-        return run_test_command(options.serial_port, options.is_quiet);
+        // XXX temp
+        //return run_test_command(options.serial_port, options.is_quiet);
+        return 0;
     }
 
     if (options.run_control_panel)
     {
-        run_control_panel(options.serial_port);
+        // XXX temp
+        //run_control_panel(options.serial_port);
         return 0;
     }
 

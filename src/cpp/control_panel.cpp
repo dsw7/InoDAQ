@@ -35,7 +35,7 @@ ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
 
 ControlPanel::~ControlPanel()
 {
-    this->connection.close_connection();
+    this->connection.disconnect();
     endwin();
 }
 
@@ -125,16 +125,9 @@ void ControlPanel::connect()
         return;
     }
 
-    if (not this->connection.open_connection(serial_port))
+    if (not this->connection.connect())
     {
         this->print_status("Could not connect on port " + this->serial_port);
-        return;
-    }
-
-    if (not this->connection.configure_connection())
-    {
-        this->print_status("Could not configure port " + this->serial_port);
-        this->connection.close_connection();
         return;
     }
 
@@ -152,7 +145,7 @@ void ControlPanel::disconnect()
 
     this->print_status("Disconnecting from port " + this->serial_port);
 
-    this->connection.close_connection();
+    this->connection.disconnect();
     this->reset_state_matrix();
     this->reset_state_panel();
 

@@ -13,18 +13,19 @@ class Serial
     private:
         int serial_port_fd = 0;
         bool is_quiet;
+        std::string serial_port;
 
     public:
-        Serial(const bool &is_quiet);
+        Serial(const bool &is_quiet, std::string &serial_port);
 
-        bool setup_fd(std::string serial_port);
+        bool setup_fd();
         bool configure_connection();
-        bool configure_fildes();
+        bool configure_fd();
         bool write_data(const std::string &message);
         bool read_data();
         void teardown_fd();
 
-        bool connect(std::string &serial_port);
+        bool connect();
         bool disconnect();
 };
 
