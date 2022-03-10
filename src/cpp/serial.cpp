@@ -150,7 +150,8 @@ bool Serial::read_data(std::string &payload)
         if (read(this->serial_port_fd, &buffer[index], 1) == -1)
         {
             error(strerror(errno), this->is_quiet);
-            break;
+            //break;
+            goto abort;
         }
 
         if (buffer[index] == '\n')
@@ -160,6 +161,8 @@ bool Serial::read_data(std::string &payload)
 
         index++;
     }
+
+    goto: return false
 
     buffer[index] = '\0';
     payload = std::string(buffer);
