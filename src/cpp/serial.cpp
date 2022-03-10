@@ -3,11 +3,11 @@
 namespace Protocol
 {
     std::string MESSAGE_SYN = "SYN";
-    std::string MESSAGE_SYN_ACK = "SYN-ACK\n";
+    std::string MESSAGE_SYN_ACK = "SYN-ACK";
     std::string MESSAGE_ACK = "ACK";
-
     std::string MESSAGE_FIN = "FIN";
     std::string MESSAGE_FIN_ACK = "FIN-ACK";
+    std::string MESSAGE_TERMINATOR = "\n";
 }
 
 Serial::Serial(const bool &is_quiet, std::string &serial_port)
@@ -212,6 +212,7 @@ bool Serial::connect()
     if (not this->read_data(payload))
     {
         error("Failed to acquire " + Protocol::MESSAGE_SYN, this->is_quiet);
+        return false;
     }
 
     if (payload.compare(Protocol::MESSAGE_SYN) != 0)
@@ -222,9 +223,10 @@ bool Serial::connect()
 
     info("Accepted " + Protocol::MESSAGE_SYN + ". Sending " + Protocol::MESSAGE_SYN_ACK, this->is_quiet);
 
-    if (not this->write_data(Protocol::SYN_ACK))
+    if (not this->write_data(Protocol::MESSAGE_SYN_ACK + Protocol::MESSAGE_TERMINATOR))
     {
-        error("Failed to send" + Protocol::MESSAGE_SYN_ACK, this->is_quiet);
+        error("Failed to send " + Protocol::MESSAGE_SYN_ACK, this->is_quiet);
+        return false;
     }
 
     return true;
