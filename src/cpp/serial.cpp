@@ -206,18 +206,26 @@ bool Serial::connect()
     }
 
     info("Starting 3-way handshake...", this->is_quiet);
-    std::string syn;
 
-    if (this->read_data(syn))
+    std::string payload;
+
+    if (not this->read_data(payload))
     {
-        if (syn.compare(Protocol::MESSAGE_SYN) != 0)
-        {
-            error("Received unknown bytes: '" + syn + "'. Was expecting: " + Protocol::MESSAGE_SYN, this->is_quiet);
-            return false;
-        }
+        error("Failed to acquire " + Protocol::MESSAGE_SYN, this->is_quiet);
+    }
+
+    if (payload.compare(Protocol::MESSAGE_SYN) != 0)
+    {
+        error("Received unknown bytes: '" + payload + "'. Was expecting: " + Protocol::MESSAGE_SYN, this->is_quiet);
+        return false;
     }
 
     info("Accepted " + Protocol::MESSAGE_SYN + ". Sending " + Protocol::MESSAGE_SYN_ACK, this->is_quiet);
+
+    if (not this->write_data(Protocol::SYN_ACK))
+    {
+        error("Failed to send" + Protocol::MESSAGE_SYN_ACK, this->is_quiet);
+    }
 
     return true;
 }
