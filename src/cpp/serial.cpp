@@ -208,6 +208,7 @@ bool Serial::connect()
     info("Starting 3-way handshake...", this->is_quiet);
 
     std::string payload;
+    info("Waiting for " + Protocol::MESSAGE_SYN, this->is_quiet);
 
     if (not this->read_data(payload))
     {
@@ -229,6 +230,23 @@ bool Serial::connect()
         return false;
     }
 
+    payload.clear();
+    info("Waiting for " + Protocol::MESSAGE_ACK, this->is_quiet);
+
+    if (not this->read_data(payload))
+    {
+        error("Failed to acquire " + Protocol::MESSAGE_ACK, this->is_quiet);
+        return false;
+    }
+
+    if (payload.compare(Protocol::MESSAGE_ACK) != 0)
+    {
+        error("Received unknown bytes: '" + payload + "'. Was expecting: " + Protocol::MESSAGE_ACK, this->is_quiet);
+        return false;
+    }
+
+    info("Accepted " + Protocol::MESSAGE_ACK, this->is_quiet);
+    info("3-way handshake complete. Device is ready for bidirectional I/O", this->is_quiet);
     return true;
 }
 
