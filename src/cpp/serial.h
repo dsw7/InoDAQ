@@ -21,8 +21,8 @@ class Serial
         bool setup_fd();
         bool configure_connection();
         bool configure_fd();
-        bool write_data(const std::string &message);
-        bool read_data();
+        bool write_data(const std::string &payload);
+        bool read_data(std::string &payload);
         void teardown_fd();
 
         bool connect();

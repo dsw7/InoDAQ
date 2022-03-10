@@ -28,7 +28,6 @@ set(DEFAULT_SERIAL_PORT_DEV_X86_X86_64 "/dev/ttyS2")
 set(DEFAULT_SERIAL_PORT_DEV_NIX "/dev/ttyUSB0")
 
 # Macro definitions
-add_compile_definitions(MAX_SIZE_PAYLOAD=25)              # Maximum payload size in bytes (must match device)
 add_compile_definitions(MAX_SLEEP_WAIT_FOR_AUTO_RESET=2)  # Number of seconds to wait for device to auto-reset
 add_compile_definitions(RW_DELAY_USEC=50000)              # Delay between writing to and reading from device
 add_compile_definitions(TIMEOUT_SELECT_SECS=2)            # select(2) timeout in seconds

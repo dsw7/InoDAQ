@@ -86,12 +86,12 @@ bool Serial::configure_connection()
 	return true;
 }
 
-bool Serial::write_data(const std::string &message)
+bool Serial::write_data(const std::string &payload)
 {
-    if (message.size() > 0)
+    if (payload.size() > 0)
     {
-        std::string message_no_newline = message.substr(0, message.size() - 1);
-        info("Writing message '" + message_no_newline + "' to file descriptor", this->is_quiet);
+        std::string payload_no_newline = payload.substr(0, payload.size() - 1);
+        info("Writing message '" + payload_no_newline + "' to file descriptor", this->is_quiet);
     }
     else
     {
@@ -100,7 +100,7 @@ bool Serial::write_data(const std::string &message)
     }
 
     // https://man7.org/linux/man-pages/man2/write.2.html
-    int num_bytes_written = write(this->serial_port_fd, message.c_str(), message.size());
+    int num_bytes_written = write(this->serial_port_fd, payload.c_str(), payload.size());
 
     if (num_bytes_written == -1)
     {
@@ -112,24 +112,23 @@ bool Serial::write_data(const std::string &message)
     return true;
 }
 
-bool Serial::read_data()
+bool Serial::read_data(std::string &payload)
 {
     info("Reading data from file descriptor", this->is_quiet);
 
-    char n;
-    fd_set fildes_ready_for_reading;
+    fd_set fds_ready_for_reading;
     struct timeval timeout;
 
     timeout.tv_sec = TIMEOUT_SELECT_SECS;
     timeout.tv_usec = 0;
 
 	// https://man7.org/linux/man-pages/man2/select.2.html
-    FD_ZERO(&fildes_ready_for_reading);
-    FD_SET(this->serial_port_fd, &fildes_ready_for_reading);
+    FD_ZERO(&fds_ready_for_reading);
+    FD_SET(this->serial_port_fd, &fds_ready_for_reading);
 
 	// https://man7.org/linux/man-pages/man2/select.2.html
     // specifically see the part about how we must have the largest file descriptor + 1
-	n = select(this->serial_port_fd + 1, &fildes_ready_for_reading, NULL, NULL, &timeout);
+	char n = select(this->serial_port_fd + 1, &fds_ready_for_reading, NULL, NULL, &timeout);
 
 	if (n < 0)
 	{
@@ -142,24 +141,31 @@ bool Serial::read_data()
         return false;
 	}
 
-    char message[MAX_SIZE_PAYLOAD];
+    const unsigned int max_size_payload = 25;
+    char buffer[max_size_payload];
+    unsigned int index = 0;
 
-    // The read function will wait until all MAX_SIZE_PAYLOAD number of bytes arrive. If device only
-    // sends 10 bytes then read will hang until a timeout, unless fnctl sets a O_NONBLOCK on the file descriptor.
-    // The solution is simple -> we just need to pad the messages with zeros to a fixed length
-    // or read byte-by-byte until we receive some sort of terminator
-    int num_bytes_read = read(this->serial_port_fd, &message, MAX_SIZE_PAYLOAD);
-
-    if (num_bytes_read == -1)
+    while (index < max_size_payload)
     {
-        error(strerror(errno), this->is_quiet);
-        return false;
+        if (read(this->serial_port_fd, &buffer[index], 1) == -1)
+        {
+            error(strerror(errno), this->is_quiet);
+            break;
+        }
+
+        if (buffer[index] == '\n')
+        {
+            break;
+        }
+
+        index++;
     }
 
-	info("Number of bytes read from file descriptor: " + std::to_string(num_bytes_read), this->is_quiet);
+    buffer[index] = '\0';
+    payload = std::string(buffer);
 
-    message[24] = '\0'; // Final byte must be NULL terminated otherwise std::string doesn't know where to stop
-    info("Received message from device: '" + std::string(message) + "'", this->is_quiet);
+	info("Number of bytes read from file descriptor: " + std::to_string(payload.size()), this->is_quiet);
+    info("Received message from device: '" + payload + "'", this->is_quiet);
 
     return true;
 }
@@ -198,6 +204,9 @@ bool Serial::connect()
         this->teardown_fd();
         return false;
     }
+
+    std::string syn;
+    this->read_data(syn);
 
     return true;
 }
