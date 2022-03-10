@@ -2,12 +2,12 @@
 
 namespace Protocol
 {
-    const char* MESSAGE_SYN = "SYN";
-    const char* MESSAGE_SYN_ACK = "SYN-ACK";
-    const char* MESSAGE_ACK = "ACK";
+    std::string MESSAGE_SYN = "SYN";
+    std::string MESSAGE_SYN_ACK = "SYN-ACK";
+    std::string MESSAGE_ACK = "ACK";
 
-    const char* MESSAGE_FIN = "FIN";
-    const char* MESSAGE_FIN_ACK = "FIN-ACK";
+    std::string MESSAGE_FIN = "FIN";
+    std::string MESSAGE_FIN_ACK = "FIN-ACK";
 }
 
 Serial::Serial(const bool &is_quiet, std::string &serial_port)
