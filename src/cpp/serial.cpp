@@ -178,3 +178,30 @@ void Serial::close_connection()
         error(strerror(errno), this->is_quiet);
     }
 }
+
+bool Serial::connect(std::string &serial_port)
+{
+    if (not this->open_connection(serial_port))
+    {
+        return false;
+    }
+
+    if (not this->configure_fildes())
+    {
+        this->close_connection();
+        return false;
+    }
+
+    if (not this->configure_connection())
+    {
+        this->close_connection();
+        return false;
+    }
+
+    return true;
+}
+
+bool Serial::disconnect()
+{
+    return true;
+}

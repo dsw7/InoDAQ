@@ -23,6 +23,9 @@ class Serial
         bool write_data(const std::string &message);
         bool read_data();
         void close_connection();
+
+        bool connect(std::string &serial_port);
+        bool disconnect();
 };
 
 #endif
