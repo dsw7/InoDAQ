@@ -1,5 +1,15 @@
 #include "serial.h"
 
+namespace Protocol
+{
+    const char* MESSAGE_SYN = "SYN";
+    const char* MESSAGE_SYN_ACK = "SYN-ACK";
+    const char* MESSAGE_ACK = "ACK";
+
+    const char* MESSAGE_FIN = "FIN";
+    const char* MESSAGE_FIN_ACK = "FIN-ACK";
+}
+
 Serial::Serial(const bool &is_quiet)
 {
     this->is_quiet = is_quiet;
