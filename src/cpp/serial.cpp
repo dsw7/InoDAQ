@@ -204,5 +204,6 @@ bool Serial::connect()
 
 bool Serial::disconnect()
 {
+    this->teardown_fd();
     return true;
 }
