@@ -32,7 +32,7 @@ bool Serial::setup_fd()
     }
 
     info("Successfully opened serial port: " + this->serial_port, this->is_quiet);
-    info("File descriptor: " + std::to_string(this->serial_port_fd), this->is_quiet);
+    info("The assigned file descriptor is " + std::to_string(this->serial_port_fd), this->is_quiet);
 
     return true;
 }
@@ -52,7 +52,7 @@ bool Serial::configure_fd()
 
 bool Serial::configure_connection()
 {
-    info("Configuring connection on serial port", this->is_quiet);
+    info("Configuring I/O settings on file descriptor " + std::to_string(this->serial_port_fd), this->is_quiet);
 
     struct termios serial_port_configs;
 
@@ -82,7 +82,7 @@ bool Serial::configure_connection()
         return false;
     }
 
-    info("Successfully set all configurations on serial port", this->is_quiet);
+    info("Successfully set all configurations on file descriptor", this->is_quiet);
 	return true;
 }
 
@@ -91,7 +91,7 @@ bool Serial::write_data(const std::string &message)
     if (message.size() > 0)
     {
         std::string message_no_newline = message.substr(0, message.size() - 1);
-        info("Writing message '" + message_no_newline + "' to device", this->is_quiet);
+        info("Writing message '" + message_no_newline + "' to file descriptor", this->is_quiet);
     }
     else
     {
@@ -108,13 +108,13 @@ bool Serial::write_data(const std::string &message)
         return false;
     }
 
-    info("Successfully wrote out " + std::to_string(num_bytes_written) + " bytes to serial port", this->is_quiet);
+    info("Successfully wrote out " + std::to_string(num_bytes_written) + " bytes to file descriptor", this->is_quiet);
     return true;
 }
 
 bool Serial::read_data()
 {
-    info("Reading data from serial port", this->is_quiet);
+    info("Reading data from file descriptor", this->is_quiet);
 
     char n;
     fd_set fildes_ready_for_reading;
@@ -156,7 +156,7 @@ bool Serial::read_data()
         return false;
     }
 
-	info("Number of bytes read from serial port: " + std::to_string(num_bytes_read), this->is_quiet);
+	info("Number of bytes read from file descriptor: " + std::to_string(num_bytes_read), this->is_quiet);
 
     message[24] = '\0'; // Final byte must be NULL terminated otherwise std::string doesn't know where to stop
     info("Received message from device: '" + std::string(message) + "'", this->is_quiet);
@@ -166,7 +166,7 @@ bool Serial::read_data()
 
 void Serial::teardown_fd()
 {
-    info("Closing connection to serial port", this->is_quiet);
+    info("Closing file descriptor " + std::to_string(this->serial_port_fd), this->is_quiet);
 
     if (this->serial_port_fd == 0)
     {
