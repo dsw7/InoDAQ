@@ -19,6 +19,7 @@ class Serial
 
         bool open_connection(std::string serial_port);
         bool configure_connection();
+        bool configure_fildes();
         bool write_data(const std::string &message);
         bool read_data();
         void close_connection();

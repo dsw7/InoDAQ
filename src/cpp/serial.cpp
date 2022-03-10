@@ -20,13 +20,22 @@ bool Serial::open_connection(std::string serial_port)
         return false;
     }
 
+    info("Successfully opened serial port: " + serial_port, this->is_quiet);
+    info("File descriptor: " + std::to_string(this->serial_port_fd), this->is_quiet);
+
+    return true;
+}
+
+bool Serial::configure_fildes()
+{
+    info("Configurating file descriptor " + std::to_string(this->serial_port_fd), this->is_quiet);
+
     if (fcntl(this->serial_port_fd, F_SETFL, 0) == -1)
     {
         error(strerror(errno), this->is_quiet);
         return false;
     }
 
-    info("Successfully opened serial port: " + serial_port, this->is_quiet);
     return true;
 }
 
