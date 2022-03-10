@@ -17,12 +17,12 @@ class Serial
     public:
         Serial(const bool &is_quiet);
 
-        bool open_connection(std::string serial_port);
+        bool setup_fd(std::string serial_port);
         bool configure_connection();
         bool configure_fildes();
         bool write_data(const std::string &message);
         bool read_data();
-        void close_connection();
+        void teardown_fd();
 
         bool connect(std::string &serial_port);
         bool disconnect();
