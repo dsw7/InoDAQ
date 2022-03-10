@@ -15,7 +15,7 @@ Serial::Serial(const bool &is_quiet)
     this->is_quiet = is_quiet;
 }
 
-bool Serial::open_connection(std::string serial_port)
+bool Serial::setup_fildes(std::string serial_port)
 {
     info("Attempting to open serial port: " + serial_port, this->is_quiet);
 
@@ -163,7 +163,7 @@ bool Serial::read_data()
     return true;
 }
 
-void Serial::close_connection()
+void Serial::teardown_fildes()
 {
     info("Closing connection to serial port", this->is_quiet);
 
@@ -181,20 +181,20 @@ void Serial::close_connection()
 
 bool Serial::connect(std::string &serial_port)
 {
-    if (not this->open_connection(serial_port))
+    if (not this->setup_fildes(serial_port))
     {
         return false;
     }
 
     if (not this->configure_fildes())
     {
-        this->close_connection();
+        this->teardown_fildes();
         return false;
     }
 
     if (not this->configure_connection())
     {
-        this->close_connection();
+        this->teardown_fildes();
         return false;
     }
 
