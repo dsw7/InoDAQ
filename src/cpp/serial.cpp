@@ -170,6 +170,22 @@ bool Serial::read_data(std::string &payload)
     return true;
 }
 
+bool Serial::flush_buffer()
+{
+
+    std::string payload;
+    info("Flushing buffer...", this->is_quiet);
+
+    if (not this->read_data(payload))
+    {
+        warning("Could not flush buffer! Any downstream operations may be unstable", this->is_quiet);
+        return false;
+    }
+
+    payload.clear();
+    return true;
+}
+
 void Serial::teardown_fd()
 {
     info("Closing file descriptor " + std::to_string(this->serial_port_fd), this->is_quiet);
@@ -252,6 +268,36 @@ bool Serial::connect()
 
 bool Serial::disconnect()
 {
+    info("Starting 2-way termination...", this->is_quiet);
+
+    info("Sending " + Protocol::MESSAGE_FIN, this->is_quiet);
+
+    if (not this->write_data(Protocol::MESSAGE_FIN + Protocol::MESSAGE_TERMINATOR))
+    {
+        error("Failed to send " + Protocol::MESSAGE_FIN, this->is_quiet);
+        return false;
+    }
+
+    std::string payload;
+    info("Waiting for " + Protocol::MESSAGE_FIN_ACK, this->is_quiet);
+
+    this->flush_buffer();
+
+    if (not this->read_data(payload))
+    {
+        error("Failed to acquire " + Protocol::MESSAGE_FIN_ACK, this->is_quiet);
+        return false;
+    }
+
+    if (payload.compare(Protocol::MESSAGE_FIN_ACK) != 0)
+    {
+        error("Received unknown bytes: '" + payload + "'. Was expecting: " + Protocol::MESSAGE_FIN_ACK, this->is_quiet);
+        return false;
+    }
+
+    info("Accepted " + Protocol::MESSAGE_FIN_ACK, this->is_quiet);
+    info("2-way teardown complete. Device will no longer accept I/O", this->is_quiet);
+
     this->teardown_fd();
     return true;
 }

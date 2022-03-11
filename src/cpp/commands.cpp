@@ -19,6 +19,8 @@ int run_ping_command(std::string &serial_port, const bool &is_quiet)
         return EXIT_FAILURE;
     }
 
+    usleep(RW_DELAY_USEC);
+
     connection.disconnect();
     return EXIT_SUCCESS;
 }

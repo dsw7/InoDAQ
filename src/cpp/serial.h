@@ -23,6 +23,7 @@ class Serial
         bool configure_fd();
         bool write_data(const std::string &payload);
         bool read_data(std::string &payload);
+        bool flush_buffer();
         void teardown_fd();
 
         bool connect();
