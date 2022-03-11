@@ -263,6 +263,8 @@ bool Serial::connect()
 
     info("Accepted " + Protocol::MESSAGE_ACK, this->is_quiet);
     info("3-way handshake complete. Device is ready for bidirectional I/O", this->is_quiet);
+
+    this->flush_buffer();
     return true;
 }
 
@@ -280,8 +282,6 @@ bool Serial::disconnect()
 
     std::string payload;
     info("Waiting for " + Protocol::MESSAGE_FIN_ACK, this->is_quiet);
-
-    this->flush_buffer();
 
     if (not this->read_data(payload))
     {
