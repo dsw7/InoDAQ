@@ -98,9 +98,7 @@ int main(int argc, char **argv)
 
     if (options.run_test_command)
     {
-        // XXX temp
-        //return run_test_command(options.serial_port, options.is_quiet);
-        return 0;
+        return run_test_command(options.serial_port, options.is_quiet);
     }
 
     if (options.run_control_panel)
