@@ -1,5 +1,10 @@
 #include "commands.h"
 
+namespace Protocol
+{
+    std::string MESSAGE_TOGGLE_BUILTIN_LED = "TEST\n";
+}
+
 /*
 void run_control_panel(std::string &serial_port)
 {
@@ -19,7 +24,23 @@ int run_ping_command(std::string &serial_port, const bool &is_quiet)
         return EXIT_FAILURE;
     }
 
+    std::string payload;
+
+    if (connection.write_data(Protocol::MESSAGE_TOGGLE_BUILTIN_LED))
+    {
+        usleep(RW_DELAY_USEC);
+        connection.read_data(payload);
+        payload.clear();
+    }
+
     usleep(RW_DELAY_USEC);
+
+    if (connection.write_data(Protocol::MESSAGE_TOGGLE_BUILTIN_LED))
+    {
+        usleep(RW_DELAY_USEC);
+        connection.read_data(payload);
+        payload.clear();
+    }
 
     connection.disconnect();
     return EXIT_SUCCESS;
