@@ -1,7 +1,8 @@
 .PHONY = \
     help \
 	compile-ino upload-ino test-ino full-ino \
-	compile-cpp test-cpp full-cpp
+	compile-cpp test-cpp full-cpp \
+	full
 
 LIGHT_PURPLE = "\033[1;1;35m"
 NO_COLOR = "\033[0m"
@@ -41,6 +42,8 @@ Test presentation layer code:
     $$ make test-cpp
 Make all presentation layer targets:
     $$ make full-cpp
+Build entire product:
+	$$ make full
 endef
 
 export HELP_LIST_TARGETS
@@ -57,7 +60,7 @@ upload-ino:
 	@arduino-cli upload --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose $(PATH_INO_SRC)/
 
 test-ino:
-	$(call MESSAGE,Running basic test)
+	$(call MESSAGE,Running basic tests to ensure hardware control layer is working properly)
 	@$(PYTHON_INTERP) -m pytest $(PATH_INO_SRC)/tests/
 
 full-ino: compile-ino upload-ino test-ino
@@ -69,6 +72,8 @@ compile-cpp:
 test-cpp:
 	$(call MESSAGE,Testing presentation layer code)
 	@$(CMAKE_BINARY) --ping
-	@$(CMAKE_BINARY) --test
 
 full-cpp: compile-cpp test-cpp
+
+full: full-ino full-cpp
+	$(call MESSAGE,Product successfully built!)
