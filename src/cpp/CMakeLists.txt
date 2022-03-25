@@ -20,9 +20,8 @@ add_compile_options(-Wall -Wextra -pedantic -Werror)
 # Set binary name
 set(OUTPUT_NAME inodaq)
 
-# Set where to dump binary
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/tmp")
-message(STATUS "Compiled binary will be ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${OUTPUT_NAME}")
+# Print where binary will be dumped
+message(STATUS "Compiled binary will be ${CMAKE_BINARY_DIR}/${OUTPUT_NAME}")
 
 set(DEFAULT_SERIAL_PORT_DEV_X86_X86_64 "/dev/ttyS2")
 set(DEFAULT_SERIAL_PORT_DEV_NIX "/dev/ttyUSB0")
