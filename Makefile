@@ -1,4 +1,7 @@
-.PHONY = help compile-ino upload-ino test-ino compile-cpp full
+.PHONY = \
+    help \
+	compile-ino upload-ino test-ino full-ino \
+	compile-cpp test-cpp full-cpp
 
 LIGHT_PURPLE = "\033[1;1;35m"
 NO_COLOR = "\033[0m"
@@ -8,7 +11,8 @@ PYTHON_INTERP = /usr/bin/python3.9
 
 PATH_INO_SRC = src/ino
 PATH_CPP_SRC = src/cpp
-PATH_BUILD_DIR = /tmp/build
+CMAKE_BINARY_DIR = /tmp/build
+CMAKE_BINARY = $(CMAKE_BINARY_DIR)/inodaq
 
 ifneq (,$(findstring CYGWIN,$(KERNEL)))
 	SERIAL_PORT = COM3
@@ -27,10 +31,16 @@ Compile hardware control layer code:
     $$ make compile-ino
 Upload compiled Arduino code to board:
     $$ make upload-ino
+Test hardware control layer code:
+    $$ make test-ino
+Make all hardware control layer targets:
+    $$ make full-ino
 Compile presentation layer code:
     $$ make compile-cpp
-Make all targets:
-    $$ make full
+Test presentation layer code:
+    $$ make test-cpp
+Make all presentation layer targets:
+    $$ make full-cpp
 endef
 
 export HELP_LIST_TARGETS
@@ -39,19 +49,26 @@ help:
 	@echo "$$HELP_LIST_TARGETS"
 
 compile-ino:
-	$(call MESSAGE,Compiling Arduino code)
+	$(call MESSAGE,Compiling hardware control layer code)
 	@arduino-cli compile --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose $(PATH_INO_SRC)/
 
-upload-ino: compile-ino
-	$(call MESSAGE,Uploading Arduino code)
+upload-ino:
+	$(call MESSAGE,Uploading hardware control layer code)
 	@arduino-cli upload --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose $(PATH_INO_SRC)/
 
 test-ino:
 	$(call MESSAGE,Running basic test)
 	@$(PYTHON_INTERP) -m pytest $(PATH_INO_SRC)/tests/
 
-compile-cpp:
-	$(call MESSAGE,Compiling frontend code)
-	@cmake -S $(PATH_CPP_SRC)/ -B $(PATH_BUILD_DIR)/ && make -j12 -C $(PATH_BUILD_DIR)/
+full-ino: compile-ino upload-ino test-ino
 
-full: upload-ino test-ino
+compile-cpp:
+	$(call MESSAGE,Compiling presentation layer code)
+	@cmake -S $(PATH_CPP_SRC)/ -B $(CMAKE_BINARY_DIR)/ && make -j12 -C $(CMAKE_BINARY_DIR)/
+
+test-cpp:
+	$(call MESSAGE,Testing presentation layer code)
+	@$(CMAKE_BINARY) --ping
+	@$(CMAKE_BINARY) --test
+
+full-cpp: compile-cpp test-cpp
