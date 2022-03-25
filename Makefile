@@ -23,10 +23,12 @@ endef
 define HELP_LIST_TARGETS
 To display all targets:
     $$ make help
-Compile Arduino code:
+Compile hardware control layer code:
     $$ make compile-ino
 Upload compiled Arduino code to board:
     $$ make upload-ino
+Compile presentation layer code:
+    $$ make compile-cpp
 Make all targets:
     $$ make full
 endef
