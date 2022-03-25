@@ -1,10 +1,11 @@
-.PHONY = help compile upload
+.PHONY = help compile-ino upload-ino
 
 LIGHT_PURPLE = "\033[1;1;35m"
 NO_COLOR = "\033[0m"
 FULLY_QUALIFIED_BOARD_NAME = arduino:avr:uno
 KERNEL := $(shell uname --kernel-name)
 PYTHON_INTERP = /usr/bin/python3.9
+PATH_INO_SRC = src/ino
 
 ifneq (,$(findstring CYGWIN,$(KERNEL)))
 	SERIAL_PORT = COM3
@@ -20,9 +21,9 @@ define HELP_LIST_TARGETS
 To display all targets:
     $$ make help
 Compile Arduino code:
-    $$ make compile
+    $$ make compile-ino
 Upload compiled Arduino code to board:
-    $$ make upload
+    $$ make upload-ino
 Make all targets:
     $$ make full
 endef
@@ -32,16 +33,16 @@ export HELP_LIST_TARGETS
 help:
 	@echo "$$HELP_LIST_TARGETS"
 
-compile:
+compile-ino:
 	$(call MESSAGE,Compiling Arduino code)
-	@arduino-cli compile --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose
+	@arduino-cli compile --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose $(PATH_INO_SRC)/
 
-upload: compile
+upload-ino: compile-ino
 	$(call MESSAGE,Uploading Arduino code)
-	@arduino-cli upload --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose
+	@arduino-cli upload --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose $(PATH_INO_SRC)/
 
-test:
+test-ino:
 	$(call MESSAGE,Running basic test)
-	@$(PYTHON_INTERP) -m pytest tests/
+	@$(PYTHON_INTERP) -m pytest $(PATH_INO_SRC)/tests/
 
-full: upload test
+full: upload-ino test-ino
