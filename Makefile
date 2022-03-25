@@ -1,11 +1,14 @@
-.PHONY = help compile-ino upload-ino
+.PHONY = help compile-ino upload-ino test-ino compile-cpp full
 
 LIGHT_PURPLE = "\033[1;1;35m"
 NO_COLOR = "\033[0m"
 FULLY_QUALIFIED_BOARD_NAME = arduino:avr:uno
 KERNEL := $(shell uname --kernel-name)
 PYTHON_INTERP = /usr/bin/python3.9
+
 PATH_INO_SRC = src/ino
+PATH_CPP_SRC = src/cpp
+PATH_BUILD_DIR = /tmp/build
 
 ifneq (,$(findstring CYGWIN,$(KERNEL)))
 	SERIAL_PORT = COM3
@@ -44,5 +47,9 @@ upload-ino: compile-ino
 test-ino:
 	$(call MESSAGE,Running basic test)
 	@$(PYTHON_INTERP) -m pytest $(PATH_INO_SRC)/tests/
+
+compile-cpp:
+	$(call MESSAGE,Compiling frontend code)
+	@cmake -S $(PATH_CPP_SRC)/ -B $(PATH_BUILD_DIR)/ && make -j12 -C $(PATH_BUILD_DIR)/
 
 full: upload-ino test-ino
