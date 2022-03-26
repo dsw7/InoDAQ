@@ -33,6 +33,52 @@ void help_message(char *file)
     std::cout << std::endl;
 }
 
+bool resolve_serial_port(std::string &serial_port, const bool &is_quiet)
+{
+    std::string platform = std::string(CMAKE_SYSTEM_NAME);
+
+    if (platform.compare("Linux") == 0)
+    {
+        return true;
+    }
+
+    if (platform.compare("CYGWIN") == 0)
+    {
+        info("Detected Cygwin platform. Checking if COM port was passed...", is_quiet);
+
+        if (serial_port.size() < 4)
+        {
+            error("Received invalid port '" + serial_port + "'. Cannot proceed", is_quiet);
+            return false;
+        }
+
+        if (serial_port.compare(0, 3, "COM") == 0)
+        {
+            info("Found COM port '" + serial_port + "'. Casting to device file representation", is_quiet);
+            int port;
+
+            try
+            {
+                port = std::stoi(serial_port.substr(3, serial_port.size()));
+            }
+            catch (const std::exception& exception)
+            {
+                error("An exception was caught with message: '" + std::string(exception.what()) + "'", is_quiet);
+                error("Serial port: '" + serial_port + "' is invalid!", is_quiet);
+                return false;
+            }
+
+            serial_port = "/dev/ttyS" + std::to_string(port - 1);
+            info("Cast COM port to device file representation '" + serial_port + "'", is_quiet);
+        }
+
+        return true;
+    }
+
+    error("Unsupported platform '" + platform + "'. Cannot continue!", is_quiet);
+    return false;
+}
+
 int main(int argc, char **argv)
 {
     int c;
@@ -90,6 +136,11 @@ int main(int argc, char **argv)
                 exit(EXIT_FAILURE);
         }
     };
+
+    if (not resolve_serial_port(options.serial_port, options.is_quiet))
+    {
+        return EXIT_FAILURE;
+    }
 
     if (options.run_ping_command)
     {
