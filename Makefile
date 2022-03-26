@@ -43,7 +43,7 @@ Test presentation layer code:
 Make all presentation layer targets:
     $$ make full-cpp
 Build entire product:
-	$$ make full
+    $$ make full
 endef
 
 export HELP_LIST_TARGETS
@@ -71,7 +71,7 @@ compile-cpp:
 
 test-cpp:
 	$(call MESSAGE,Testing presentation layer code)
-	@$(CMAKE_BINARY) --ping
+	@$(CMAKE_BINARY) --ping --serial-port $(SERIAL_PORT)
 
 full-cpp: compile-cpp test-cpp
 
