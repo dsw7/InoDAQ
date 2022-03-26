@@ -11,7 +11,7 @@ KERNEL := $(shell uname --kernel-name)
 PYTHON_INTERP = /usr/bin/python3.9
 
 PATH_INO_SRC = src/ino
-PATH_CPP_SRC = src/cpp
+PATH_CPP_SRC = src/cpp/src
 CMAKE_BINARY_DIR = /tmp/build
 CMAKE_BINARY = $(CMAKE_BINARY_DIR)/inodaq
 
