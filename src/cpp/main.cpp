@@ -6,7 +6,7 @@
 
 struct cli_options
 {
-    std::string serial_port = DEFAULT_SERIAL_PORT_DEVICE;
+    std::string serial_port = "";
     bool is_quiet = false;
     bool run_ping_command = false;
     bool run_test_command = false;
@@ -35,6 +35,12 @@ void help_message(char *file)
 
 bool resolve_serial_port(std::string &serial_port, const bool &is_quiet)
 {
+    if (serial_port.size() < 1)
+    {
+        error("Serial port was not provided. Cannot continue!", is_quiet);
+        return false;
+    }
+
     std::string platform = std::string(CMAKE_SYSTEM_NAME);
 
     if (platform.compare("Linux") == 0)
