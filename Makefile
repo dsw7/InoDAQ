@@ -11,7 +11,7 @@ KERNEL := $(shell uname --kernel-name)
 PYTHON_INTERP = /usr/bin/python3.9
 
 PATH_INO_SRC = src/ino
-PATH_CPP_SRC = src/cpp/src
+PATH_CPP_SRC = src/cpp
 CMAKE_BINARY_DIR = /tmp/build
 CMAKE_BINARY = $(CMAKE_BINARY_DIR)/inodaq
 
@@ -67,11 +67,12 @@ full-ino: compile-ino upload-ino test-ino
 
 compile-cpp:
 	$(call MESSAGE,Compiling presentation layer code)
-	@cmake -S $(PATH_CPP_SRC)/ -B $(CMAKE_BINARY_DIR)/ && make -j12 -C $(CMAKE_BINARY_DIR)/
+	@cmake -S $(PATH_CPP_SRC)/src/ -B $(CMAKE_BINARY_DIR)/ && make -j12 -C $(CMAKE_BINARY_DIR)/
 
 test-cpp:
 	$(call MESSAGE,Testing presentation layer code)
 	@$(CMAKE_BINARY) --ping --serial-port $(SERIAL_PORT)
+	@$(PYTHON_INTERP) -m pytest $(PATH_CPP_SRC)/tests/
 
 full-cpp: compile-cpp test-cpp
 
