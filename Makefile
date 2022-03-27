@@ -15,10 +15,8 @@ PATH_CPP_SRC = src/cpp
 CMAKE_BINARY_DIR = /tmp/build
 CMAKE_BINARY = $(CMAKE_BINARY_DIR)/inodaq
 
-ifneq (,$(findstring CYGWIN,$(KERNEL)))
-	SERIAL_PORT = COM3
-else
-	SERIAL_PORT = /dev/ttyUSB0
+ifndef SERIAL_PORT
+$(error SERIAL_PORT is not set. Run "make <target> SERIAL_PORT=<serial-port-or-device-file>)
 endif
 
 define MESSAGE
