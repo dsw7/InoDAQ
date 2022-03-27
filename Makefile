@@ -71,8 +71,7 @@ compile-cpp:
 
 test-cpp:
 	$(call MESSAGE,Testing presentation layer code)
-	#@$(CMAKE_BINARY) --ping --serial-port $(SERIAL_PORT)
-	@$(PYTHON_INTERP) -m pytest --binary $(CMAKE_BINARY) $(PATH_CPP_SRC)/tests/
+	@$(PYTHON_INTERP) -m pytest $(PATH_CPP_SRC)/tests/ --port $(SERIAL_PORT) --binary $(CMAKE_BINARY)
 
 full-cpp: compile-cpp test-cpp
 
