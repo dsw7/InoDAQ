@@ -5,6 +5,7 @@ essentially consists of a C++ `ncurses` interface that toggles the GPIO pins on 
 and receiving messages via UART.
 ## Table of Contents
   - [Setup](#installation)
+    - [Quick setup](#quick-setup)
     - [Setting up the presentation layer](#setting-up-the-presentation-layer)
     - [Setting up the hardware control layer](#setting-up-the-hardware-control-layer)
       - [Install `arduino-cli`](#install-arduino-cli)
@@ -29,6 +30,13 @@ and receiving messages via UART.
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses`
 interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino
 device.
+### Quick setup
+To set up the product from end to end, first `git clone` this repository, then run:
+```bash
+make full SERIAL_PORT=<serial-port-or-device-file>
+```
+This `make` target will first compile, upload and test the hardware control layer, then compile and test the
+presentation layer. The hardware control and presentation layers can be built individually as well.
 ### Setting up the presentation layer
 To compile a binary, first change directories to this project's root, then run:
 ```bash
