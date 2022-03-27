@@ -1,17 +1,25 @@
-class TestPresentationLayer:
+import logging
+from os import EX_OK
+from subprocess import run
 
-    def setup_class(self) -> None:
-        pass
+def test_help_menu_long(pytestconfig):
+    command = [pytestconfig.getoption('binary'), '--help']
 
-    def teardown_class(self) -> None:
-        pass
+    logging.debug('Running command: "%s"', ' '.join(command))
+    process = run(command, capture_output=True, check=True)
 
-    def test_placeholder(self) -> None:
+    logging.debug('The stdout was:\n%s', process.stdout.decode())
+    logging.debug('The stderr was:\n%s', process.stderr.decode())
 
-        # Continue with tests here...
-        assert True
+    assert process.returncode == EX_OK
 
-    # Add more tests here...
+def test_help_menu_short(pytestconfig):
+    command = [pytestconfig.getoption('binary'), '-h']
 
-    #XXX need to add various binary tests here
-    #XXX need to somehow pass CMAKE_BUILD_DIR/BINARY_NAME here
+    logging.debug('Running command: "%s"', ' '.join(command))
+    process = run(command, capture_output=True, check=True)
+
+    logging.debug('The stdout was:\n%s', process.stdout.decode())
+    logging.debug('The stderr was:\n%s', process.stderr.decode())
+
+    assert process.returncode == EX_OK
