@@ -4,7 +4,7 @@ mainly to troubleshoot some logic circuits I was messing around with in my spare
 essentially consists of a C++ `ncurses` interface that toggles the GPIO pins on an Arduino device by sending
 and receiving messages via UART.
 ## Table of Contents
-  - [Setup](#installation)
+  - [Setup](#setup)
     - [Configuring `arduino-cli`](#configuring-arduino-cli)
       - [Install `arduino-cli`](#install-arduino-cli)
       - [Compile the Arduino code](#compile-the-arduino-code)
@@ -12,7 +12,6 @@ and receiving messages via UART.
     - [Quick setup](#quick-setup)
     - [Setting up the presentation layer](#setting-up-the-presentation-layer)
     - [Setting up the hardware control layer](#setting-up-the-hardware-control-layer)
-    - [Example: build product from end-to-end](#example-build-product-from-end-to-end)
   - [Usage](#usage)
     - [Step 1](#step-1)
     - [Step 2](#step-2)
