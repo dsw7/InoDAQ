@@ -24,7 +24,6 @@ and receiving messages via UART.
     - [A = 0 & B = 1](#a--0--b--1)
     - [A = 1 & B = 1](#a--1--b--1)
   - [Testing and troubleshooting](#testing-and-troubleshooting)
-    - [Automated testing](#automated-testing)
     - [Troubleshooting with `strace`](#troubleshooting-with-strace)
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses`
@@ -339,13 +338,6 @@ In this case, the LED is logical false because both of the inputs are logical tr
 </p>
 
 ## Testing and troubleshooting
-### Automated testing
-This package includes some primitive automated tests for testing the hardware control layer. To run the
-tests, change directories to the project root and run:
-```shell
-python3 -m pytest -vs .
-```
-After compiling and uploading the Arduino code to the device.
 ### Troubleshooting with `strace`
 The `strace` utility can be used to troubleshoot communication issues between the host and the device given
 that the host writes to and reads from a device file (i.e. makes `read` and `write` system calls). To
