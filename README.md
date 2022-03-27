@@ -122,9 +122,7 @@ binary
 can and should be moved to a convenient location such as under `$PATH`.
 ### Setting up the hardware control layer
 To set up the hardware control layer, change directories from the project root to `src/ino` and upload the
-`ino.ino` sketch via the Arduino CLI or the Arduino GUI. I strongly recommend using the CLI and am including
-instructions here.
-To set up the hardware control layer (i.e. upload the Arduino code to the device), run:
+`ino.ino` sketch via the Arduino CLI or the Arduino GUI. Alternatively, simply run the following `make` target:
 ```bash
 make full-ino SERIAL_PORT=<serial-port-or-device-file>
 ```
