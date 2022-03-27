@@ -29,7 +29,9 @@ and receiving messages via UART.
 ## Setup
 Setup can be broken down into two components. First, the _presentation layer_ (i.e. the C++ `ncurses`
 interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino
-device.
+device. **NOTE:** Setup assumes that `arduino-cli` is set up and configured to upload to an Arduino device. See
+[Configuring `arduino-cli`](#configuring-arduino-cli) if `arduino-cli` has not been configured.
+### Configuring `arduino-cli`
 ### Quick setup
 To set up the product from end to end, first `git clone` this repository, change directories into the repository,
 then run:
@@ -45,16 +47,22 @@ make
 make help
 ```
 ### Setting up the presentation layer
-To compile a binary, first change directories to this project's root, then run:
+To compile an `inodaq` binary, run:
 ```bash
-cmake -S src/cpp/ -B build/ && make -j12 -C build/
+make full-cpp SERIAL_PORT=<serial-port-or-device-file>
 ```
-This chain of commands will compile a binary named `inodaq` and place the binary onto the host's temporary
-directory. The binary can and should be moved to a convenient location such as under `$PATH`.
+This chain of commands will compile a binary named `inodaq` and place the binary under `/tmp/build/`. The binary
+can and should be moved to a convenient location such as under `$PATH`.
 ### Setting up the hardware control layer
 To set up the hardware control layer, change directories from the project root to `src/ino` and upload the
 `ino.ino` sketch via the Arduino CLI or the Arduino GUI. I strongly recommend using the CLI and am including
 instructions here.
+To set up the hardware control layer (i.e. upload the Arduino code to the device), run:
+```bash
+make full-ino SERIAL_PORT=<serial-port-or-device-file>
+```
+Note that this assumes that `arduino-cli` is set up and configured to upload to an Arduino device. SeeVyV
+
 #### Install `arduino-cli`
 **NOTE:** These instructions vary strongly between boards. In this case I will only describe the installation
 of `arduino-cli` for the Arduino Uno board.
