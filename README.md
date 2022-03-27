@@ -31,12 +31,19 @@ Setup can be broken down into two components. First, the _presentation layer_ (i
 interface) must be compiled. Next, the _hardware control layer_ must be compiled and uploaded to the Arduino
 device.
 ### Quick setup
-To set up the product from end to end, first `git clone` this repository, then run:
+To set up the product from end to end, first `git clone` this repository, change directories into the repository,
+then run:
 ```bash
 make full SERIAL_PORT=<serial-port-or-device-file>
 ```
 This `make` target will first compile, upload and test the hardware control layer, then compile and test the
-presentation layer. The hardware control and presentation layers can be built individually as well.
+presentation layer. The hardware control and presentation layers can be built individually as well. A full
+list of targets and their descriptions can be obtained by running:
+```bash
+make
+# OR
+make help
+```
 ### Setting up the presentation layer
 To compile a binary, first change directories to this project's root, then run:
 ```bash
