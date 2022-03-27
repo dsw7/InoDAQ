@@ -5,12 +5,13 @@ essentially consists of a C++ `ncurses` interface that toggles the GPIO pins on 
 and receiving messages via UART.
 ## Table of Contents
   - [Setup](#installation)
-    - [Quick setup](#quick-setup)
-    - [Setting up the presentation layer](#setting-up-the-presentation-layer)
-    - [Setting up the hardware control layer](#setting-up-the-hardware-control-layer)
+    - [Configuring `arduino-cli`](#configuring-arduino-cli)
       - [Install `arduino-cli`](#install-arduino-cli)
       - [Compile the Arduino code](#compile-the-arduino-code)
       - [Upload the Arduino code](#upload-the-arduino-code)
+    - [Quick setup](#quick-setup)
+    - [Setting up the presentation layer](#setting-up-the-presentation-layer)
+    - [Setting up the hardware control layer](#setting-up-the-hardware-control-layer)
     - [Example: build product from end-to-end](#example-build-product-from-end-to-end)
   - [Usage](#usage)
     - [Step 1](#step-1)
@@ -32,37 +33,6 @@ interface) must be compiled. Next, the _hardware control layer_ must be compiled
 device. **NOTE:** Setup assumes that `arduino-cli` is set up and configured to upload to an Arduino device. See
 [Configuring `arduino-cli`](#configuring-arduino-cli) if `arduino-cli` has not been configured.
 ### Configuring `arduino-cli`
-### Quick setup
-To set up the product from end to end, first `git clone` this repository, change directories into the repository,
-then run:
-```bash
-make full SERIAL_PORT=<serial-port-or-device-file>
-```
-This `make` target will first compile, upload and test the hardware control layer, then compile and test the
-presentation layer. The hardware control and presentation layers can be built individually as well. A full
-list of targets and their descriptions can be obtained by running:
-```bash
-make
-# OR
-make help
-```
-### Setting up the presentation layer
-To compile an `inodaq` binary, run:
-```bash
-make full-cpp SERIAL_PORT=<serial-port-or-device-file>
-```
-This chain of commands will compile a binary named `inodaq` and place the binary under `/tmp/build/`. The binary
-can and should be moved to a convenient location such as under `$PATH`.
-### Setting up the hardware control layer
-To set up the hardware control layer, change directories from the project root to `src/ino` and upload the
-`ino.ino` sketch via the Arduino CLI or the Arduino GUI. I strongly recommend using the CLI and am including
-instructions here.
-To set up the hardware control layer (i.e. upload the Arduino code to the device), run:
-```bash
-make full-ino SERIAL_PORT=<serial-port-or-device-file>
-```
-Note that this assumes that `arduino-cli` is set up and configured to upload to an Arduino device. SeeVyV
-
 #### Install `arduino-cli`
 **NOTE:** These instructions vary strongly between boards. In this case I will only describe the installation
 of `arduino-cli` for the Arduino Uno board.
@@ -118,8 +88,8 @@ To upload the code, change directories to the project root and run:
 ```bash
 arduino-cli upload --port <serial-port> --fqbn <fqbn> src/ino/
 ```
-**NOTE:** Cygwin users may encounter an issue with `COM` ports and `dev` device file naming. The general mapping
-follows:
+**NOTE:** Cygwin users may encounter an issue with `COM` ports and `dev` device file naming. The general
+mapping follows:
 ```
 ttySn => COM(n + 1)
 ```
@@ -128,17 +98,36 @@ For example, one would pass:
 arduino-cli upload --port COM3 --fqbn <fqbn> src/ino/
 ```
 If plugging in the device allocates the `/dev/ttyS2` device file.
-### Example: build product from end-to-end
-Here is a short example for building this entire product from end to end. The example assumes the following:
-- The host's kernel is `SMP Debian 4.9.210-1`
-- The FQBN is `arduino:avr:uno`
-- The serial port is `/dev/ttyUSB0`
-The command follows:
+### Quick setup
+To set up the product from end to end, first `git clone` this repository, change directories into the
+repository,
+then run:
 ```bash
-cmake -S src/cpp/ -B build/ \
-&& make -j12 -C build/ \
-&& arduino-cli compile --fqbn arduino:avr:uno src/ino/ \
-&& arduino-cli upload --port /dev/ttyUSB0 --fqbn arduino:avr:uno src/ino/
+make full SERIAL_PORT=<serial-port-or-device-file>
+```
+This `make` target will first compile, upload and test the hardware control layer, then compile and test the
+presentation layer. The hardware control and presentation layers can be built individually as well. A full
+list of targets and their descriptions can be obtained by running:
+```bash
+make
+# OR
+make help
+```
+### Setting up the presentation layer
+To compile an `inodaq` binary, run:
+```bash
+make full-cpp SERIAL_PORT=<serial-port-or-device-file>
+```
+This chain of commands will compile a binary named `inodaq` and place the binary under `/tmp/build/`. The
+binary
+can and should be moved to a convenient location such as under `$PATH`.
+### Setting up the hardware control layer
+To set up the hardware control layer, change directories from the project root to `src/ino` and upload the
+`ino.ino` sketch via the Arduino CLI or the Arduino GUI. I strongly recommend using the CLI and am including
+instructions here.
+To set up the hardware control layer (i.e. upload the Arduino code to the device), run:
+```bash
+make full-ino SERIAL_PORT=<serial-port-or-device-file>
 ```
 ## Usage
 ### Step 1
