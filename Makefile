@@ -1,5 +1,6 @@
 .PHONY = \
-    help \
+	help \
+	check-env \
 	compile-ino upload-ino test-ino full-ino \
 	compile-cpp test-cpp full-cpp \
 	full
@@ -14,10 +15,6 @@ PATH_INO_SRC = src/ino
 PATH_CPP_SRC = src/cpp
 CMAKE_BINARY_DIR = /tmp/build
 CMAKE_BINARY = $(CMAKE_BINARY_DIR)/inodaq
-
-ifndef SERIAL_PORT
-$(error SERIAL_PORT is not set. Run "make <target> SERIAL_PORT=<serial-port-or-device-file>)
-endif
 
 define MESSAGE
 	@echo -e $(LIGHT_PURPLE)\> $(1)$(NO_COLOR)
@@ -49,11 +46,16 @@ export HELP_LIST_TARGETS
 help:
 	@echo "$$HELP_LIST_TARGETS"
 
-compile-ino:
+check-env:
+ifndef SERIAL_PORT
+	$(error SERIAL_PORT is not set. Run "make <target> SERIAL_PORT=<serial-port-or-device-file>")
+endif
+
+compile-ino: check-env
 	$(call MESSAGE,Compiling hardware control layer code)
 	@arduino-cli compile --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose $(PATH_INO_SRC)/
 
-upload-ino:
+upload-ino: check-env
 	$(call MESSAGE,Uploading hardware control layer code)
 	@arduino-cli upload --port $(SERIAL_PORT) --fqbn $(FULLY_QUALIFIED_BOARD_NAME) --verbose $(PATH_INO_SRC)/
 
@@ -62,16 +64,18 @@ test-ino:
 	@$(PYTHON_INTERP) -m pytest $(PATH_INO_SRC)/tests/
 
 full-ino: compile-ino upload-ino test-ino
+	$(call MESSAGE,Hardware control layer successfully built!)
 
 compile-cpp:
 	$(call MESSAGE,Compiling presentation layer code)
 	@cmake -S $(PATH_CPP_SRC)/src/ -B $(CMAKE_BINARY_DIR)/ && make -j12 -C $(CMAKE_BINARY_DIR)/
 
-test-cpp:
+test-cpp: check-env
 	$(call MESSAGE,Testing presentation layer code)
 	@$(PYTHON_INTERP) -m pytest $(PATH_CPP_SRC)/tests/ --port $(SERIAL_PORT) --binary $(CMAKE_BINARY)
 
 full-cpp: compile-cpp test-cpp
+	$(call MESSAGE,Presentation layer successfully built!)
 
 full: full-ino full-cpp
-	$(call MESSAGE,Product successfully built!)
+	$(call MESSAGE,Full product successfully built!)
