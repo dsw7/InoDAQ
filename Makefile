@@ -61,7 +61,7 @@ upload-ino: check-env
 
 test-ino:
 	$(call MESSAGE,Running basic tests to ensure hardware control layer is working properly)
-	@$(PYTHON_INTERP) -m pytest $(PATH_INO_SRC)/tests/
+	@$(PYTHON_INTERP) -m pytest $(PATH_INO_SRC)/tests/ --port $(SERIAL_PORT)
 
 full-ino: compile-ino upload-ino test-ino
 	$(call MESSAGE,Hardware control layer successfully built!)
