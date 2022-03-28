@@ -3,8 +3,14 @@ from uuid import uuid4
 from time import sleep
 from random import randint
 from typing import List
+from platform import uname
 import pytest
 from serial_connection import SerialConnection
+
+if 'CYGWIN' in uname().system:
+    SERIAL_PORT = '/dev/ttyS2'
+else:
+    SERIAL_PORT = '/dev/ttyUSB0'
 
 def generate_random_bytes(size: int) -> List[bytes]:
 
@@ -20,7 +26,7 @@ def generate_random_bytes(size: int) -> List[bytes]:
 class TestSerial:
 
     def setup_class(self) -> None:
-        self.serial_obj = SerialConnection()
+        self.serial_obj = SerialConnection(serial_port=SERIAL_PORT)
 
         if not self.serial_obj.three_way_handshake():
             pytest.exit('Failed to connect to device!', EX_PROTOCOL)

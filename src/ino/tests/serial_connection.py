@@ -1,16 +1,9 @@
 from time import sleep
 from json import dumps
-from platform import uname
 import logging
 import serial
 
-if 'CYGWIN' in uname().system:
-    SERIAL_PORT = '/dev/ttyS2'
-else:
-    SERIAL_PORT = '/dev/ttyUSB0'
-
 CONNECTION_KWARGS = {
-    'port': SERIAL_PORT,
     'baudrate': 9600,
     'parity': serial.PARITY_NONE,
     'stopbits': serial.STOPBITS_ONE,
@@ -27,16 +20,17 @@ MESSAGE_FIN_ACK = b'FIN-ACK\n'
 
 class SerialConnection:
 
-    def __init__(self) -> None:
+    def __init__(self, serial_port: str) -> None:
 
         self.serial_port_obj = None
+        self.serial_port = serial_port
 
     def open_connection(self) -> bool:
 
         logging.debug('Connecting using parameters: %s', dumps(CONNECTION_KWARGS, indent=4))
 
         try:
-            self.serial_port_obj = serial.Serial(**CONNECTION_KWARGS)
+            self.serial_port_obj = serial.Serial(**CONNECTION_KWARGS, port=self.serial_port)
         except serial.serialutil.SerialException:
             logging.exception('An exception occurred when connecting:')
             return False
