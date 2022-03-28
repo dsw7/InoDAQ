@@ -1,16 +1,36 @@
-from os import EX_PROTOCOL
+# pylint: disable=W0621  # Disable "Redefining name 'connection' from outer scope" since
+#                        # dependency injection is how fixtures work
+
+from os import EX_PROTOCOL, path
 from uuid import uuid4
 from time import sleep
 from random import randint
 from typing import List
-from platform import uname
 import pytest
 from serial_connection import SerialConnection
 
-if 'CYGWIN' in uname().system:
-    SERIAL_PORT = '/dev/ttyS2'
-else:
-    SERIAL_PORT = '/dev/ttyUSB0'
+def map_com_port_to_device_file(port: str) -> str:
+
+    try:
+        port = int(port.strip('COM'))
+    except ValueError:
+        pytest.exit(f'Invalid port provided: {port}')
+
+    return path.join('/dev', 'ttyS{}'.format(port - 1))
+
+@pytest.fixture(scope='session')
+def connection(pytestconfig):
+    serial_port = pytestconfig.getoption('port')
+
+    if 'COM' in serial_port:
+        serial_port = map_com_port_to_device_file(serial_port)
+
+    connection_handle = SerialConnection(serial_port=serial_port)
+    if not connection_handle.three_way_handshake():
+        pytest.exit('Failed to connect to device!', EX_PROTOCOL)
+
+    yield connection_handle
+    connection_handle.two_way_termination()
 
 def generate_random_bytes(size: int) -> List[bytes]:
 
@@ -22,97 +42,85 @@ def generate_random_bytes(size: int) -> List[bytes]:
 
     return random_bytes
 
+@pytest.mark.parametrize('message', generate_random_bytes(10))
+def test_unknown_message(connection: SerialConnection, message: str) -> None:
 
-class TestSerial:
+    connection.send_message(message)
+    assert connection.wait_for_message() == message
 
-    def setup_class(self) -> None:
-        self.serial_obj = SerialConnection(serial_port=SERIAL_PORT)
+def test_message_buffering(connection: SerialConnection) -> None:
 
-        if not self.serial_obj.three_way_handshake():
-            pytest.exit('Failed to connect to device!', EX_PROTOCOL)
+    connection.send_message(b'ab')
+    connection.send_message(b'cd')
+    connection.send_message(b'ef')
+    connection.send_message(b'\n')
 
-    def teardown_class(self) -> None:
-        self.serial_obj.two_way_termination()
+    assert connection.wait_for_message() == b'abcdef\n'
 
-    @pytest.mark.parametrize('message', generate_random_bytes(10))
-    def test_unknown_message(self, message: str) -> None:
+def test_empty_message(connection: SerialConnection) -> None:
 
-        self.serial_obj.send_message(message)
-        assert self.serial_obj.wait_for_message() == message
+    connection.send_message(b'')
+    connection.send_message(b'')
+    connection.send_message(b'\n')
 
-    def test_message_buffering(self) -> None:
+    assert connection.wait_for_message() == b'\n'
 
-        self.serial_obj.send_message(b'ab')
-        self.serial_obj.send_message(b'cd')
-        self.serial_obj.send_message(b'ef')
-        self.serial_obj.send_message(b'\n')
+@pytest.mark.skip(reason='Will fix ASAP')
+def test_overflow_message(connection: SerialConnection) -> None:
 
-        assert self.serial_obj.wait_for_message() == b'abcdef\n'
+    connection.send_message(b'abcdefghijabcdefghij')
+    connection.send_message(b'abcdefghijabcdefghij')
 
-    def test_empty_message(self) -> None:
+    # readBytesUntil reads until either MESSAGE_TERMINATOR is received
+    # or the number of bytes in buffer exceeds SIZE_MESSAGE_BUF
+    connection.send_message(b'abcdefghij\n')
 
-        self.serial_obj.send_message(b'')
-        self.serial_obj.send_message(b'')
-        self.serial_obj.send_message(b'\n')
+    assert connection.wait_for_message() == b'abcdefghijabcdefghijabcdefghijabcdefghij\n'
+    assert connection.wait_for_message() == b'abcdefghij\n'
 
-        assert self.serial_obj.wait_for_message() == b'\n'
+@pytest.mark.parametrize(
+    'message',
+    [
+        b'Built in LED is ON\n',
+        b'Built in LED is OFF\n',
+        b'Built in LED is ON\n',
+        b'Built in LED is OFF\n'
+    ],
+    ids=[
+        '(1) Test built in LED is turned ON',
+        '(2) Test built in LED is turned OFF',
+        '(3) Test built in LED is turned ON',
+        '(4) Test built in LED is turned OFF'
+    ]
+)
+def test_toggle_builtin_led(connection: SerialConnection, message: bytes) -> None:
 
-    @pytest.mark.skip(reason='Will fix ASAP')
-    def test_overflow_message(self) -> None:
+    connection.send_message(b'TEST\n')
+    sleep(0.5)
 
-        self.serial_obj.send_message(b'abcdefghijabcdefghij')
-        self.serial_obj.send_message(b'abcdefghijabcdefghij')
+    assert connection.wait_for_message() == message
 
-        # readBytesUntil reads until either MESSAGE_TERMINATOR is received
-        # or the number of bytes in buffer exceeds SIZE_MESSAGE_BUF
-        self.serial_obj.send_message(b'abcdefghij\n')
+@pytest.mark.parametrize(
+    'command',
+    [
+        b'D\n',
+        b'DI\n',
+        b'DIG\n',
+        b'DIGA\n',
+        b'DIGAB\n',
+        b'DIGABC\n',
+    ]
+)
+def test_invalid_digital_pin_message(connection: SerialConnection, command: bytes) -> None:
 
-        assert self.serial_obj.wait_for_message() == b'abcdefghijabcdefghijabcdefghijabcdefghij\n'
-        assert self.serial_obj.wait_for_message() == b'abcdefghij\n'
+    connection.send_message(command)
+    assert connection.wait_for_message() == command
 
-    @pytest.mark.parametrize(
-        'message',
-        [
-            b'Built in LED is ON\n',
-            b'Built in LED is OFF\n',
-            b'Built in LED is ON\n',
-            b'Built in LED is OFF\n'
-        ],
-        ids=[
-            '(1) Test built in LED is turned ON',
-            '(2) Test built in LED is turned OFF',
-            '(3) Test built in LED is turned ON',
-            '(4) Test built in LED is turned OFF'
-        ]
-    )
-    def test_toggle_builtin_led(self, message: bytes) -> None:
+@pytest.mark.parametrize('pin', range(2, 14), ids=[f'Test digital pin {n}' for n in range(2, 14)])
+def test_valid_digital_pin_message(connection: SerialConnection, pin: int) -> None:
 
-        self.serial_obj.send_message(b'TEST\n')
-        sleep(0.5)
+    connection.send_message(f'DIG{pin}\n'.encode())
+    assert connection.wait_for_message() == f'DIG{pin}: ON\n'.encode()
 
-        assert self.serial_obj.wait_for_message() == message
-
-    @pytest.mark.parametrize(
-        'command',
-        [
-            b'D\n',
-            b'DI\n',
-            b'DIG\n',
-            b'DIGA\n',
-            b'DIGAB\n',
-            b'DIGABC\n',
-        ]
-    )
-    def test_invalid_digital_pin_message(self, command: bytes) -> None:
-
-        self.serial_obj.send_message(command)
-        assert self.serial_obj.wait_for_message() == command
-
-    @pytest.mark.parametrize('pin', range(2, 14), ids=[f'Test digital pin {n}' for n in range(2, 14)])
-    def test_valid_digital_pin_message(self, pin: int) -> None:
-
-        self.serial_obj.send_message(f'DIG{pin}\n'.encode())
-        assert self.serial_obj.wait_for_message() == f'DIG{pin}: ON\n'.encode()
-
-        self.serial_obj.send_message(f'DIG{pin}\n'.encode())
-        assert self.serial_obj.wait_for_message() == f'DIG{pin}: OFF\n'.encode()
+    connection.send_message(f'DIG{pin}\n'.encode())
+    assert connection.wait_for_message() == f'DIG{pin}: OFF\n'.encode()
