@@ -27,6 +27,7 @@ ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
     }
 
     this->list_instructions();
+    this->list_pid();
 
     this->print_status("All digital pins are low");
     this->reset_state_matrix();
@@ -82,6 +83,12 @@ void ControlPanel::list_instructions()
 
     move(28, 0);
     hline('=', terminal_width);
+}
+
+void ControlPanel::list_pid()
+{
+    std::string pid = "PID: " + std::to_string(getpid());
+    mvwprintw(stdscr, 30, 2, pid.c_str());
 }
 
 void ControlPanel::reset_state_matrix()

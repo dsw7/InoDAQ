@@ -4,6 +4,8 @@
 #include <curses.h>
 #include <string>
 #include <map>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "serial.h"
 
@@ -26,6 +28,7 @@ class ControlPanel
 
         void print_status(const std::string &status);
         void list_instructions();
+        void list_pid();
         void reset_state_matrix();
         void reset_state_panel();
         void connect();
