@@ -87,7 +87,7 @@ bool resolve_serial_port(std::string &serial_port, const bool &is_quiet)
 
 int main(int argc, char **argv)
 {
-    int c;
+    int option;
 
     cli_options options;
 
@@ -103,20 +103,19 @@ int main(int argc, char **argv)
             {"serial-port", required_argument, 0, 'p'}
         };
 
-        // What's the point of this?
         int option_index = 0;
 
-        c = getopt_long(
+        option = getopt_long(
             argc, argv, "hqctip:", long_options, &option_index
         );
 
         // End of options
-        if (c == -1)
+        if (option == -1)
         {
             break;
         }
 
-        switch (c)
+        switch (option)
         {
             case 'h':
                 help_message(argv[0]);
