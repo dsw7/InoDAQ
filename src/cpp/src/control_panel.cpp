@@ -152,7 +152,12 @@ void ControlPanel::disconnect()
 
     this->print_status("Disconnecting from port " + this->serial_port);
 
-    this->connection.disconnect();
+    if (not this->connection.disconnect())
+    {
+        this->print_status("Failed to cleanly disconnect from device!");
+        return;
+    }
+
     this->reset_state_matrix();
     this->reset_state_panel();
 
@@ -192,6 +197,8 @@ void ControlPanel::toggle_pin()
     }
 
     this->connection.write_data("DIG" + std::to_string(this->cursor) + "\n");
+    this->connection.flush_buffer();
+
     this->state_matrix[this->cursor] = !this->state_matrix[this->cursor];
 
     static std::string status;
