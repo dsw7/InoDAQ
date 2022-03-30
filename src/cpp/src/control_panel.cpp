@@ -35,7 +35,7 @@ ControlPanel::ControlPanel(std::string &serial_port): serial_port(serial_port)
 
 ControlPanel::~ControlPanel()
 {
-    this->connection.disconnect();
+    this->disconnect();
     endwin();
 }
 
@@ -184,7 +184,7 @@ void ControlPanel::toggle_pin()
         return;
     }
 
-    this->connection.write_data("D" + std::to_string(this->cursor) + "\n");
+    this->connection.write_data("DIG" + std::to_string(this->cursor) + "\n");
     this->state_matrix[this->cursor] = !this->state_matrix[this->cursor];
 
     static std::string status;

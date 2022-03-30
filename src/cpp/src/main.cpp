@@ -159,8 +159,7 @@ int main(int argc, char **argv)
 
     if (options.run_control_panel)
     {
-        // XXX temp
-        //run_control_panel(options.serial_port);
+        run_control_panel(options.serial_port);
         return 0;
     }
 

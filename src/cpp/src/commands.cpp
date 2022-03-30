@@ -19,13 +19,11 @@ namespace Protocol
     };
 }
 
-/*
 void run_control_panel(std::string &serial_port)
 {
     ControlPanel panel(serial_port);
     panel.loop();
 }
-*/
 
 int run_ping_command(std::string &serial_port, const bool &is_quiet)
 {
