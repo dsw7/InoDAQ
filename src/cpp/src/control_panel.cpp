@@ -197,6 +197,8 @@ void ControlPanel::toggle_pin()
     }
 
     this->connection.write_data("DIG" + std::to_string(this->cursor) + "\n");
+    this->connection.flush_buffer();
+
     this->state_matrix[this->cursor] = !this->state_matrix[this->cursor];
 
     static std::string status;
