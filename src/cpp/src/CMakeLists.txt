@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.8.1)
 project(InoDAQ)
 
+set(CMAKE_VERBOSE_MAKEFILE true)
+
 # Do not support Windows or Mac OS X at the moment
 if(UNIX)
     message(STATUS "Detected *nix platform. Proceeding.")
