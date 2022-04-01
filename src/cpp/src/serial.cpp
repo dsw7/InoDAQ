@@ -229,12 +229,14 @@ bool Serial::connect()
     if (not this->read_data(payload))
     {
         error("Failed to acquire " + Protocol::MESSAGE_SYN, this->is_quiet);
+        this->teardown_fd();
         return false;
     }
 
     if (payload.compare(Protocol::MESSAGE_SYN) != 0)
     {
         error("Received unknown bytes: '" + payload + "'. Was expecting: " + Protocol::MESSAGE_SYN, this->is_quiet);
+        this->teardown_fd();
         return false;
     }
 
@@ -243,6 +245,7 @@ bool Serial::connect()
     if (not this->write_data(Protocol::MESSAGE_SYN_ACK + Protocol::MESSAGE_TERMINATOR))
     {
         error("Failed to send " + Protocol::MESSAGE_SYN_ACK, this->is_quiet);
+        this->teardown_fd();
         return false;
     }
 
@@ -252,12 +255,14 @@ bool Serial::connect()
     if (not this->read_data(payload))
     {
         error("Failed to acquire " + Protocol::MESSAGE_ACK, this->is_quiet);
+        this->teardown_fd();
         return false;
     }
 
     if (payload.compare(Protocol::MESSAGE_ACK) != 0)
     {
         error("Received unknown bytes: '" + payload + "'. Was expecting: " + Protocol::MESSAGE_ACK, this->is_quiet);
+        this->teardown_fd();
         return false;
     }
 
