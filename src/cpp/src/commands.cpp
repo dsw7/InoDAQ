@@ -33,6 +33,7 @@ int run_ping_command(std::string &serial_port, const bool &is_quiet)
 
     if (not connection.connect())
     {
+        error("Could not connect on serial port " + serial_port, is_quiet);
         return EXIT_FAILURE;
     }
 
@@ -66,6 +67,7 @@ int run_test_command(std::string &serial_port, const bool &is_quiet)
 
     if (not connection.connect())
     {
+        error("Could not connect on serial port " + serial_port, is_quiet);
         return EXIT_FAILURE;
     }
 
