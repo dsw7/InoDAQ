@@ -3,6 +3,9 @@ A low cost, primitive alternative to some commercially available digital I/O too
 mainly to troubleshoot some logic circuits I was messing around with in my spare time. This software
 essentially consists of a C++ `ncurses` interface that toggles the GPIO pins on an Arduino device by sending
 and receiving messages via UART.
+## Disclaimer
+I have only tested this utility on a Windows PC running Cygwin. I cannot guarantee that this utility will work
+flawlessly on Unix-like platforms!
 ## Table of Contents
   - [Setup](#setup)
     - [Configuring `arduino-cli`](#configuring-arduino-cli)
