@@ -8,8 +8,6 @@
 LIGHT_PURPLE = "\033[1;1;35m"
 NO_COLOR = "\033[0m"
 FULLY_QUALIFIED_BOARD_NAME = arduino:avr:uno
-KERNEL := $(shell uname --kernel-name)
-PYTHON_INTERP = /usr/bin/python3.9
 
 PATH_INO_SRC = src/ino
 PATH_CPP_SRC = src/cpp
@@ -61,7 +59,7 @@ upload-ino: check-env
 
 test-ino: check-env
 	$(call MESSAGE,Running basic tests to ensure hardware control layer is working properly)
-	@$(PYTHON_INTERP) -m pytest $(PATH_INO_SRC)/tests/ --port $(SERIAL_PORT)
+	@python3 -m pytest $(PATH_INO_SRC)/tests/ --port $(SERIAL_PORT)
 
 full-ino: compile-ino upload-ino test-ino
 	$(call MESSAGE,Hardware control layer successfully built!)
@@ -72,7 +70,7 @@ compile-cpp:
 
 test-cpp: check-env
 	$(call MESSAGE,Testing presentation layer code)
-	@$(PYTHON_INTERP) -m pytest $(PATH_CPP_SRC)/tests/ --port $(SERIAL_PORT) --binary $(CMAKE_BINARY)
+	@python3 -m pytest $(PATH_CPP_SRC)/tests/ --port $(SERIAL_PORT) --binary $(CMAKE_BINARY)
 
 full-cpp: compile-cpp test-cpp
 	$(call MESSAGE,Presentation layer successfully built!)
