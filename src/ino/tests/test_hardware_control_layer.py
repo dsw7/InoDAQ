@@ -9,14 +9,14 @@ from typing import List
 import pytest
 from serial_connection import SerialConnection
 
-def map_com_port_to_device_file(port: str) -> str:
+def map_com_port_to_device_file(port_s: str) -> str:
 
     try:
-        port = int(port.strip('COM'))
+        port = int(port_s.strip('COM'))
     except ValueError:
-        pytest.exit(f'Invalid port provided: {port}')
+        pytest.exit(f'Invalid port provided: {port_s}')
 
-    return path.join('/dev', 'ttyS{}'.format(port - 1))
+    return path.join('/dev', f'ttyS{port - 1}')
 
 @pytest.fixture(scope='session')
 def connection(pytestconfig):
@@ -43,7 +43,7 @@ def generate_random_bytes(size: int) -> List[bytes]:
     return random_bytes
 
 @pytest.mark.parametrize('message', generate_random_bytes(10))
-def test_unknown_message(connection: SerialConnection, message: str) -> None:
+def test_unknown_message(connection: SerialConnection, message: bytes) -> None:
 
     connection.send_message(message)
     assert connection.wait_for_message() == message

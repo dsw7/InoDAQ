@@ -22,7 +22,7 @@ class SerialConnection:
 
     def __init__(self, serial_port: str) -> None:
 
-        self.serial_port_obj = None
+        self.serial_port_obj: serial.Serial
         self.serial_port = serial_port
 
     def open_connection(self) -> bool:
@@ -47,7 +47,7 @@ class SerialConnection:
 
         self.flush_input_buffer()
 
-        return True, None
+        return True
 
     def close_connection(self) -> None:
 
